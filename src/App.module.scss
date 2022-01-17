@@ -1,0 +1,32 @@
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 1200px;
+  margin: -100px auto 0;
+  padding: 0 100px
+}
+
+.logo {
+  max-width: 100%;
+  width: 300px
+}
+
+.boxes {
+  display: flex;
+
+  section {
+    max-width: 50%;
+    padding: 20px
+  }
+}
+
+h1, h2, p {
+  color: #fff;
+}
+
+a {
+  color: #515cbf;
+}
