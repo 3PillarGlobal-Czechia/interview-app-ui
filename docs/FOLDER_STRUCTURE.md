@@ -7,18 +7,17 @@ Check URL: https://www.robinwieruch.de/react-folder-structure/
 ```
 - src/
 
---- pages ============ Root components of page ============
+--- pages/ (Root components of page)
 ----- UserPage/
 ------- UserPage.tsx
-------- UserPage.module.scs
+------- UserPage.module.scss
 ------- UserPageProps.ts
 ----- PaymentPage/
 ------- PaymentPage.tsx
 ------- PaymentPage.module.scss
-------- PaymentPageProps.ts
 
 
---- router/ ===================== Routing ====================
+--- router/ (Routing)
 ----- index.ts
 or
 ----- publicRoutes.tsx
@@ -26,7 +25,7 @@ or
 
 
 
---- domain/ ============== Components for domain ==============
+--- domain/ (Components for domain)
 ----- User/
 ------- Profile/
 ------- Avatar/
@@ -40,16 +39,16 @@ or
 --------- currency/
 ----------- currency.ts
 ----------- currency.test.ts
-------- hooks/ =========== hooks for Payment domain ===========
+------- hooks/ (Hooks for Payment domain)
 --------- useBody/
 ----------- useBody.ts
 ----------- useBody.test.ts
-------- contexts/ ======== contexts for Payment domain ========
+------- contexts/ (Contexts for Payment domain)
 -------- PaymentContext/
 ---------- PaymentContext.tsx
 ---------- PaymentContext.test.ts
 
---- components/ === Global components used throught all app ===
+--- components/ (Global components used throught all app)
 ----- Button/
 ------- Button.tsx
 ------- Button.module.scss
@@ -59,21 +58,21 @@ or
 ------- Input.module.scss
 ------- InputProps.tsx
 
---- hooks/ =========== Global hooks used for all app ===========
+--- hooks/ (Global hooks used for all app)
 ----- useWatchResize.ts
 
---- context/ ========= Global contexts used for all app ========
+--- context/ (Global contexts used for all app)
 ----- AppContext.tsx
 
--- enums/ ============ Global enums used for all app ===========
+-- enums/ (Global enums used for all app)
 
--- interfaces/ || types/ == Global  interfaces/types used for all app ==
+-- interfaces/ || types/ (Global interfaces/types used for all app)
 
---- services/ ========= Global services used for all app =========
+--- services/ (Global services used for all app)
 ----- format/
 ------- date/
---------- date.js
---------- date.test.js
+--------- date.ts
+--------- date.test.ts
 ```
 
 ### Notes:
@@ -89,7 +88,9 @@ or
 3. You should hold logic structure as above and keep this rules:
     1. If `components/interface/...` is used in more domains/pages should be stored in root
     2. If `components/interface/...` is used for specific domain should be stored to domain specific folder
-4. If `file/folder` contains component should be capitalized and file extension should be `.tsx`
+4. If file or folder:
+   1. contains component should be capitalized camelCase and file extension should be `.tsx`
+   2. not contains component should be camelCase and file extension should be `.ts`
 5. SCSS files are postfixed by `.module`
 6. If subtree `pages/PaymentPage` should contain more `interfaces/types/enums` create specific folder for it
 ```
@@ -102,7 +103,17 @@ or
 ------- PaymentPage.module.scss
 ------- PaymentPageProps.ts
 ```
-
+7. Separate component props type into own file is optional. If components has more than 20 props you should
+consider creating new file for it.
+```
+----- UserPage/
+------- UserPage.tsx
+------- UserPage.module.scss
+------- UserPageProps.ts (is optional)
+----- PaymentPage/
+------- PaymentPage.tsx
+------- PaymentPage.module.scss
+```
 
 
 
