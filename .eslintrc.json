@@ -101,8 +101,7 @@
           "**/*.spec.ts",
           "**/*.test.tsx",
           "**/*.spec.tsx",
-          "src/setupTests.ts",
-          "src/reportWebVitals.ts"
+          "src/setupTests.ts"
         ]
       }
     ]
