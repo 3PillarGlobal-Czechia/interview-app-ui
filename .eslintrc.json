@@ -8,7 +8,8 @@
     "plugin:react/recommended",
     "airbnb",
     "prettier/prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:typescript-sort-keys/recommended"
   ],
   "settings": {
     "import/resolver": {
@@ -27,7 +28,9 @@
     "react",
     "simple-import-sort",
     "@typescript-eslint",
-    "react-hooks"
+    "react-hooks",
+    "sort-destructure-keys",
+    "typescript-sort-keys"
   ],
   "overrides": [
     {
@@ -116,6 +119,16 @@
         "exports": "only-multiline",
         "functions": "never"
       }
-    ]
+    ],
+    "sort-keys": [
+      "error",
+      "asc",
+      {
+        "caseSensitive": true,
+        "natural": true,
+        "minKeys": 2
+      }
+    ],
+    "sort-destructure-keys/sort-destructure-keys": 2
   }
 }
