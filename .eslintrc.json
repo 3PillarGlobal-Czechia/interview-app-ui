@@ -8,8 +8,7 @@
     "plugin:react/recommended",
     "airbnb",
     "prettier/prettier",
-    "plugin:prettier/recommended",
-    "plugin:typescript-sort-keys/recommended"
+    "plugin:prettier/recommended"
   ],
   "settings": {
     "import/resolver": {
@@ -28,9 +27,7 @@
     "react",
     "simple-import-sort",
     "@typescript-eslint",
-    "react-hooks",
-    "sort-destructure-keys",
-    "typescript-sort-keys"
+    "react-hooks"
   ],
   "overrides": [
     {
@@ -89,15 +86,6 @@
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
-    "react/jsx-sort-props": [
-      "error",
-      {
-        "callbacksLast": true,
-        "shorthandFirst": true,
-        "ignoreCase": true,
-        "reservedFirst": true
-      }
-    ],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -109,26 +97,6 @@
           "src/setupTests.ts"
         ]
       }
-    ],
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "only-multiline",
-        "objects": "only-multiline",
-        "imports": "only-multiline",
-        "exports": "only-multiline",
-        "functions": "never"
-      }
-    ],
-    "sort-keys": [
-      "error",
-      "asc",
-      {
-        "caseSensitive": true,
-        "natural": true,
-        "minKeys": 2
-      }
-    ],
-    "sort-destructure-keys/sort-destructure-keys": 2
+    ]
   }
 }
