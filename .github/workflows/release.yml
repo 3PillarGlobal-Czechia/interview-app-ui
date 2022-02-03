@@ -14,7 +14,6 @@ jobs:
           node-version: '14'
 
       - name: Build project
-        working-directory: ./src/WebApi
         run: npm run build
 
       - name: Create archive
