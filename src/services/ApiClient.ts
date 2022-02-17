@@ -47,6 +47,20 @@ export class Client {
             return response.text().then((_responseText) => {
             return;
             });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -61,7 +75,7 @@ export class Client {
      * @param difficulties (optional) 
      * @return Success
      */
-    interviewQuestions(category: string | undefined, text: string | undefined, difficulties: number[] | undefined): Promise<void> {
+    interviewQuestions(category: string | undefined, text: string | undefined, difficulties: number[] | undefined): Promise<InterviewQuestionModel[]> {
         let url_ = this.baseUrl + "/api/v1/InterviewQuestions?";
         if (category === null)
             throw new Error("The parameter 'category' cannot be null.");
@@ -80,6 +94,7 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "text/plain"
             }
         };
 
@@ -88,19 +103,43 @@ export class Client {
         });
     }
 
-    protected processInterviewQuestions(response: Response): Promise<void> {
+    protected processInterviewQuestions(response: Response): Promise<InterviewQuestionModel[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(InterviewQuestionModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<InterviewQuestionModel[]>(null as any);
     }
 
     /**
@@ -131,6 +170,191 @@ export class Client {
         if (status === 200) {
             return response.text().then((_responseText) => {
             return;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    update2(body: UpdateQuestionListRequest): Promise<void> {
+        let url_ = this.baseUrl + "/api/v1/QuestionLists/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdate2(_response);
+        });
+    }
+
+    protected processUpdate2(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param text (optional) 
+     * @param categories (optional) 
+     * @return Success
+     */
+    questionLists(text: string | undefined, categories: string[] | undefined): Promise<QuestionListModel[]> {
+        let url_ = this.baseUrl + "/api/v1/QuestionLists?";
+        if (text === null)
+            throw new Error("The parameter 'text' cannot be null.");
+        else if (text !== undefined)
+            url_ += "Text=" + encodeURIComponent("" + text) + "&";
+        if (categories === null)
+            throw new Error("The parameter 'categories' cannot be null.");
+        else if (categories !== undefined)
+            categories && categories.forEach(item => { url_ += "Categories=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processQuestionLists(_response);
+        });
+    }
+
+    protected processQuestionLists(response: Response): Promise<QuestionListModel[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(QuestionListModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<QuestionListModel[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    create2(body: CreateQuestionListRequest | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/v1/QuestionLists/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreate2(_response);
+        });
+    }
+
+    protected processCreate2(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -269,6 +493,58 @@ export interface ICreateInterviewQuestionRequest {
     content: string;
 }
 
+export class CreateQuestionListRequest implements ICreateQuestionListRequest {
+    title?: string | undefined;
+    description?: string | undefined;
+    interviewQuestionIds?: number[] | undefined;
+
+    constructor(data?: ICreateQuestionListRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["interviewQuestionIds"])) {
+                this.interviewQuestionIds = [] as any;
+                for (let item of _data["interviewQuestionIds"])
+                    this.interviewQuestionIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): CreateQuestionListRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateQuestionListRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        if (Array.isArray(this.interviewQuestionIds)) {
+            data["interviewQuestionIds"] = [];
+            for (let item of this.interviewQuestionIds)
+                data["interviewQuestionIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface ICreateQuestionListRequest {
+    title?: string | undefined;
+    description?: string | undefined;
+    interviewQuestionIds?: number[] | undefined;
+}
+
 export class CreateUserRequest implements ICreateUserRequest {
     name!: string;
     email!: string;
@@ -357,6 +633,182 @@ export interface ICreateUserResponse {
     age?: string | undefined;
 }
 
+export class InterviewQuestionModel implements IInterviewQuestionModel {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id?: number;
+    title?: string | undefined;
+    difficulty?: number | undefined;
+    category?: string | undefined;
+    content?: string | undefined;
+
+    constructor(data?: IInterviewQuestionModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.difficulty = _data["difficulty"];
+            this.category = _data["category"];
+            this.content = _data["content"];
+        }
+    }
+
+    static fromJS(data: any): InterviewQuestionModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new InterviewQuestionModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["difficulty"] = this.difficulty;
+        data["category"] = this.category;
+        data["content"] = this.content;
+        return data;
+    }
+}
+
+export interface IInterviewQuestionModel {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id?: number;
+    title?: string | undefined;
+    difficulty?: number | undefined;
+    category?: string | undefined;
+    content?: string | undefined;
+}
+
+export class ProblemDetails implements IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+
+    constructor(data?: IProblemDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.status = _data["status"];
+            this.detail = _data["detail"];
+            this.instance = _data["instance"];
+        }
+    }
+
+    static fromJS(data: any): ProblemDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProblemDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["status"] = this.status;
+        data["detail"] = this.detail;
+        data["instance"] = this.instance;
+        return data;
+    }
+}
+
+export interface IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+}
+
+export class QuestionListModel implements IQuestionListModel {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    interviewQuestions?: InterviewQuestionModel[] | undefined;
+
+    constructor(data?: IQuestionListModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["interviewQuestions"])) {
+                this.interviewQuestions = [] as any;
+                for (let item of _data["interviewQuestions"])
+                    this.interviewQuestions!.push(InterviewQuestionModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): QuestionListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuestionListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        if (Array.isArray(this.interviewQuestions)) {
+            data["interviewQuestions"] = [];
+            for (let item of this.interviewQuestions)
+                data["interviewQuestions"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IQuestionListModel {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    interviewQuestions?: InterviewQuestionModel[] | undefined;
+}
+
 export class UpdateInterviewQuestionRequest implements IUpdateInterviewQuestionRequest {
     id!: number;
     title?: string | undefined;
@@ -407,6 +859,74 @@ export interface IUpdateInterviewQuestionRequest {
     difficulty?: number | undefined;
     category?: string | undefined;
     content?: string | undefined;
+}
+
+export class UpdateQuestionListRequest implements IUpdateQuestionListRequest {
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    questionsToAdd?: number[] | undefined;
+    questionsToRemove?: number[] | undefined;
+
+    constructor(data?: IUpdateQuestionListRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["questionsToAdd"])) {
+                this.questionsToAdd = [] as any;
+                for (let item of _data["questionsToAdd"])
+                    this.questionsToAdd!.push(item);
+            }
+            if (Array.isArray(_data["questionsToRemove"])) {
+                this.questionsToRemove = [] as any;
+                for (let item of _data["questionsToRemove"])
+                    this.questionsToRemove!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateQuestionListRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateQuestionListRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        if (Array.isArray(this.questionsToAdd)) {
+            data["questionsToAdd"] = [];
+            for (let item of this.questionsToAdd)
+                data["questionsToAdd"].push(item);
+        }
+        if (Array.isArray(this.questionsToRemove)) {
+            data["questionsToRemove"] = [];
+            for (let item of this.questionsToRemove)
+                data["questionsToRemove"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IUpdateQuestionListRequest {
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    questionsToAdd?: number[] | undefined;
+    questionsToRemove?: number[] | undefined;
 }
 
 export class ApiException extends Error {
