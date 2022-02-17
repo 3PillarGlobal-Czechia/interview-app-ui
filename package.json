@@ -7,8 +7,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint src/* --quiet --fix",
-    "lint-check": "npx eslint src/*"
+    "lint": "npx eslint src/ --quiet --fix",
+    "lint-check": "npx eslint src/"
   },
   "dependencies": {
     "react": "^17.0.2",
