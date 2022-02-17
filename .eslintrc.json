@@ -41,6 +41,7 @@
     }
   ],
   "rules": {
+    "eol-last": ["warn", "always"],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": [
       "error"
