@@ -1,4 +1,4 @@
-import { Client } from './GeneratedClient';
+import { Client } from './Client';
 
 export class ApiClient extends Client {
   constructor() {
@@ -6,4 +6,4 @@ export class ApiClient extends Client {
   }
 }
 
-export * from './GeneratedClient';
+export * from './Client';
