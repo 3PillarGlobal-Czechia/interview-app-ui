@@ -15,7 +15,7 @@ import {
   InterviewQuestionModel,
   QuestionListModel,
 } from '../services/ApiClient';
-import styles from './QuestionListsView.module.scss';
+import styles from './QuestionLists.module.scss';
 
 const { TextArea } = Input;
 
