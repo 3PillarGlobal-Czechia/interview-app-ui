@@ -27,8 +27,8 @@ export default function QuestionLists(): JSX.Element {
     'yellow',
     'black',
   ];
-  const colorIndex = 0;
-  let hashmap = new Map<string, string>();
+  let colorIndex = 0;
+  const hashmap = new Map<string, string>();
 
   useEffect(() => {
     async function loadLists(): Promise<void> {
@@ -54,12 +54,12 @@ export default function QuestionLists(): JSX.Element {
   }
 
   function nextColor(): string {
-    return colors[(colorIndex + 1) % colors.length];
+    return colors[colorIndex++ % colors.length];
   }
 
   function colorByCategory(category: string): string {
     if (!hashmap.has(category)) {
-      hashmap = hashmap.set(category, nextColor());
+      hashmap.set(category, nextColor());
     }
     return hashmap.get(category)!;
   }
@@ -89,9 +89,9 @@ export default function QuestionLists(): JSX.Element {
       key: 'categories',
       render: (interviewQuestions: InterviewQuestionModel[]) => (
         <>
-          {getDistinctCategories(interviewQuestions).map((category, index) => {
+          {getDistinctCategories(interviewQuestions).map((category) => {
             return (
-              <Tag key={index} color={colorByCategory(category)}>
+              <Tag key={category} color={colorByCategory(category)}>
                 {category}
               </Tag>
             );
@@ -114,11 +114,19 @@ export default function QuestionLists(): JSX.Element {
     },
   ];
 
+  const showModal = (): void => setModalVisibility(true);
+  const hideModal = (): void => setModalVisibility(false);
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
+    setTitleInput(e.target.value);
+  const onDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => setDescriptionInput(e.target.value);
+
   return (
     <div className={styles.questionLists}>
       <div className={styles.questionListsHeader}>
         <h3>Question Lists</h3>
-        <Button type="primary" onClick={() => setModalVisibility(true)}>
+        <Button type="primary" onClick={showModal}>
           Create a New List
         </Button>
       </div>
@@ -127,18 +135,18 @@ export default function QuestionLists(): JSX.Element {
         visible={isPopupVisible}
         okButtonProps={{ disabled: titleInput === '' }}
         onOk={createList}
-        onCancel={() => setModalVisibility(false)}
+        onCancel={hideModal}
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input
             placeholder="Title"
             value={titleInput}
-            onChange={(e) => setTitleInput(e.target.value)}
+            onChange={onTitleChange}
           />
           <TextArea
             placeholder="Description"
             value={descriptionInput}
-            onChange={(e) => setDescriptionInput(e.target.value)}
+            onChange={onDescriptionChange}
             rows={4}
           />
         </Space>
