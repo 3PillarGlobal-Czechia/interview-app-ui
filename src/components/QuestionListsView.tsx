@@ -1,6 +1,13 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import { Button, Empty, Input, Modal, Space, Spin, Table, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { ColumnsType } from 'antd/lib/table';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Client,
@@ -13,106 +20,110 @@ import styles from './QuestionListsView.module.scss';
 const { TextArea } = Input;
 
 export default function QuestionLists(): JSX.Element {
-  const client = new Client('https://localhost:5001');
+  const url = 'https://localhost:5001';
+  const client = useMemo(() => new Client(url), [url]);
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [lists, setLists] = useState<QuestionListModel[] | null>();
-  const colors: string[] = [
-    'red',
-    'blue',
-    'green',
-    'orange',
-    'purple',
-    'yellow',
-    'black',
-  ];
-  let colorIndex = 0;
-  const hashmap = new Map<string, string>();
+  const colors: string[] = useMemo(
+    () => ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'black'],
+    []
+  );
+  const colorIndex = useRef(0);
+  const hashmap = useMemo(() => new Map<string, string>(), []);
 
-  useEffect(() => {
-    async function loadLists(): Promise<void> {
-      const data = await client.questionLists(undefined, undefined);
-      setLists(data);
-    }
-    loadLists();
-  }, []);
+  const nextColor = useCallback((): string => {
+    const color = colors[colorIndex.current];
+    colorIndex.current = (colorIndex.current + 1) % colors.length;
+    return color;
+  }, [colors]);
 
-  function setModalVisibility(value: boolean | null = null): void {
-    setPopupVisible((isCurrentlyVisible) => value || !isCurrentlyVisible);
-  }
-
-  function createList(): void {
-    const request = new CreateQuestionListRequest({
-      title: titleInput,
-      description: descriptionInput,
-    });
-    client.create2(request).then((model) => {
-      setLists([...lists!, model]);
-    });
-    setModalVisibility(false);
-  }
-
-  function nextColor(): string {
-    return colors[colorIndex++ % colors.length];
-  }
-
-  function colorByCategory(category: string): string {
-    if (!hashmap.has(category)) {
-      hashmap.set(category, nextColor());
-    }
-    return hashmap.get(category)!;
-  }
+  const colorByCategory = useCallback(
+    (category: string): string => {
+      if (!hashmap.has(category)) {
+        hashmap.set(category, nextColor());
+      }
+      return hashmap.get(category) ?? 'black';
+    },
+    [hashmap, nextColor]
+  );
 
   function getDistinctCategories(
     questions: InterviewQuestionModel[]
   ): string[] {
     const set = new Set<string>();
-    questions
-      ?.map((question) => question.category)
-      .filter((category) => category !== undefined)
-      .forEach((category) => {
-        set.add(category!);
-      });
+    questions?.forEach((question) => {
+      if (question?.category) {
+        set.add(question.category);
+      }
+    });
     return Array.from(set);
   }
 
-  const tableColumns = [
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-    },
-    {
-      title: 'Categories',
-      dataIndex: 'interviewQuestions',
-      key: 'categories',
-      render: (interviewQuestions: InterviewQuestionModel[]) => (
-        <>
-          {getDistinctCategories(interviewQuestions).map((category) => {
-            return (
-              <Tag key={category} color={colorByCategory(category)}>
-                {category}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Options',
-      key: 'options',
-      render: () => (
-        <div>
-          <Button type="link">View</Button>
-          <Button type="link">Start Interview</Button>
-          <Button type="link" danger>
-            Delete
-          </Button>
-        </div>
-      ),
-    },
-  ];
+  useEffect(() => {
+    async function loadLists(): Promise<void> {
+      const data = await client.questionLists(undefined, undefined);
+
+      setLists(data);
+    }
+    loadLists();
+  }, [client]);
+
+  function setModalVisibility(value: boolean | null = null): void {
+    setPopupVisible((isCurrentlyVisible) => value || !isCurrentlyVisible);
+  }
+
+  const createList = useCallback(() => {
+    const request = new CreateQuestionListRequest({
+      title: titleInput,
+      description: descriptionInput,
+    });
+    client.create2(request).then((model) => {
+      setLists([...(lists ?? []), model]);
+    });
+    setModalVisibility(false);
+  }, [client, lists, titleInput, descriptionInput]);
+
+  const tableColumns = useMemo(
+    (): ColumnsType<QuestionListModel> => [
+      {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: 'Categories',
+        dataIndex: 'interviewQuestions',
+        key: 'categories',
+        render: (interviewQuestions: InterviewQuestionModel[]) => (
+          <>
+            {getDistinctCategories(interviewQuestions).map((category) => {
+              return (
+                <Tag key={category} color={colorByCategory(category)}>
+                  {category}
+                </Tag>
+              );
+            })}
+          </>
+        ),
+      },
+      {
+        title: 'Options',
+        key: 'options',
+        render: () => (
+          <div>
+            <Button type="link">View</Button>
+            <Button type="link">Start Interview</Button>
+            <Button type="link" danger>
+              Delete
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [colorByCategory]
+  );
 
   const showModal = (): void => setModalVisibility(true);
   const hideModal = (): void => setModalVisibility(false);
@@ -121,6 +132,18 @@ export default function QuestionLists(): JSX.Element {
   const onDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => setDescriptionInput(e.target.value);
+
+  const listsElement = useMemo(() => {
+    if (lists) {
+      if (lists.length) {
+        return <Table dataSource={lists} columns={tableColumns} />;
+      }
+
+      return <Empty description="No question lists" />;
+    }
+
+    return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />;
+  }, [lists, tableColumns]);
 
   return (
     <div className={styles.questionLists}>
@@ -151,17 +174,7 @@ export default function QuestionLists(): JSX.Element {
           />
         </Space>
       </Modal>
-      <div className={styles.questionListsData}>
-        {lists ? (
-          lists.length ? (
-            <Table dataSource={lists} columns={tableColumns} />
-          ) : (
-            <Empty description="No question lists" />
-          )
-        ) : (
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
-        )}
-      </div>
+      <div className={styles.questionListsData}>{listsElement}</div>
     </div>
   );
 }

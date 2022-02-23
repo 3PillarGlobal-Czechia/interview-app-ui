@@ -28,7 +28,8 @@ test('3pillar section has right description', () => {
   const threePillarSection = screen.getByTestId('3pillar-global-section');
 
   expect(threePillarSection.querySelector('p')).toHaveTextContent(
-    `3Pillar Global builds breakthrough software products that power digital businesses. Trusted services. Tested results. Innovations that scale.`
+    `3Pillar Global builds breakthrough software products that power digital businesses. 
+     Trusted services. Tested results. Innovations that scale.`
   );
 });
 
