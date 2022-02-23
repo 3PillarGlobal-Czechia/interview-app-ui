@@ -10,7 +10,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "{controller}Client",
+      "className": "{controller}ApiClient",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,
@@ -68,7 +68,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "src/services/GeneratedClient.ts",
+      "output": "src/services/ApiClient.ts",
       "newLineBehavior": "Auto"
     }
   }
