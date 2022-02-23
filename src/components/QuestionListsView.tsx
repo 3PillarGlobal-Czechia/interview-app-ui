@@ -1,99 +1,159 @@
-import { useEffect, useState } from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Empty, Input, Modal, Space, Spin, Table, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
 
-import styles from '../App.module.scss';
 import {
   Client,
   CreateQuestionListRequest,
+  InterviewQuestionModel,
   QuestionListModel,
 } from '../services/ApiClient';
-import Categories from './Categories';
-import CreateQuestionList from './CreateQuestionList';
+import styles from './QuestionListsView.module.scss';
 
-export default function QuestionLists() {
+const { TextArea } = Input;
+
+export default function QuestionLists(): JSX.Element {
   const client = new Client('https://localhost:5001');
   const [isPopupVisible, setPopupVisible] = useState(false);
+  const [titleInput, setTitleInput] = useState('');
+  const [descriptionInput, setDescriptionInput] = useState('');
   const [lists, setLists] = useState<QuestionListModel[] | null>();
+  const colors: string[] = [
+    'red',
+    'blue',
+    'green',
+    'orange',
+    'purple',
+    'yellow',
+    'black',
+  ];
+  const colorIndex = 0;
+  let hashmap = new Map<string, string>();
+
   useEffect(() => {
-    async function loadLists() {
+    async function loadLists(): Promise<void> {
       const data = await client.questionLists(undefined, undefined);
       setLists(data);
     }
     loadLists();
   }, []);
 
-  function togglePopup(): void {
-    setPopupVisible((isCurrentlyVisible) => !isCurrentlyVisible);
+  function setModalVisibility(value: boolean | null = null): void {
+    setPopupVisible((isCurrentlyVisible) => value || !isCurrentlyVisible);
   }
 
-  function createList(name: string): void {
+  function createList(): void {
     const request = new CreateQuestionListRequest({
-      title: name,
+      title: titleInput,
+      description: descriptionInput,
     });
     client.create2(request).then((model) => {
       setLists([...lists!, model]);
     });
-    togglePopup();
+    setModalVisibility(false);
   }
+
+  function nextColor(): string {
+    return colors[(colorIndex + 1) % colors.length];
+  }
+
+  function colorByCategory(category: string): string {
+    if (!hashmap.has(category)) {
+      hashmap = hashmap.set(category, nextColor());
+    }
+    return hashmap.get(category)!;
+  }
+
+  function getDistinctCategories(
+    questions: InterviewQuestionModel[]
+  ): string[] {
+    const set = new Set<string>();
+    questions
+      ?.map((question) => question.category)
+      .filter((category) => category !== undefined)
+      .forEach((category) => {
+        set.add(category!);
+      });
+    return Array.from(set);
+  }
+
+  const tableColumns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Categories',
+      dataIndex: 'interviewQuestions',
+      key: 'categories',
+      render: (interviewQuestions: InterviewQuestionModel[]) => (
+        <>
+          {getDistinctCategories(interviewQuestions).map((category, index) => {
+            return (
+              <Tag key={index} color={colorByCategory(category)}>
+                {category}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Options',
+      key: 'options',
+      render: () => (
+        <div>
+          <Button type="link">View</Button>
+          <Button type="link">Start Interview</Button>
+          <Button type="link" danger>
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className={styles.questionLists}>
       <div className={styles.questionListsHeader}>
-        <h4>Question Lists</h4>
-        <button onClick={togglePopup} className={styles.btnPrimary}>
+        <h3>Question Lists</h3>
+        <Button type="primary" onClick={() => setModalVisibility(true)}>
           Create a New List
-        </button>
+        </Button>
       </div>
-      {isPopupVisible ? (
-        <CreateQuestionList
-          createList={createList}
-          toggleCallback={togglePopup}
-        />
-      ) : null}
+      <Modal
+        title="New Question List"
+        visible={isPopupVisible}
+        okButtonProps={{ disabled: titleInput === '' }}
+        onOk={createList}
+        onCancel={() => setModalVisibility(false)}
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Input
+            placeholder="Title"
+            value={titleInput}
+            onChange={(e) => setTitleInput(e.target.value)}
+          />
+          <TextArea
+            placeholder="Description"
+            value={descriptionInput}
+            onChange={(e) => setDescriptionInput(e.target.value)}
+            rows={4}
+          />
+        </Space>
+      </Modal>
       <div className={styles.questionListsData}>
         {lists ? (
           lists.length ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Categories</th>
-                  <th>Options</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lists.map((list: QuestionListModel) => (
-                  <tr key={list.id}>
-                    <td>{list.title}</td>
-                    <td>
-                      <Categories list={list} />
-                    </td>
-                    <td>
-                      <button onClick={() => {}} className={styles.btnTextBlue}>
-                        View
-                      </button>
-                      <button onClick={() => {}} className={styles.btnTextBlue}>
-                        Start Interview
-                      </button>
-                      <button onClick={() => {}} className={styles.btnTextRed}>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <Table dataSource={lists} columns={tableColumns} />
           ) : (
-            <div>
-              <img src={`${process.env.PUBLIC_URL}/noQuestionLists.png`} />
-              <p>No question lists</p>
-            </div>
+            <Empty description="No question lists" />
           )
         ) : (
-          <p>Loading</p>
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
         )}
       </div>
     </div>
   );
-}
-{
 }
