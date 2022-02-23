@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 
 import {
-  Client,
+  ApiClient,
   CreateQuestionListRequest,
   InterviewQuestionModel,
   QuestionListModel,
@@ -20,8 +20,7 @@ import styles from './QuestionLists.module.scss';
 const { TextArea } = Input;
 
 export default function QuestionLists(): JSX.Element {
-  const url = 'https://localhost:5001';
-  const client = useMemo(() => new Client(url), [url]);
+  const client = useMemo(() => new ApiClient(), []);
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
