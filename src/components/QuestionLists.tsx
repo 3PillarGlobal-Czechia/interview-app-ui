@@ -70,7 +70,7 @@ export default function QuestionLists(): JSX.Element {
   }, [client]);
 
   function setModalVisibility(value: boolean | null = null): void {
-    setPopupVisible(isCurrentlyVisible => value ?? !isCurrentlyVisible);
+    setPopupVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
   }
 
   const createList = useCallback(() => {
