@@ -10,7 +10,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "{controller}Client",
+      "className": "{controller}ApiClient",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,
