@@ -245,12 +245,17 @@ export class ApiClient {
     }
 
     /**
+     * @param id (optional) 
      * @param text (optional) 
      * @param categories (optional) 
      * @return Success
      */
-    questionLists(text: string | undefined, categories: string[] | undefined): Promise<QuestionListModel[]> {
+    questionLists(id: number | undefined, text: string | undefined, categories: string[] | undefined): Promise<QuestionListModel[]> {
         let url_ = this.baseUrl + "/api/v1/QuestionLists?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
         if (text === null)
             throw new Error("The parameter 'text' cannot be null.");
         else if (text !== undefined)

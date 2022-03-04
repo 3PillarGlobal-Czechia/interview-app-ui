@@ -1,8 +1,10 @@
 import { ProfileOutlined } from '@ant-design/icons';
 import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import styles from './App.module.scss';
+import QuestionList from './components/QuestionList';
 import QuestionLists from './components/QuestionLists';
 
 function App(): JSX.Element {
@@ -13,7 +15,12 @@ function App(): JSX.Element {
         <p>Interview App</p>
       </Header>
       <Content>
-        <QuestionLists />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<QuestionLists />} />
+            <Route path="QuestionList/:id" element={<QuestionList />} />
+          </Routes>
+        </BrowserRouter>
       </Content>
     </Layout>
   );

@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Client,
@@ -62,7 +63,7 @@ export default function QuestionLists(): JSX.Element {
 
   useEffect(() => {
     async function loadLists(): Promise<void> {
-      const data = await client.questionLists(undefined, undefined);
+      const data = await client.questionLists(undefined, undefined, undefined);
 
       setLists(data);
     }
@@ -110,9 +111,9 @@ export default function QuestionLists(): JSX.Element {
       {
         title: 'Options',
         key: 'options',
-        render: () => (
+        render: (_, record) => (
           <div>
-            <Button type="link">View</Button>
+            <Link to={`QuestionList/${record.id}`}>View</Link>
             <Button type="link">Start Interview</Button>
             <Button type="link" danger>
               Delete
