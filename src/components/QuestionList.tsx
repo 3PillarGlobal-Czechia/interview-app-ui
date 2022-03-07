@@ -2,19 +2,11 @@ import {
   ArrowLeftOutlined,
   DeleteOutlined,
   LoadingOutlined,
-  SearchOutlined,
 } from '@ant-design/icons';
 import { Button, Divider, Drawer, Input, Rate, Space, Spin } from 'antd';
 import Table, { ColumnsType } from 'antd/lib/table';
-import {
-  ColumnFilterItem,
-  ColumnTitle,
-  FilterConfirmProps,
-  FilterDropdownProps,
-} from 'antd/lib/table/interface';
-import { DataIndex } from 'rc-table/lib/interface';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, {
-  Key,
   useCallback,
   useEffect,
   useMemo,
@@ -29,11 +21,9 @@ import {
   QuestionListModel,
   UpdateQuestionListRequest,
 } from '../services/Client';
-import { getDistinctValues } from '../utils/stringUtils';
 import {
   createColumnFilterProps,
   createColumnSearchProps,
-  createDefaultColumnProps,
 } from '../utils/tableUtils';
 import styles from './QuestionLists.module.scss';
 
