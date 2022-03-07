@@ -29,11 +29,15 @@ import {
   QuestionListModel,
   UpdateQuestionListRequest,
 } from '../services/Client';
-import { getDistinctValues, toPascalCase } from '../utils/stringUtils';
+import { getDistinctValues } from '../utils/stringUtils';
+import {
+  createColumnFilterProps,
+  createColumnSearchProps,
+  createDefaultColumnProps,
+} from '../utils/tableUtils';
 import styles from './QuestionLists.module.scss';
 
-export default function QuestionLists(): JSX.Element {
-  const searchHighlightColor = '#1890ff';
+export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
   const searchInput = useRef<Input>();
   const client = useMemo(() => new Client(), []);
@@ -90,142 +94,19 @@ export default function QuestionLists(): JSX.Element {
     confirm({ closeDropdown: true });
   };
 
-  const getColumnProps = (
-    dataIndex: string
-  ): {
-    title: string;
-    dataIndex: string;
-    key: string;
-  } => ({
-    title: toPascalCase(dataIndex),
-    dataIndex,
-    key: dataIndex,
-  });
-
-  const filterIcon = useCallback(
-    (filtered: boolean) => (
-      <SearchOutlined
-        style={{ color: filtered ? searchHighlightColor : undefined }}
-      />
-    ),
-    [searchHighlightColor]
-  );
-
-  const getColumnSearchProps = (
-    dataIndex: 'title' | 'category' | 'content' | 'difficulty'
-  ): {
-    title: ColumnTitle<InterviewQuestionModel>;
-    dataIndex: DataIndex;
-    key: Key;
-    filterIcon: React.ReactNode | ((filtered: boolean) => React.ReactNode);
-    filterDropdown:
-      | React.ReactNode
-      | ((props: FilterDropdownProps) => React.ReactNode);
-    onFilterDropdownVisibleChange: (visible: boolean) => void;
-    onFilter: (
-      value: string | number | boolean,
-      record: InterviewQuestionModel
-    ) => boolean;
-  } => ({
-    ...getColumnProps(dataIndex),
-    filterIcon,
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }: {
-      setSelectedKeys: (selectedKeys: React.Key[]) => void;
-      selectedKeys: React.Key[];
-      confirm: (param?: FilterConfirmProps) => void;
-      clearFilters: () => void;
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            searchInput.current = node!;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => handleReset(clearFilters!, confirm)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-        </Space>
-      </div>
-    ),
-    onFilterDropdownVisibleChange: (visible: boolean) => {
-      if (visible) {
-        setTimeout(() => searchInput.current!.select(), 100);
-      }
-    },
-    onFilter: (
-      value: string | number | boolean,
-      record: InterviewQuestionModel
-    ): boolean => {
-      return record[dataIndex]!.toString()
-        .toLowerCase()
-        .includes(value.toString().toLowerCase());
-    },
-  });
-
-  const getColumnFilterProps = (
-    dataIndex: 'title' | 'category' | 'content' | 'difficulty',
-    filterData: string[]
-  ): {
-    title: ColumnTitle<InterviewQuestionModel>;
-    dataIndex: DataIndex;
-    key: Key;
-    filters: ColumnFilterItem[];
-    onFilter: (
-      value: string | number | boolean,
-      record: InterviewQuestionModel
-    ) => boolean;
-  } => ({
-    ...getColumnProps(dataIndex),
-    filters: getDistinctValues(filterData).map((value) => {
-      return { text: value, value };
-    }),
-    onFilter: (
-      value: string | number | boolean,
-      record: InterviewQuestionModel
-    ): boolean => {
-      return (
-        record[dataIndex]
-          ?.toString()
-          .toLowerCase()
-          .indexOf(value.toString().toLowerCase()) === 0
-      );
-    },
-  });
-
   const tableColumns = useCallback(
     (data: InterviewQuestionModel[]): ColumnsType<InterviewQuestionModel> => {
       return [
         {
-          ...getColumnSearchProps('title'),
+          ...createColumnSearchProps(
+            'title',
+            searchInput,
+            handleSearch,
+            handleReset
+          ),
         },
         {
-          ...getColumnFilterProps(
+          ...createColumnFilterProps(
             'category',
             data
               .map((value) => value.category!.toString())
@@ -233,10 +114,15 @@ export default function QuestionLists(): JSX.Element {
           ),
         },
         {
-          ...getColumnSearchProps('content'),
+          ...createColumnSearchProps(
+            'content',
+            searchInput,
+            handleSearch,
+            handleReset
+          ),
         },
         {
-          ...getColumnFilterProps(
+          ...createColumnFilterProps(
             'difficulty',
             data
               .map((value) => value.difficulty!.toString())
