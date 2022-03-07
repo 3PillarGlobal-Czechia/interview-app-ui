@@ -33,6 +33,7 @@ import { getDistinctValues, toPascalCase } from '../utils/stringUtils';
 import styles from './QuestionLists.module.scss';
 
 export default function QuestionLists(): JSX.Element {
+  const searchHighlightColor = '#1890ff';
   const { id } = useParams<'id'>();
   const searchInput = useRef<Input>();
   const client = useMemo(() => new Client(), []);
@@ -89,11 +90,26 @@ export default function QuestionLists(): JSX.Element {
     confirm({ closeDropdown: true });
   };
 
-  const getColumnProps = (dataIndex: string) => ({
+  const getColumnProps = (
+    dataIndex: string
+  ): {
+    title: string;
+    dataIndex: string;
+    key: string;
+  } => ({
     title: toPascalCase(dataIndex),
     dataIndex,
     key: dataIndex,
   });
+
+  const filterIcon = useCallback(
+    (filtered: boolean) => (
+      <SearchOutlined
+        style={{ color: filtered ? searchHighlightColor : undefined }}
+      />
+    ),
+    [searchHighlightColor]
+  );
 
   const getColumnSearchProps = (
     dataIndex: 'title' | 'category' | 'content' | 'difficulty'
@@ -112,14 +128,17 @@ export default function QuestionLists(): JSX.Element {
     ) => boolean;
   } => ({
     ...getColumnProps(dataIndex),
-    filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
-    ),
+    filterIcon,
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
       clearFilters,
+    }: {
+      setSelectedKeys: (selectedKeys: React.Key[]) => void;
+      selectedKeys: React.Key[];
+      confirm: (param?: FilterConfirmProps) => void;
+      clearFilters: () => void;
     }) => (
       <div style={{ padding: 8 }}>
         <Input
