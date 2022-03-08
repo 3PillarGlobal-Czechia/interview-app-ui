@@ -31,26 +31,15 @@ export default function QuestionList(): JSX.Element {
   const client = new Client();
   const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
   const [list, setList] = useState<QuestionListModel>();
+  const [allQuestions, setAllQuestions] = useState<InterviewQuestionModel[]>([]);
   useEffect(() => {
-    async function loadList(): Promise<void> {
-      setList(
-        (await client.questionLists(Number(id), undefined, undefined))[0]
-      );
-    }
-    loadList();
-  }, [client]);
-
-  const [allQuestions, setAllQuestions] = useState<InterviewQuestionModel[]>(
-    []
-  );
-  useEffect(() => {
-    async function loadQuestions(): Promise<void> {
-      setAllQuestions(
-        await client.interviewQuestions(undefined, undefined, undefined)
-      );
-    }
-    loadQuestions();
-  }, [client]);
+    client.questionLists(Number(id), undefined, undefined).then(lists => {
+      setList(lists[0]);
+    });
+    client.interviewQuestions(undefined, undefined, undefined).then(questions => {
+      setAllQuestions(questions);
+    })
+  }, []);
 
   const [isDrawerVisible, setDrawerVisible] = useState(false);
   const [questionsToAdd, setQuestionsToAdd] = useState<
