@@ -7,9 +7,7 @@ import { Button, Divider, Drawer, Input, Rate, Space, Spin } from 'antd';
 import Table, { ColumnsType } from 'antd/lib/table';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, {
-  useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -30,7 +28,7 @@ import styles from './QuestionLists.module.scss';
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
   const searchInput = useRef<Input>();
-  const client = useMemo(() => new Client(), []);
+  const client = new Client();
   const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
   const [list, setList] = useState<QuestionListModel>();
   useEffect(() => {
@@ -84,50 +82,47 @@ export default function QuestionList(): JSX.Element {
     confirm({ closeDropdown: true });
   };
 
-  const tableColumns = useCallback(
-    (data: InterviewQuestionModel[]): ColumnsType<InterviewQuestionModel> => {
-      return [
-        {
-          ...createColumnSearchProps(
-            'title',
-            searchInput,
-            handleSearch,
-            handleReset
-          ),
-        },
-        {
-          ...createColumnFilterProps(
-            'category',
-            data
-              .map((value) => value.category!.toString())
-              .filter((value) => value !== undefined)!
-          ),
-        },
-        {
-          ...createColumnSearchProps(
-            'content',
-            searchInput,
-            handleSearch,
-            handleReset
-          ),
-        },
-        {
-          ...createColumnFilterProps(
-            'difficulty',
-            data
-              .map((value) => value.difficulty!.toString())
-              .filter((value) => value !== undefined)!
-          ),
-          sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
-            a.difficulty != null && b.difficulty != null
-              ? a.difficulty - b.difficulty
-              : 1,
-          render: (value: number) => <Rate disabled value={value} />,
-        },
-      ];
-    },
-    [isBeingEdited, searchText, list]
-  );
+  const tableColumns = (data: InterviewQuestionModel[]): ColumnsType<InterviewQuestionModel> => {
+    return [
+      {
+        ...createColumnSearchProps(
+          'title',
+          searchInput,
+          handleSearch,
+          handleReset
+        ),
+      },
+      {
+        ...createColumnFilterProps(
+          'category',
+          data
+            .map((value) => value.category!.toString())
+            .filter((value) => value !== undefined)!
+        ),
+      },
+      {
+        ...createColumnSearchProps(
+          'content',
+          searchInput,
+          handleSearch,
+          handleReset
+        ),
+      },
+      {
+        ...createColumnFilterProps(
+          'difficulty',
+          data
+            .map((value) => value.difficulty!.toString())
+            .filter((value) => value !== undefined)!
+        ),
+        sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
+          a.difficulty != null && b.difficulty != null
+            ? a.difficulty - b.difficulty
+            : 1,
+        render: (value: number) => <Rate disabled value={value} />,
+      },
+    ];
+  };
 
   const removeFromAddDrawer = (question: InterviewQuestionModel): void => {
     setQuestionsToAdd((old) => old.filter((q) => q.id !== question.id));
@@ -171,8 +166,7 @@ export default function QuestionList(): JSX.Element {
       });
   };
 
-  const existingQuestionsTableColumns = useMemo(
-    () => [
+  const existingQuestionsTableColumns = [
       {
         title: 'Questions added to list',
         children: [
@@ -180,7 +174,7 @@ export default function QuestionList(): JSX.Element {
           {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
+            render: (_: any, record: InterviewQuestionModel) => (
               <Button
                 type="link"
                 onClick={() => setQuestionsToRemove((old) => [...old, record])}
@@ -190,52 +184,41 @@ export default function QuestionList(): JSX.Element {
             ),
           },
         ],
-      },
-    ],
-    [tableColumns, list]
+      }
+    ];
+
+  const addableQuestionsTableColumns = [
+    {
+      title: 'Questions you can add to list',
+      children: [
+        ...tableColumns(allQuestions),
+        {
+          title: 'Action',
+          key: 'action',
+          render: (_: any, record: InterviewQuestionModel) => (
+            <Button
+              type="link"
+              onClick={() => setQuestionsToAdd((old) => [...old, record])}
+            >
+              Add
+            </Button>
+          ),
+        },
+      ],
+    },
+  ];
+
+  const addableQuestions = allQuestions.filter(
+    (question) =>
+      !list?.interviewQuestions?.map((q) => q.id).includes(question.id) &&
+      !questionsToAdd.map((q) => q.id).includes(question.id)
   );
 
-  const addableQuestionsTableColumns = useMemo(
-    () => [
-      {
-        title: 'Questions you can add to list',
-        children: [
-          ...tableColumns(allQuestions),
-          {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-              <Button
-                type="link"
-                onClick={() => setQuestionsToAdd((old) => [...old, record])}
-              >
-                Add
-              </Button>
-            ),
-          },
-        ],
-      },
-    ],
-    [tableColumns, allQuestions]
+  const displayableQuestions = list?.interviewQuestions?.filter(
+    (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
   );
 
-  const addableQuestions = useMemo(
-    () =>
-      allQuestions.filter(
-        (question) =>
-          !list?.interviewQuestions?.map((q) => q.id).includes(question.id) &&
-          !questionsToAdd.map((q) => q.id).includes(question.id)
-      ),
-    [list, allQuestions, questionsToAdd]
-  );
-
-  const displayableQuestions = useMemo(() => {
-    return list?.interviewQuestions?.filter(
-      (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
-    );
-  }, [list, questionsToRemove]);
-
-  const questionsElement = useMemo(() => {
+  const questionsElement = () => {
     if (list?.interviewQuestions) {
       return isBeingEdited ? (
         <Space direction="vertical">
@@ -257,18 +240,9 @@ export default function QuestionList(): JSX.Element {
     }
 
     return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />;
-  }, [
-    isBeingEdited,
-    list,
-    allQuestions,
-    tableColumns,
-    displayableQuestions,
-    addableQuestions,
-    questionsToAdd,
-    questionsToRemove,
-  ]);
+  };
 
-  const headerElement = useMemo(() => {
+  const headerElement = () => {
     if (isBeingEdited) {
       return (
         <>
@@ -295,7 +269,7 @@ export default function QuestionList(): JSX.Element {
         </Button>
       </>
     );
-  }, [isBeingEdited, list, questionsToAdd, questionsToRemove]);
+  };
 
   return (
     <div className={styles.questionLists}>
