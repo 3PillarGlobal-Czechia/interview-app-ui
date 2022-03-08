@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
 } from '@ant-design/icons';
 import { Button, Divider, Drawer, Input, Rate, Space, Spin } from 'antd';
-import Table, { ColumnsType } from 'antd/lib/table';
+import { ColumnsType } from 'antd/lib/table';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, {
   useEffect,
@@ -25,6 +25,7 @@ import {
 } from '../utils/tableUtils';
 import Header from './Header';
 import styles from './QuestionLists.module.scss';
+import TableWrapper from './TableWrapper';
 
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
@@ -114,6 +115,14 @@ export default function QuestionList(): JSX.Element {
     ];
   };
 
+  const addToAddDrawer = (record: InterviewQuestionModel): void => {
+    setQuestionsToAdd((old) => [...old, record]);
+  };
+
+  const addToRemoveDrawer = (record: InterviewQuestionModel): void => {
+    setQuestionsToRemove((old) => [...old, record]);
+  };
+
   const removeFromAddDrawer = (question: InterviewQuestionModel): void => {
     setQuestionsToAdd((old) => old.filter((q) => q.id !== question.id));
   };
@@ -125,8 +134,12 @@ export default function QuestionList(): JSX.Element {
   const clearDrawerQuestions = (): void => {
     questionsToAdd.forEach((question) => removeFromAddDrawer(question));
     questionsToRemove.forEach((question) => removeFromRemoveDrawer(question));
-    setBeingEdited(false);
   };
+
+  const discard = (): void => {
+    clearDrawerQuestions();
+    setBeingEdited(false);
+  }
 
   const saveChanges = (): void => {
     client
@@ -153,50 +166,9 @@ export default function QuestionList(): JSX.Element {
             })
         );
         clearDrawerQuestions();
+        setBeingEdited(false);
       });
   };
-
-  const existingQuestionsTableColumns = [
-      {
-        title: 'Questions added to list',
-        children: [
-          ...tableColumns(list?.interviewQuestions ?? []),
-          {
-            title: 'Action',
-            key: 'action',
-            render: (_: any, record: InterviewQuestionModel) => (
-              <Button
-                type="link"
-                onClick={() => setQuestionsToRemove((old) => [...old, record])}
-              >
-                Remove
-              </Button>
-            ),
-          },
-        ],
-      }
-    ];
-
-  const addableQuestionsTableColumns = [
-    {
-      title: 'Questions you can add to list',
-      children: [
-        ...tableColumns(allQuestions),
-        {
-          title: 'Action',
-          key: 'action',
-          render: (_: any, record: InterviewQuestionModel) => (
-            <Button
-              type="link"
-              onClick={() => setQuestionsToAdd((old) => [...old, record])}
-            >
-              Add
-            </Button>
-          ),
-        },
-      ],
-    },
-  ];
 
   const addableQuestions = allQuestions.filter(
     (question) =>
@@ -206,31 +178,19 @@ export default function QuestionList(): JSX.Element {
 
   const displayableQuestions = list?.interviewQuestions?.filter(
     (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
-  );
+  ) ?? [];
 
-  const questionsElement = () => {
-    if (list?.interviewQuestions) {
-      return isBeingEdited ? (
+  const questionsElement =
+    list?.interviewQuestions ? (
+      isBeingEdited ? (
         <Space direction="vertical">
-          <Table
-            dataSource={displayableQuestions}
-            columns={existingQuestionsTableColumns}
-          />
-          <Table
-            dataSource={addableQuestions}
-            columns={addableQuestionsTableColumns}
-          />
+          <TableWrapper dataSource={displayableQuestions} columns={tableColumns(list?.interviewQuestions)} customAction={{buttonText: "Remove", actionCallback: (record) => addToRemoveDrawer(record)}} customTitle="Questions added to list" />
+          <TableWrapper dataSource={addableQuestions} columns={tableColumns(allQuestions)} customAction={{buttonText: "Add", actionCallback: (record) => addToAddDrawer(record)}} customTitle="Questions you can add to list" />
         </Space>
       ) : (
-        <Table
-          dataSource={displayableQuestions}
-          columns={tableColumns(list.interviewQuestions)}
-        />
-      );
-    }
-
-    return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />;
-  };
+        <TableWrapper dataSource={displayableQuestions} columns={tableColumns(list.interviewQuestions)} />
+      )
+    ) : ( <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} /> );
 
   const headerElement = isBeingEdited ? (
     <Header
@@ -238,7 +198,7 @@ export default function QuestionList(): JSX.Element {
       right={
         <Space>
           <Button onClick={() => setDrawerVisibility(true)}>Open</Button>
-          <Button onClick={clearDrawerQuestions}>Discard</Button>
+          <Button onClick={discard}>Discard</Button>
           <Button type="primary" onClick={saveChanges}>
             Save
           </Button>
@@ -295,7 +255,7 @@ export default function QuestionList(): JSX.Element {
           ))}
         </Drawer>
       {headerElement}
-      <div className={styles.questionListsData}>{questionsElement()}</div>
+      <div className={styles.questionListsData}>{questionsElement}</div>
     </div>
   );
 }
