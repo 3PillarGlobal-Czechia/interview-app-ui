@@ -23,6 +23,7 @@ import {
   createColumnFilterProps,
   createColumnSearchProps,
 } from '../utils/tableUtils';
+import Header from './Header';
 import styles from './QuestionLists.module.scss';
 
 export default function QuestionList(): JSX.Element {
@@ -231,40 +232,40 @@ export default function QuestionList(): JSX.Element {
     return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />;
   };
 
-  const headerElement = () => {
-    if (isBeingEdited) {
-      return (
-        <>
+  const headerElement = isBeingEdited ? (
+    <Header
+      left={<h3>{list?.title}</h3>}
+      right={
+        <Space>
+          <Button onClick={() => setDrawerVisibility(true)}>Open</Button>
+          <Button onClick={clearDrawerQuestions}>Discard</Button>
+          <Button type="primary" onClick={saveChanges}>
+            Save
+          </Button>
+        </Space>
+      }
+    />
+  ) : (
+    <Header
+      left={
+        <div>
+          <Link to="/" style={{ color: 'black', padding: 5 }}>
+            <ArrowLeftOutlined />
+          </Link>
           <h3>{list?.title}</h3>
-          <Space>
-            <Button onClick={() => setDrawerVisibility(true)}>Open</Button>
-            <Button onClick={clearDrawerQuestions}>Discard</Button>
-            <Button type="primary" onClick={saveChanges}>
-              Save
-            </Button>
-          </Space>
-        </>
-      );
-    }
-
-    return (
-      <>
-        <Link to="/" style={{ color: 'black', padding: 5 }}>
-          <ArrowLeftOutlined />
-        </Link>
-        <h3>{list?.title}</h3>
+        </div>
+      }
+      right={
         <Button type="primary" onClick={() => setBeingEdited(true)}>
           Edit
         </Button>
-      </>
-    );
-  };
+      }
+    />
+  );
 
   return (
     <div className={styles.questionLists}>
-      <div className={styles.questionListsHeader}>
-        {headerElement}
-        <Drawer
+      <Drawer
           title="Question Cart"
           placement="left"
           onClose={() => setDrawerVisibility(false)}
@@ -293,8 +294,8 @@ export default function QuestionList(): JSX.Element {
             </>
           ))}
         </Drawer>
-      </div>
-      <div className={styles.questionListsData}>{questionsElement}</div>
+      {headerElement}
+      <div className={styles.questionListsData}>{questionsElement()}</div>
     </div>
   );
 }
