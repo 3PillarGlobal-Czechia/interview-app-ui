@@ -6,11 +6,7 @@ import {
 import { Button, Divider, Drawer, Input, Rate, Space, Spin } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import {
@@ -33,14 +29,18 @@ export default function QuestionList(): JSX.Element {
   const client = new Client();
   const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
   const [list, setList] = useState<QuestionListModel>();
-  const [allQuestions, setAllQuestions] = useState<InterviewQuestionModel[]>([]);
+  const [allQuestions, setAllQuestions] = useState<InterviewQuestionModel[]>(
+    []
+  );
   useEffect(() => {
-    client.questionLists(Number(id), undefined, undefined).then(lists => {
+    client.questionLists(Number(id), undefined, undefined).then((lists) => {
       setList(lists[0]);
     });
-    client.interviewQuestions(undefined, undefined, undefined).then(questions => {
-      setAllQuestions(questions);
-    })
+    client
+      .interviewQuestions(undefined, undefined, undefined)
+      .then((questions) => {
+        setAllQuestions(questions);
+      });
   }, []);
 
   const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -73,7 +73,9 @@ export default function QuestionList(): JSX.Element {
     confirm({ closeDropdown: true });
   };
 
-  const tableColumns = (data: InterviewQuestionModel[]): ColumnsType<InterviewQuestionModel> => {
+  const tableColumns = (
+    data: InterviewQuestionModel[]
+  ): ColumnsType<InterviewQuestionModel> => {
     return [
       {
         ...createColumnSearchProps(
@@ -139,7 +141,7 @@ export default function QuestionList(): JSX.Element {
   const discard = (): void => {
     clearDrawerQuestions();
     setBeingEdited(false);
-  }
+  };
 
   const saveChanges = (): void => {
     client
@@ -176,21 +178,42 @@ export default function QuestionList(): JSX.Element {
       !questionsToAdd.map((q) => q.id).includes(question.id)
   );
 
-  const displayableQuestions = list?.interviewQuestions?.filter(
-    (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
-  ) ?? [];
+  const displayableQuestions =
+    list?.interviewQuestions?.filter(
+      (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
+    ) ?? [];
 
-  const questionsElement =
-    list?.interviewQuestions ? (
-      isBeingEdited ? (
-        <Space direction="vertical">
-          <TableWrapper dataSource={displayableQuestions} columns={tableColumns(list?.interviewQuestions)} customAction={{buttonText: "Remove", actionCallback: (record) => addToRemoveDrawer(record)}} customTitle="Questions added to list" />
-          <TableWrapper dataSource={addableQuestions} columns={tableColumns(allQuestions)} customAction={{buttonText: "Add", actionCallback: (record) => addToAddDrawer(record)}} customTitle="Questions you can add to list" />
-        </Space>
-      ) : (
-        <TableWrapper dataSource={displayableQuestions} columns={tableColumns(list.interviewQuestions)} />
-      )
-    ) : ( <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} /> );
+  const questionsElement = list?.interviewQuestions ? (
+    isBeingEdited ? (
+      <Space direction="vertical">
+        <TableWrapper
+          dataSource={displayableQuestions}
+          columns={tableColumns(list?.interviewQuestions)}
+          customAction={{
+            buttonText: 'Remove',
+            actionCallback: (record) => addToRemoveDrawer(record),
+          }}
+          customTitle="Questions added to list"
+        />
+        <TableWrapper
+          dataSource={addableQuestions}
+          columns={tableColumns(allQuestions)}
+          customAction={{
+            buttonText: 'Add',
+            actionCallback: (record) => addToAddDrawer(record),
+          }}
+          customTitle="Questions you can add to list"
+        />
+      </Space>
+    ) : (
+      <TableWrapper
+        dataSource={displayableQuestions}
+        columns={tableColumns(list.interviewQuestions)}
+      />
+    )
+  ) : (
+    <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
+  );
 
   const headerElement = isBeingEdited ? (
     <Header
@@ -226,34 +249,34 @@ export default function QuestionList(): JSX.Element {
   return (
     <div className={styles.questionLists}>
       <Drawer
-          title="Question Cart"
-          placement="left"
-          onClose={() => setDrawerVisibility(false)}
-          visible={isDrawerVisible}
-        >
-          {questionsToAdd.map((question) => (
-            <>
-              <Space>
-                <strong>Add: </strong>
-                {question.title}
-                <DeleteOutlined onClick={() => removeFromAddDrawer(question)} />
-              </Space>
-              <Divider />
-            </>
-          ))}
-          {questionsToRemove.map((question) => (
-            <>
-              <Space>
-                <strong>Remove: </strong>
-                {question.title}
-                <DeleteOutlined
-                  onClick={() => removeFromRemoveDrawer(question)}
-                />
-              </Space>
-              <Divider />
-            </>
-          ))}
-        </Drawer>
+        title="Question Cart"
+        placement="left"
+        onClose={() => setDrawerVisibility(false)}
+        visible={isDrawerVisible}
+      >
+        {questionsToAdd.map((question) => (
+          <>
+            <Space>
+              <strong>Add: </strong>
+              {question.title}
+              <DeleteOutlined onClick={() => removeFromAddDrawer(question)} />
+            </Space>
+            <Divider />
+          </>
+        ))}
+        {questionsToRemove.map((question) => (
+          <>
+            <Space>
+              <strong>Remove: </strong>
+              {question.title}
+              <DeleteOutlined
+                onClick={() => removeFromRemoveDrawer(question)}
+              />
+            </Space>
+            <Divider />
+          </>
+        ))}
+      </Drawer>
       {headerElement}
       <div className={styles.questionListsData}>{questionsElement}</div>
     </div>
