@@ -142,7 +142,7 @@ export default function QuestionLists(): JSX.Element {
       return <Empty description="No question lists" />;
     }
 
-    return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />;
+    return <Spin indicator={<LoadingOutlined />} />;
   }, [lists, tableColumns]);
 
   return (

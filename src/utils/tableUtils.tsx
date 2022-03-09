@@ -10,6 +10,7 @@ import {
 import { DataIndex } from 'rc-table/lib/interface';
 import React, { MutableRefObject, ReactNode } from 'react';
 
+import styles from '../components/QuestionLists.module.scss';
 import { InterviewQuestionModel } from '../services/Client';
 import { getDistinctValues, toPascalCase } from './stringUtils';
 
@@ -52,9 +53,7 @@ export function createColumnSearchProps(
   return {
     ...createDefaultColumnProps(dataIndex),
     filterIcon: (filtered: boolean): ReactNode => (
-      <SearchOutlined
-        style={{ color: filtered ? searchHighlightColor : undefined }}
-      />
+      <SearchOutlined color={filtered ? searchHighlightColor : undefined} />
     ),
     filterDropdown: ({
       setSelectedKeys,
@@ -78,7 +77,7 @@ export function createColumnSearchProps(
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => handleSearchCallback(confirm)}
-          style={{ marginBottom: 8, display: 'block' }}
+          className={styles.filter}
         />
         <Space>
           <Button
@@ -86,14 +85,14 @@ export function createColumnSearchProps(
             onClick={() => handleSearchCallback(confirm)}
             icon={<SearchOutlined />}
             size="small"
-            style={{ width: 90 }}
+            className={styles.width90}
           >
             Search
           </Button>
           <Button
             onClick={() => handleResetCallback(clearFilters, confirm)}
             size="small"
-            style={{ width: 90 }}
+            className={styles.width90}
           >
             Reset
           </Button>

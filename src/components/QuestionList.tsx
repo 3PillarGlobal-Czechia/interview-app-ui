@@ -1,9 +1,5 @@
-import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Input, Rate, Space, Spin } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
-import { FilterConfirmProps } from 'antd/lib/table/interface';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
   Client,
@@ -11,18 +7,13 @@ import {
   QuestionListModel,
   UpdateQuestionListRequest,
 } from '../services/Client';
-import {
-  createColumnFilterProps,
-  createColumnSearchProps,
-} from '../utils/tableUtils';
-import Header from './Header';
 import QuestionCart from './QuestionCart';
+import QuestionListData from './QuestionListData';
+import QuestionListHeader from './QuestionListHeader';
 import styles from './QuestionLists.module.scss';
-import TableWrapper from './TableWrapper';
 
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
-  const searchInput = useRef<Input>();
   const client = new Client();
   const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
   const [list, setList] = useState<QuestionListModel>();
@@ -49,64 +40,6 @@ export default function QuestionList(): JSX.Element {
   >([]);
   const setDrawerVisibility = (value: boolean | null = null): void => {
     setDrawerVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
-  };
-
-  const handleSearch = (
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ): void => {
-    confirm({ closeDropdown: true });
-  };
-
-  const handleReset = (
-    clearFilters: () => void,
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ): void => {
-    clearFilters();
-    confirm({ closeDropdown: true });
-  };
-
-  const tableColumns = (
-    data: InterviewQuestionModel[]
-  ): ColumnsType<InterviewQuestionModel> => {
-    return [
-      {
-        ...createColumnSearchProps(
-          'title',
-          searchInput,
-          handleSearch,
-          handleReset
-        ),
-      },
-      {
-        ...createColumnFilterProps(
-          'category',
-          data
-            .map((value) => value.category!.toString())
-            .filter((value) => value !== undefined)!
-        ),
-      },
-      {
-        ...createColumnSearchProps(
-          'content',
-          searchInput,
-          handleSearch,
-          handleReset
-        ),
-      },
-      {
-        ...createColumnFilterProps(
-          'difficulty',
-          data
-            .map((value) => value.difficulty!.toString())
-            .filter((value) => value !== undefined)!
-        ),
-        sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
-          a.difficulty != null && b.difficulty != null
-            ? a.difficulty - b.difficulty
-            : 1,
-        render: (value: number) => <Rate disabled value={value} />,
-      },
-    ];
   };
 
   const addToAddDrawer = (record: InterviewQuestionModel): void => {
@@ -175,72 +108,6 @@ export default function QuestionList(): JSX.Element {
       (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
     ) ?? [];
 
-  let questionsElement: JSX.Element;
-  if (list?.interviewQuestions) {
-    questionsElement = isBeingEdited ? (
-      <Space direction="vertical">
-        <TableWrapper
-          dataSource={displayableQuestions}
-          columns={tableColumns(list?.interviewQuestions)}
-          customAction={{
-            buttonText: 'Remove',
-            actionCallback: (record) => addToRemoveDrawer(record),
-          }}
-          customTitle="Questions added to list"
-        />
-        <TableWrapper
-          dataSource={addableQuestions}
-          columns={tableColumns(allQuestions)}
-          customAction={{
-            buttonText: 'Add',
-            actionCallback: (record) => addToAddDrawer(record),
-          }}
-          customTitle="Questions you can add to list"
-        />
-      </Space>
-    ) : (
-      <TableWrapper
-        dataSource={displayableQuestions}
-        columns={tableColumns(list.interviewQuestions)}
-      />
-    );
-  } else {
-    questionsElement = (
-      <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
-    );
-  }
-
-  const headerElement = isBeingEdited ? (
-    <Header
-      left={<h3>{list?.title}</h3>}
-      right={
-        <Space>
-          <Button onClick={() => setDrawerVisibility(true)}>Open</Button>
-          <Button onClick={discard}>Discard</Button>
-          <Button type="primary" onClick={saveChanges}>
-            Save
-          </Button>
-        </Space>
-      }
-    />
-  ) : (
-    <Header
-      left={
-        <div>
-          <Link to="/" style={{ color: 'black', padding: 5 }}>
-            <ArrowLeftOutlined />
-          </Link>
-          <h3>{list?.title}</h3>
-        </div>
-      }
-      right={
-        <Button type="primary" onClick={() => setBeingEdited(true)}>
-          Edit
-        </Button>
-      }
-    />
-  );
-
   return (
     <div className={styles.questionLists}>
       <QuestionCart
@@ -251,8 +118,23 @@ export default function QuestionList(): JSX.Element {
         removeFromAddListCallback={removeFromAddDrawer}
         removeFromRemoveListCallback={removeFromRemoveDrawer}
       />
-      {headerElement}
-      <div className={styles.questionListsData}>{questionsElement}</div>
+      <QuestionListHeader
+        isBeingEdited={isBeingEdited}
+        setBeingEditedCallback={setBeingEdited}
+        listTitle={list?.title}
+        discardCallback={discard}
+        saveChangesCallback={saveChanges}
+        setDrawerVisibilityCallback={setDrawerVisibility}
+      />
+      <QuestionListData
+        isBeingEdited={isBeingEdited}
+        list={list}
+        allQuestions={allQuestions}
+        addToAddDrawerCallback={addToAddDrawer}
+        addToRemoveDrawerCallback={addToRemoveDrawer}
+        displayableQuestions={displayableQuestions}
+        addableQuestions={addableQuestions}
+      />
     </div>
   );
 }
