@@ -1,6 +1,7 @@
 .header {
   display: flex;
   align-items: center;
+  background-color: #363e52;
   padding: 0;
   p {
     color: white;
@@ -9,7 +10,7 @@
 }
 
 .logo {
-  background-color: #fff;
+  color: #fff;
   font-size: 32px;
   float: left;
   margin: 0 10px;
