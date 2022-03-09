@@ -31,7 +31,6 @@ export function createColumnSearchProps(
   dataIndex: 'title' | 'category' | 'content' | 'difficulty',
   searchInput: MutableRefObject<Input | undefined>,
   handleSearchCallback: (
-    selectedKeys: React.Key[],
     confirm: (param: FilterConfirmProps | undefined) => void
   ) => void,
   handleResetCallback: (
@@ -78,13 +77,13 @@ export function createColumnSearchProps(
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearchCallback(selectedKeys, confirm)}
+          onPressEnter={() => handleSearchCallback(confirm)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearchCallback(selectedKeys, confirm)}
+            onClick={() => handleSearchCallback(confirm)}
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}

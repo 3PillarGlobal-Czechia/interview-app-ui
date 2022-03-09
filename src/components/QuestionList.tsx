@@ -1,9 +1,5 @@
-import {
-  ArrowLeftOutlined,
-  DeleteOutlined,
-  LoadingOutlined,
-} from '@ant-design/icons';
-import { Button, Divider, Drawer, Input, Rate, Space, Spin } from 'antd';
+import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Input, Rate, Space, Spin } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,6 +16,7 @@ import {
   createColumnSearchProps,
 } from '../utils/tableUtils';
 import Header from './Header';
+import QuestionCart from './QuestionCart';
 import styles from './QuestionLists.module.scss';
 import TableWrapper from './TableWrapper';
 
@@ -50,18 +47,14 @@ export default function QuestionList(): JSX.Element {
   const [questionsToRemove, setQuestionsToRemove] = useState<
     InterviewQuestionModel[]
   >([]);
-  function setDrawerVisibility(value: boolean | null = null): void {
+  const setDrawerVisibility = (value: boolean | null = null): void => {
     setDrawerVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
-  }
-
-  const [searchText, setSearchText] = useState<React.Key>('');
+  };
 
   const handleSearch = (
-    selectedKeys: React.Key[],
     confirm: (param: FilterConfirmProps | undefined) => void
   ): void => {
     confirm({ closeDropdown: true });
-    setSearchText(selectedKeys[0]);
   };
 
   const handleReset = (
@@ -69,7 +62,6 @@ export default function QuestionList(): JSX.Element {
     confirm: (param: FilterConfirmProps | undefined) => void
   ): void => {
     clearFilters();
-    setSearchText('');
     confirm({ closeDropdown: true });
   };
 
@@ -251,35 +243,14 @@ export default function QuestionList(): JSX.Element {
 
   return (
     <div className={styles.questionLists}>
-      <Drawer
-        title="Question Cart"
-        placement="left"
-        onClose={() => setDrawerVisibility(false)}
-        visible={isDrawerVisible}
-      >
-        {questionsToAdd.map((question) => (
-          <>
-            <Space>
-              <strong>Add: </strong>
-              {question.title}
-              <DeleteOutlined onClick={() => removeFromAddDrawer(question)} />
-            </Space>
-            <Divider />
-          </>
-        ))}
-        {questionsToRemove.map((question) => (
-          <>
-            <Space>
-              <strong>Remove: </strong>
-              {question.title}
-              <DeleteOutlined
-                onClick={() => removeFromRemoveDrawer(question)}
-              />
-            </Space>
-            <Divider />
-          </>
-        ))}
-      </Drawer>
+      <QuestionCart
+        isVisible={isDrawerVisible}
+        visibilityChangedCallback={setDrawerVisibility}
+        addList={questionsToAdd}
+        removeList={questionsToRemove}
+        removeFromAddListCallback={removeFromAddDrawer}
+        removeFromRemoveListCallback={removeFromRemoveDrawer}
+      />
       {headerElement}
       <div className={styles.questionListsData}>{questionsElement}</div>
     </div>
