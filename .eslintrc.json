@@ -42,7 +42,8 @@
   ],
   "rules": {
     "no-param-reassign": ["warn"],
-    "no-unused-vars": ["warn"],
+    "no-unused-vars": ["off"],
+    "@typescript-eslint/no-unused-vars": ["error"],
     "react/no-unused-prop-types": ["warn"],
     "react/no-unstable-nested-components": ["warn"],
     "eol-last": ["warn", "always"],
