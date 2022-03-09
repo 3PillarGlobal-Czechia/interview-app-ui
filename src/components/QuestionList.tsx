@@ -183,8 +183,9 @@ export default function QuestionList(): JSX.Element {
       (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
     ) ?? [];
 
-  const questionsElement = list?.interviewQuestions ? (
-    isBeingEdited ? (
+  let questionsElement: JSX.Element;
+  if (list?.interviewQuestions) {
+    questionsElement = isBeingEdited ? (
       <Space direction="vertical">
         <TableWrapper
           dataSource={displayableQuestions}
@@ -210,10 +211,12 @@ export default function QuestionList(): JSX.Element {
         dataSource={displayableQuestions}
         columns={tableColumns(list.interviewQuestions)}
       />
-    )
-  ) : (
-    <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
-  );
+    );
+  } else {
+    questionsElement = (
+      <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
+    );
+  }
 
   const headerElement = isBeingEdited ? (
     <Header

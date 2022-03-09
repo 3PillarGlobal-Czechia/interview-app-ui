@@ -45,3 +45,8 @@ export default function TableWrapper<RecordType extends object>({
 
   return <Table<RecordType> dataSource={dataSource} columns={columns} />;
 }
+
+TableWrapper.defaultProps = {
+  customAction: undefined,
+  customTitle: undefined,
+};
