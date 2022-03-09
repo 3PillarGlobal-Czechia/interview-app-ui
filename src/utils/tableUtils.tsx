@@ -66,7 +66,7 @@ export function createColumnSearchProps(
       confirm: (param?: FilterConfirmProps) => void;
       clearFilters: () => void;
     }) => (
-      <div style={{ padding: 8 }}>
+      <div className={styles.padding8}>
         <Input
           ref={(node) => {
             searchInput.current = node!;
