@@ -7,7 +7,7 @@ import QuestionLists from './components/QuestionLists';
 
 function App(): JSX.Element {
   return (
-    <Layout>
+    <Layout style={{ height: '100vh' }}>
       <Header className={styles.header}>
         <ProfileOutlined className={styles.logo} />
         <p>Interview App</p>
