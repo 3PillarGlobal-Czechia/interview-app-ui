@@ -58,6 +58,10 @@ or
 ------- Input.module.scss
 ------- InputProps.tsx
 
+--- layout/ (Layout components)
+----- Header.tsx
+----- Footer.tsx
+
 --- hooks/ (Global hooks used for all app)
 ----- useWatchResize.ts
 
