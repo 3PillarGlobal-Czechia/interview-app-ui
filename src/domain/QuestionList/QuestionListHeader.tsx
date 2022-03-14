@@ -4,7 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../layout/header/Header';
-import styles from './QuestionList.module.scss';
 
 export default function QuestionListHeader({
   isBeingEdited,
@@ -40,7 +39,7 @@ export default function QuestionListHeader({
     <Header
       left={
         <div>
-          <Link to="/" className={styles.link}>
+          <Link to="/" className="text-black">
             <ArrowLeftOutlined />
           </Link>
           <h3>{listTitle}</h3>
