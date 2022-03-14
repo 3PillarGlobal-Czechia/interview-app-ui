@@ -4,13 +4,16 @@ import { ColumnsType } from 'antd/lib/table';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { useRef } from 'react';
 
-import { InterviewQuestionModel, QuestionListModel } from '../services/Client';
+import TableWrapper from '../../components/TableWrapper';
+import {
+  InterviewQuestionModel,
+  QuestionListModel,
+} from '../../services/Client';
 import {
   createColumnFilterProps,
   createColumnSearchProps,
-} from '../utils/tableUtils';
-import styles from './QuestionLists.module.scss';
-import TableWrapper from './TableWrapper';
+} from '../../services/table/tableUtils';
+import styles from './QuestionList.module.scss';
 
 export default function QuestionListData({
   isBeingEdited,
@@ -89,42 +92,43 @@ export default function QuestionListData({
     ];
   };
 
-  if (list?.interviewQuestions) {
-    return isBeingEdited ? (
-      <div className={styles.questionListsData}>
-        <Space direction="vertical">
-          <TableWrapper
-            dataSource={displayableQuestions}
-            columns={tableColumns(list?.interviewQuestions)}
-            customAction={{
-              buttonText: 'Remove',
-              actionCallback: addToRemoveDrawerCallback,
-            }}
-            customTitle="Questions added to list"
-          />
-          <TableWrapper
-            dataSource={addableQuestions}
-            columns={tableColumns(allQuestions)}
-            customAction={{
-              buttonText: 'Add',
-              actionCallback: addToAddDrawerCallback,
-            }}
-            customTitle="Questions you can add to list"
-          />
-        </Space>
-      </div>
-    ) : (
-      <div className={styles.questionListsData}>
-        <TableWrapper
-          dataSource={displayableQuestions}
-          columns={tableColumns(list.interviewQuestions)}
-        />
+  if (!list?.interviewQuestions) {
+    return (
+      <div className={styles.questionListData}>
+        <Spin indicator={<LoadingOutlined />} />
       </div>
     );
   }
-  return (
-    <div className={styles.questionListsData}>
-      <Spin indicator={<LoadingOutlined />} />
+
+  return isBeingEdited ? (
+    <div className={styles.questionListData}>
+      <Space direction="vertical">
+        <TableWrapper
+          dataSource={displayableQuestions}
+          columns={tableColumns(list?.interviewQuestions)}
+          customAction={{
+            buttonText: 'Remove',
+            actionCallback: addToRemoveDrawerCallback,
+          }}
+          customTitle="Questions added to list"
+        />
+        <TableWrapper
+          dataSource={addableQuestions}
+          columns={tableColumns(allQuestions)}
+          customAction={{
+            buttonText: 'Add',
+            actionCallback: addToAddDrawerCallback,
+          }}
+          customTitle="Questions you can add to list"
+        />
+      </Space>
+    </div>
+  ) : (
+    <div className={styles.questionListData}>
+      <TableWrapper
+        dataSource={displayableQuestions}
+        columns={tableColumns(list.interviewQuestions)}
+      />
     </div>
   );
 }

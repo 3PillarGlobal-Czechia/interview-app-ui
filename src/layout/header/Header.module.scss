@@ -4,11 +4,11 @@
     justify-content: space-between;
     margin: 30px 0;
     width: 750px;
-    >:nth-child(1) {
+    >:first-child {
         display: flex;
         justify-content: flex-start;
     }
-    >:nth-child(2) {
+    >:last-child {
         display: flex;
         justify-content: flex-end;
     }

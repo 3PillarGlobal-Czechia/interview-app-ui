@@ -3,8 +3,8 @@ import { Button, Space } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Header from './Header';
-import styles from './QuestionLists.module.scss';
+import Header from '../../layout/header/Header';
+import styles from './QuestionList.module.scss';
 
 export default function QuestionListHeader({
   isBeingEdited,
@@ -40,7 +40,7 @@ export default function QuestionListHeader({
     <Header
       left={
         <div>
-          <Link to="/" className={styles.black}>
+          <Link to="/" className={styles.link}>
             <ArrowLeftOutlined />
           </Link>
           <h3>{listTitle}</h3>

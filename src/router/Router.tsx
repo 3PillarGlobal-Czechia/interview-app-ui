@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import QuestionList from './QuestionList';
-import QuestionLists from './QuestionLists';
+import QuestionList from '../pages/QuestionListPage/QuestionList';
+import QuestionLists from '../pages/QuestionListsPage/QuestionLists';
 
-export default function RouterComponent(): JSX.Element {
+export default function Router(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import QuestionCart from '../../domain/QuestionList/QuestionCart';
+import styles from '../../domain/QuestionList/QuestionList.module.scss';
+import QuestionListData from '../../domain/QuestionList/QuestionListData';
+import QuestionListHeader from '../../domain/QuestionList/QuestionListHeader';
 import {
   Client,
   InterviewQuestionModel,
   QuestionListModel,
   UpdateQuestionListRequest,
-} from '../services/Client';
-import QuestionCart from './QuestionCart';
-import QuestionListData from './QuestionListData';
-import QuestionListHeader from './QuestionListHeader';
-import styles from './QuestionLists.module.scss';
+} from '../../services/Client';
 
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
@@ -109,7 +109,7 @@ export default function QuestionList(): JSX.Element {
     ) ?? [];
 
   return (
-    <div className={styles.questionLists}>
+    <div className={styles.questionList}>
       <QuestionCart
         isVisible={isDrawerVisible}
         visibilityChangedCallback={setDrawerVisibility}

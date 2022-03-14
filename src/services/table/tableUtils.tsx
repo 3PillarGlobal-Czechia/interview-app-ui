@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space } from 'antd';
+import { Input } from 'antd';
 import {
   ColumnFilterItem,
   ColumnTitle,
@@ -10,9 +10,9 @@ import {
 import { DataIndex } from 'rc-table/lib/interface';
 import React, { MutableRefObject, ReactNode } from 'react';
 
-import styles from '../components/QuestionLists.module.scss';
-import { InterviewQuestionModel } from '../services/Client';
-import { getDistinctValues, toPascalCase } from './stringUtils';
+import { InterviewQuestionModel } from '../Client';
+import { getDistinctValues, toPascalCase } from '../stringUtils';
+import FilterDropdown from './FilterDropdown';
 
 export function createDefaultColumnProps(dataIndex: string): {
   title: string;
@@ -66,38 +66,16 @@ export function createColumnSearchProps(
       confirm: (param?: FilterConfirmProps) => void;
       clearFilters: () => void;
     }) => (
-      <div className={styles.padding8}>
-        <Input
-          ref={(node) => {
-            searchInput.current = node!;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearchCallback(confirm)}
-          className={styles.filter}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearchCallback(confirm)}
-            icon={<SearchOutlined />}
-            size="small"
-            className={styles.width90}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => handleResetCallback(clearFilters, confirm)}
-            size="small"
-            className={styles.width90}
-          >
-            Reset
-          </Button>
-        </Space>
-      </div>
+      <FilterDropdown
+        setSelectedKeys={setSelectedKeys}
+        selectedKeys={selectedKeys}
+        confirm={confirm}
+        clearFilters={clearFilters}
+        dataIndex={dataIndex}
+        searchInput={searchInput}
+        handleSearchCallback={handleSearchCallback}
+        handleResetCallback={handleResetCallback}
+      />
     ),
     onFilterDropdownVisibleChange: (visible: boolean) => {
       if (visible) {

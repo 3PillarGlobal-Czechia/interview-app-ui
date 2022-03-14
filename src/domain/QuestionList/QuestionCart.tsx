@@ -2,7 +2,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Divider, Drawer, Space } from 'antd';
 import React from 'react';
 
-import { InterviewQuestionModel } from '../services/Client';
+import { InterviewQuestionModel } from '../../services/Client';
 
 export default function QuestionCart({
   isVisible,

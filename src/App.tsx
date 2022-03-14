@@ -3,7 +3,7 @@ import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import React from 'react';
 
 import styles from './App.module.scss';
-import RouterComponent from './components/RouterComponent';
+import RouterComponent from './router/Router';
 
 function App(): JSX.Element {
   return (

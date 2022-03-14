@@ -15,7 +15,7 @@ import {
   CreateQuestionListRequest,
   InterviewQuestionModel,
   QuestionListModel,
-} from '../services/Client';
+} from '../../services/Client';
 import styles from './QuestionLists.module.scss';
 
 const { TextArea } = Input;
