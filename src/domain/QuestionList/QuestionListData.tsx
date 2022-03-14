@@ -84,7 +84,7 @@ export default function QuestionListData({
             .filter((value) => value !== undefined)!
         ),
         sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
-          a.difficulty != null && b.difficulty != null
+          a.difficulty && b.difficulty
             ? a.difficulty - b.difficulty
             : 1,
         render: (value: number) => <Rate disabled value={value} />,
