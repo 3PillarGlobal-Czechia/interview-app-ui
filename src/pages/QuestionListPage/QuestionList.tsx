@@ -75,8 +75,8 @@ export default function QuestionList(): JSX.Element {
           id: list?.id,
           title: list?.title,
           description: list?.description,
-          questionsToAdd: questionsToAdd.map((q) => q.id!),
-          questionsToRemove: questionsToRemove.map((q) => q.id!),
+          questionsToAdd: questionsToAdd.map((q) => (q.id ? q.id : 0)),
+          questionsToRemove: questionsToRemove.map((q) => (q.id ? q.id : 0)),
         })
       )
       .then(() => {

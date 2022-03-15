@@ -23,7 +23,9 @@ export default function FilterDropdown(
     <div className={style.padded}>
       <Input
         ref={(node) => {
-          searchInput.current = node!;
+          if (node) {
+            searchInput.current = node;
+          }
         }}
         placeholder={`Search ${dataIndex}`}
         value={selectedKeys[0]}

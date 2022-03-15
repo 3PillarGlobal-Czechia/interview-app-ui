@@ -60,17 +60,19 @@ export function createColumnSearchProps(
     ),
     onFilterDropdownVisibleChange: (visible: boolean) => {
       if (visible) {
-        setTimeout(() => searchInput.current!.select(), 100);
+        if (searchInput.current) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
       }
     },
     onFilter: (
       value: string | number | boolean,
       record: InterviewQuestionModel
-    ): boolean => {
-      return record[dataIndex]!.toString()
+    ): boolean =>
+      record[dataIndex]
+        ?.toString()
         .toLowerCase()
-        .includes(value.toString().toLowerCase());
-    },
+        .includes(value.toString().toLowerCase()) ?? false,
   };
 }
 

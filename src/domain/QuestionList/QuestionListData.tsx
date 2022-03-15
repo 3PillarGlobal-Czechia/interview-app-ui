@@ -64,8 +64,8 @@ export default function QuestionListData(
           dataIndex:
             InterviewQuestionModelProps.category as InterviewQuestionDisplayColumns,
           filterData: data
-            .map((value) => value.category!.toString())
-            .filter((value) => value !== undefined)!,
+            .filter((value) => value !== undefined)
+            .map((value) => value.category?.toString() ?? ''),
         }),
       },
       {
@@ -82,8 +82,8 @@ export default function QuestionListData(
           dataIndex:
             InterviewQuestionModelProps.difficulty as InterviewQuestionDisplayColumns,
           filterData: data
-            .map((value) => value.difficulty!.toString())
-            .filter((value) => value !== undefined)!,
+            .filter((value) => value !== undefined)
+            .map((value) => value.difficulty?.toString() ?? ''),
         }),
         sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
           a.difficulty && b.difficulty ? a.difficulty - b.difficulty : 1,
