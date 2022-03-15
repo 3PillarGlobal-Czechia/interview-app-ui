@@ -1,34 +1,24 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
-import { FilterConfirmProps } from 'antd/lib/table/interface';
-import React, { MutableRefObject } from 'react';
+import React from 'react';
 
 import style from './FilterDropdown.module.scss';
+import FilterDropdownProps from './FilterDropdownProps';
 
-export default function FilterDropdown({
-  dataIndex,
-  setSelectedKeys,
-  selectedKeys,
-  confirm,
-  clearFilters,
-  searchInput,
-  handleSearchCallback,
-  handleResetCallback,
-}: {
-  dataIndex: string;
-  setSelectedKeys: (selectedKeys: React.Key[]) => void;
-  selectedKeys: React.Key[];
-  confirm: (param?: FilterConfirmProps) => void;
-  clearFilters: () => void;
-  searchInput: MutableRefObject<Input | undefined>;
-  handleSearchCallback: (
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ) => void;
-  handleResetCallback: (
-    clearFilters: () => void,
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ) => void;
-}): JSX.Element {
+export default function FilterDropdown(
+  props: FilterDropdownProps
+): JSX.Element {
+  const {
+    dataIndex,
+    setSelectedKeys,
+    selectedKeys,
+    confirm,
+    clearFilters,
+    searchInput,
+    handleSearchCallback,
+    handleResetCallback,
+  } = props;
+
   return (
     <div className={style.padded}>
       <Input

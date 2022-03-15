@@ -5,33 +5,27 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { useRef } from 'react';
 
 import TableWrapper from '../../components/TableWrapper';
-import {
-  InterviewQuestionModel,
-  QuestionListModel,
-} from '../../services/Client';
+import { InterviewQuestionModel } from '../../services/Client';
 import {
   createColumnFilterProps,
   createColumnSearchProps,
 } from '../../services/table/tableUtils';
 import styles from './QuestionList.module.scss';
+import QuestionListDataProps from './QuestionListDataProps';
 
-export default function QuestionListData({
-  isBeingEdited,
-  list,
-  displayableQuestions,
-  addableQuestions,
-  allQuestions,
-  addToRemoveDrawerCallback,
-  addToAddDrawerCallback,
-}: {
-  isBeingEdited: boolean;
-  list: QuestionListModel | undefined;
-  displayableQuestions: InterviewQuestionModel[];
-  addableQuestions: InterviewQuestionModel[];
-  allQuestions: InterviewQuestionModel[];
-  addToRemoveDrawerCallback: (question: InterviewQuestionModel) => void;
-  addToAddDrawerCallback: (question: InterviewQuestionModel) => void;
-}): JSX.Element {
+export default function QuestionListData(
+  props: QuestionListDataProps
+): JSX.Element {
+  const {
+    isBeingEdited,
+    list,
+    displayableQuestions,
+    addableQuestions,
+    allQuestions,
+    addToRemoveDrawerCallback,
+    addToAddDrawerCallback,
+  } = props;
+
   const searchInput = useRef<Input>();
 
   const handleSearch = (
@@ -53,40 +47,38 @@ export default function QuestionListData({
   ): ColumnsType<InterviewQuestionModel> => {
     return [
       {
-        ...createColumnSearchProps(
-          'title',
+        ...createColumnSearchProps({
+          dataIndex: 'title',
           searchInput,
-          handleSearch,
-          handleReset
-        ),
+          handleSearchCallback: handleSearch,
+          handleResetCallback: handleReset,
+        }),
       },
       {
-        ...createColumnFilterProps(
-          'category',
-          data
+        ...createColumnFilterProps({
+          dataIndex: 'category',
+          filterData: data
             .map((value) => value.category!.toString())
-            .filter((value) => value !== undefined)!
-        ),
+            .filter((value) => value !== undefined)!,
+        }),
       },
       {
-        ...createColumnSearchProps(
-          'content',
+        ...createColumnSearchProps({
+          dataIndex: 'content',
           searchInput,
-          handleSearch,
-          handleReset
-        ),
+          handleSearchCallback: handleSearch,
+          handleResetCallback: handleReset,
+        }),
       },
       {
-        ...createColumnFilterProps(
-          'difficulty',
-          data
+        ...createColumnFilterProps({
+          dataIndex: 'difficulty',
+          filterData: data
             .map((value) => value.difficulty!.toString())
-            .filter((value) => value !== undefined)!
-        ),
+            .filter((value) => value !== undefined)!,
+        }),
         sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
-          a.difficulty && b.difficulty
-            ? a.difficulty - b.difficulty
-            : 1,
+          a.difficulty && b.difficulty ? a.difficulty - b.difficulty : 1,
         render: (value: number) => <Rate disabled value={value} />,
       },
     ];

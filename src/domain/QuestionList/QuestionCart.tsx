@@ -2,23 +2,18 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Divider, Drawer, Space } from 'antd';
 import React from 'react';
 
-import { InterviewQuestionModel } from '../../services/Client';
+import QuestionCartProps from './QuestionCartProps';
 
-export default function QuestionCart({
-  isVisible,
-  visibilityChangedCallback,
-  addList,
-  removeList,
-  removeFromAddListCallback,
-  removeFromRemoveListCallback,
-}: {
-  isVisible: boolean;
-  visibilityChangedCallback: (value?: boolean | null) => void;
-  addList: InterviewQuestionModel[];
-  removeList: InterviewQuestionModel[];
-  removeFromAddListCallback: (question: InterviewQuestionModel) => void;
-  removeFromRemoveListCallback: (question: InterviewQuestionModel) => void;
-}): JSX.Element {
+export default function QuestionCart(props: QuestionCartProps): JSX.Element {
+  const {
+    isVisible,
+    visibilityChangedCallback,
+    addList,
+    removeList,
+    removeFromAddListCallback,
+    removeFromRemoveListCallback,
+  } = props;
+
   return (
     <Drawer
       title="Question Cart"

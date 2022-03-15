@@ -1,21 +1,13 @@
 import { Button, Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 
-export default function TableWrapper<RecordType extends object>({
-  dataSource,
-  columns,
-  customAction,
-  customTitle,
-}: {
-  dataSource: RecordType[];
-  columns: ColumnsType<RecordType>;
-  customAction?: {
-    buttonText: string;
-    actionCallback: (record: RecordType) => void;
-  };
-  customTitle?: string;
-}): JSX.Element {
+import TableWrapperProps from './TableWrapperProps';
+
+export default function TableWrapper<RecordType extends object>(
+  props: TableWrapperProps<RecordType>
+): JSX.Element {
+  const { dataSource, customAction, customTitle } = props;
+  let { columns } = props;
   if (customAction !== undefined) {
     columns = [
       ...columns,
@@ -25,9 +17,9 @@ export default function TableWrapper<RecordType extends object>({
         render: (_: any, record: RecordType) => (
           <Button
             type="link"
-            onClick={() => customAction.actionCallback(record)}
+            onClick={() => customAction!.actionCallback(record)}
           >
-            {customAction.buttonText}
+            {customAction!.buttonText}
           </Button>
         ),
       },

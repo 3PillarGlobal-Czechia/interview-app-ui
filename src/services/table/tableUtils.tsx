@@ -1,18 +1,16 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
-import {
-  ColumnFilterItem,
-  ColumnTitle,
-  FilterConfirmProps,
-  FilterDropdownProps,
-  Key,
-} from 'antd/lib/table/interface';
-import { DataIndex } from 'rc-table/lib/interface';
-import React, { MutableRefObject, ReactNode } from 'react';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import React, { ReactNode } from 'react';
 
 import { InterviewQuestionModel } from '../Client';
 import { getDistinctValues, toPascalCase } from '../stringUtils';
 import FilterDropdown from './FilterDropdown';
+import {
+  createColumnFilterPropsInput,
+  createColumnFilterPropsOutput,
+  createColumnSearchPropsInput,
+  createColumnSearchPropsOutput,
+} from './tableUtilsProps';
 
 export function createDefaultColumnProps(dataIndex: string): {
   title: string;
@@ -29,27 +27,10 @@ export function createDefaultColumnProps(dataIndex: string): {
 const searchHighlightColor = '#1890ff';
 
 export function createColumnSearchProps(
-  dataIndex: 'title' | 'category' | 'content' | 'difficulty',
-  searchInput: MutableRefObject<Input | undefined>,
-  handleSearchCallback: (
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ) => void,
-  handleResetCallback: (
-    clearFilters: () => void,
-    confirm: (param: FilterConfirmProps | undefined) => void
-  ) => void
-): {
-  title: ColumnTitle<InterviewQuestionModel>;
-  dataIndex: DataIndex;
-  key: Key;
-  filterIcon: ReactNode | ((filtered: boolean) => ReactNode);
-  filterDropdown: ReactNode | ((props: FilterDropdownProps) => ReactNode);
-  onFilterDropdownVisibleChange: (visible: boolean) => void;
-  onFilter: (
-    value: string | number | boolean,
-    record: InterviewQuestionModel
-  ) => boolean;
-} {
+  props: createColumnSearchPropsInput
+): createColumnSearchPropsOutput {
+  const { dataIndex, searchInput, handleSearchCallback, handleResetCallback } =
+    props;
   return {
     ...createDefaultColumnProps(dataIndex),
     filterIcon: (filtered: boolean): ReactNode => (
@@ -94,18 +75,10 @@ export function createColumnSearchProps(
 }
 
 export function createColumnFilterProps(
-  dataIndex: 'title' | 'category' | 'content' | 'difficulty',
-  filterData: string[]
-): {
-  title: ColumnTitle<InterviewQuestionModel>;
-  dataIndex: DataIndex;
-  key: Key;
-  filters: ColumnFilterItem[];
-  onFilter: (
-    value: string | number | boolean,
-    record: InterviewQuestionModel
-  ) => boolean;
-} {
+  props: createColumnFilterPropsInput
+): createColumnFilterPropsOutput {
+  const { dataIndex, filterData } = props;
+
   return {
     ...createDefaultColumnProps(dataIndex),
     filters: getDistinctValues(filterData).map((value) => {

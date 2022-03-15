@@ -4,22 +4,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../layout/header/Header';
+import QuestionListHeaderProps from './QuestionListHeaderProps';
 
-export default function QuestionListHeader({
-  isBeingEdited,
-  setBeingEditedCallback,
-  listTitle,
-  discardCallback,
-  saveChangesCallback,
-  setDrawerVisibilityCallback,
-}: {
-  isBeingEdited: boolean;
-  setBeingEditedCallback: (value: boolean) => void;
-  listTitle: string | undefined;
-  discardCallback: () => void;
-  saveChangesCallback: () => void;
-  setDrawerVisibilityCallback: (value?: boolean | null) => void;
-}): JSX.Element {
+export default function QuestionListHeader(
+  props: QuestionListHeaderProps
+): JSX.Element {
+  const {
+    isBeingEdited,
+    setBeingEditedCallback,
+    listTitle,
+    discardCallback,
+    saveChangesCallback,
+    setDrawerVisibilityCallback,
+  } = props;
+
   return isBeingEdited ? (
     <Header
       left={<h3>{listTitle}</h3>}
