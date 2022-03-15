@@ -5,11 +5,15 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { useRef } from 'react';
 
 import TableWrapper from '../../components/TableWrapper';
-import { InterviewQuestionModel } from '../../services/Client';
+import {
+  InterviewQuestionModel,
+  InterviewQuestionModelProps,
+} from '../../services/Client';
 import {
   createColumnFilterProps,
   createColumnSearchProps,
 } from '../../services/table/tableUtils';
+import { InterviewQuestionDisplayColumns } from '../../services/table/tableUtilsProps';
 import styles from './QuestionList.module.scss';
 import QuestionListDataProps from './QuestionListDataProps';
 
@@ -48,7 +52,8 @@ export default function QuestionListData(
     return [
       {
         ...createColumnSearchProps({
-          dataIndex: 'title',
+          dataIndex:
+            InterviewQuestionModelProps.title as InterviewQuestionDisplayColumns,
           searchInput,
           handleSearchCallback: handleSearch,
           handleResetCallback: handleReset,
@@ -56,7 +61,8 @@ export default function QuestionListData(
       },
       {
         ...createColumnFilterProps({
-          dataIndex: 'category',
+          dataIndex:
+            InterviewQuestionModelProps.category as InterviewQuestionDisplayColumns,
           filterData: data
             .map((value) => value.category!.toString())
             .filter((value) => value !== undefined)!,
@@ -64,7 +70,8 @@ export default function QuestionListData(
       },
       {
         ...createColumnSearchProps({
-          dataIndex: 'content',
+          dataIndex:
+            InterviewQuestionModelProps.content as InterviewQuestionDisplayColumns,
           searchInput,
           handleSearchCallback: handleSearch,
           handleResetCallback: handleReset,
@@ -72,7 +79,8 @@ export default function QuestionListData(
       },
       {
         ...createColumnFilterProps({
-          dataIndex: 'difficulty',
+          dataIndex:
+            InterviewQuestionModelProps.difficulty as InterviewQuestionDisplayColumns,
           filterData: data
             .map((value) => value.difficulty!.toString())
             .filter((value) => value !== undefined)!,
