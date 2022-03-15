@@ -16,7 +16,7 @@ export type InterviewQuestionDisplayColumns =
   | 'content'
   | 'difficulty';
 
-export interface createColumnSearchPropsInput {
+export interface CreateColumnSearchPropsInput {
   dataIndex: InterviewQuestionDisplayColumns;
   searchInput: MutableRefObject<Input | undefined>;
   handleSearchCallback: (
@@ -28,7 +28,7 @@ export interface createColumnSearchPropsInput {
   ) => void;
 }
 
-export interface createColumnSearchPropsOutput {
+export interface CreateColumnSearchPropsOutput {
   title: ColumnTitle<InterviewQuestionModel>;
   dataIndex: DataIndex;
   key: Key;
@@ -41,12 +41,12 @@ export interface createColumnSearchPropsOutput {
   ) => boolean;
 }
 
-export interface createColumnFilterPropsInput {
+export interface CreateColumnFilterPropsInput {
   dataIndex: InterviewQuestionDisplayColumns;
   filterData: string[];
 }
 
-export interface createColumnFilterPropsOutput {
+export interface CreateColumnFilterPropsOutput {
   title: ColumnTitle<InterviewQuestionModel>;
   dataIndex: DataIndex;
   key: Key;

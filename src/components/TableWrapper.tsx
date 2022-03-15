@@ -17,9 +17,9 @@ export default function TableWrapper<RecordType extends object>(
         render: (_: any, record: RecordType) => (
           <Button
             type="link"
-            onClick={() => customAction!.actionCallback(record)}
+            onClick={() => customAction.actionCallback(record)}
           >
-            {customAction!.buttonText}
+            {customAction.buttonText}
           </Button>
         ),
       },

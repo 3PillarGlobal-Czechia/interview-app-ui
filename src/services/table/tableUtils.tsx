@@ -6,10 +6,10 @@ import { InterviewQuestionModel } from '../Client';
 import { getDistinctValues, toPascalCase } from '../stringUtils';
 import FilterDropdown from './FilterDropdown';
 import {
-  createColumnFilterPropsInput,
-  createColumnFilterPropsOutput,
-  createColumnSearchPropsInput,
-  createColumnSearchPropsOutput,
+  CreateColumnFilterPropsInput,
+  CreateColumnFilterPropsOutput,
+  CreateColumnSearchPropsInput,
+  CreateColumnSearchPropsOutput,
 } from './tableUtilsProps';
 
 export function createDefaultColumnProps(dataIndex: string): {
@@ -27,8 +27,8 @@ export function createDefaultColumnProps(dataIndex: string): {
 const searchHighlightColor = '#1890ff';
 
 export function createColumnSearchProps(
-  props: createColumnSearchPropsInput
-): createColumnSearchPropsOutput {
+  props: CreateColumnSearchPropsInput
+): CreateColumnSearchPropsOutput {
   const { dataIndex, searchInput, handleSearchCallback, handleResetCallback } =
     props;
   return {
@@ -75,8 +75,8 @@ export function createColumnSearchProps(
 }
 
 export function createColumnFilterProps(
-  props: createColumnFilterPropsInput
-): createColumnFilterPropsOutput {
+  props: CreateColumnFilterPropsInput
+): CreateColumnFilterPropsOutput {
   const { dataIndex, filterData } = props;
 
   return {
