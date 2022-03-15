@@ -6,4 +6,14 @@ export class Client extends ApiClient {
   }
 }
 
+export const InterviewQuestionModelProps = {
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  id: 'id',
+  title: 'title',
+  difficulty: 'difficulty',
+  category: 'category',
+  content: 'content',
+};
+
 export * from './ApiClient';

@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 30px 0;
+    width: 750px;
+    >:first-child {
+        display: flex;
+        justify-content: flex-start;
+    }
+    >:last-child {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

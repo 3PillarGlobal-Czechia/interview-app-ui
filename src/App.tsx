@@ -3,7 +3,7 @@ import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import React from 'react';
 
 import styles from './App.module.scss';
-import QuestionLists from './components/QuestionLists';
+import RouterComponent from './router/Router';
 
 function App(): JSX.Element {
   return (
@@ -13,7 +13,7 @@ function App(): JSX.Element {
         <p>Interview App</p>
       </Header>
       <Content>
-        <QuestionLists />
+        <RouterComponent />
       </Content>
     </Layout>
   );
