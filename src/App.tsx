@@ -7,7 +7,7 @@ import RouterComponent from './router/Router';
 
 function App(): JSX.Element {
   return (
-    <Layout>
+    <Layout className={styles.appFullHeight}>
       <Header className={styles.header}>
         <ProfileFilled className={styles.logo} />
         <p>Interview App</p>
