@@ -14,9 +14,6 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Propare environment
-        run: env.ENV_FILE > .env
-
       - name: Build project
         run: npm run build
 
