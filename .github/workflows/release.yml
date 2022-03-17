@@ -7,11 +7,15 @@ jobs:
   release:
     name: Release app
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+
+      - name: Propare environment
+        run: env.ENV_FILE > .env
 
       - name: Build project
         run: npm run build
