@@ -41,10 +41,16 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: npm install, build, and test
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_REACT_APP_BACKEND_URL:  ${{ secrets.APP_BACKEND_URL }}
+        directory: .
+        file_name: .env
+        fail_on_empty: false
+
+    - name: npm install and build
       run: |
-        $ENV_FILE > .env
-        cat .env
         npm install
         npm run build
 
