@@ -44,6 +44,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         $ENV_FILE > .env
+        cat .env
         npm install
         npm run build
 
