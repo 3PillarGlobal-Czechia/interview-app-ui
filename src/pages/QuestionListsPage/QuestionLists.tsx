@@ -28,6 +28,7 @@ export default function QuestionLists(): JSX.Element {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
   const [lists, setLists] = useState<QuestionListModel[] | null>();
+  const maxStoredRecentLists = 5;
   const [recentListIds, setRecentListIds] = useLocalStorage<number[]>(
     'recentListIds',
     []
@@ -43,7 +44,7 @@ export default function QuestionLists(): JSX.Element {
     let currentIds = recentListIds;
     if (currentIds.includes(listId)) {
       currentIds = currentIds.filter((id) => id !== listId);
-    } else if (currentIds.length >= 5) {
+    } else if (currentIds.length >= maxStoredRecentLists) {
       currentIds.pop();
     }
     currentIds.unshift(listId);

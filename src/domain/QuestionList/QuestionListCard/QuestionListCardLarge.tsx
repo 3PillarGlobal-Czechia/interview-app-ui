@@ -19,7 +19,7 @@ export default function QuestionListCardLarge(
     average(
       list.interviewQuestions
         ?.filter((value) => value.difficulty !== undefined)
-        .map((value) => value.difficulty ?? 0) ?? []
+        ?.map((value) => value.difficulty ?? 0) ?? []
     ) * 20;
 
   const averageDifficultyContentElement = (
