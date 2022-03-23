@@ -5,6 +5,7 @@ import QuestionCart from '../../domain/QuestionList/QuestionCart';
 import styles from '../../domain/QuestionList/QuestionList.module.scss';
 import QuestionListData from '../../domain/QuestionList/QuestionListData';
 import QuestionListHeader from '../../domain/QuestionList/QuestionListHeader';
+import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
   InterviewQuestionModel,
@@ -109,32 +110,34 @@ export default function QuestionList(): JSX.Element {
     ) ?? [];
 
   return (
-    <div className={styles.questionList}>
-      <QuestionCart
-        isVisible={isDrawerVisible}
-        visibilityChangedCallback={setDrawerVisibility}
-        addList={questionsToAdd}
-        removeList={questionsToRemove}
-        removeFromAddListCallback={removeFromAddDrawer}
-        removeFromRemoveListCallback={removeFromRemoveDrawer}
-      />
-      <QuestionListHeader
-        isBeingEdited={isBeingEdited}
-        setBeingEditedCallback={setBeingEdited}
-        listTitle={list?.title}
-        discardCallback={discard}
-        saveChangesCallback={saveChanges}
-        setDrawerVisibilityCallback={setDrawerVisibility}
-      />
-      <QuestionListData
-        isBeingEdited={isBeingEdited}
-        list={list}
-        allQuestions={allQuestions}
-        addToAddDrawerCallback={addToAddDrawer}
-        addToRemoveDrawerCallback={addToRemoveDrawer}
-        displayableQuestions={displayableQuestions}
-        addableQuestions={addableQuestions}
-      />
-    </div>
+    <ScalableBody>
+      <div className={styles.questionList}>
+        <QuestionCart
+          isVisible={isDrawerVisible}
+          visibilityChangedCallback={setDrawerVisibility}
+          addList={questionsToAdd}
+          removeList={questionsToRemove}
+          removeFromAddListCallback={removeFromAddDrawer}
+          removeFromRemoveListCallback={removeFromRemoveDrawer}
+        />
+        <QuestionListHeader
+          isBeingEdited={isBeingEdited}
+          setBeingEditedCallback={setBeingEdited}
+          listTitle={list?.title}
+          discardCallback={discard}
+          saveChangesCallback={saveChanges}
+          setDrawerVisibilityCallback={setDrawerVisibility}
+        />
+        <QuestionListData
+          isBeingEdited={isBeingEdited}
+          list={list}
+          allQuestions={allQuestions}
+          addToAddDrawerCallback={addToAddDrawer}
+          addToRemoveDrawerCallback={addToRemoveDrawer}
+          displayableQuestions={displayableQuestions}
+          addableQuestions={addableQuestions}
+        />
+      </div>
+    </ScalableBody>
   );
 }

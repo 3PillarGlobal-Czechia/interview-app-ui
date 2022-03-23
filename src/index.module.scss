@@ -21,3 +21,16 @@ body {
 :global(.text-black) {
   color: black;
 }
+
+:global(.full-width) {
+  width: 100%;
+}
+
+:global(.half-width) {
+  width: 50%;
+}
+
+:global(.centered) {
+  display: flex;
+  justify-content: center;
+}

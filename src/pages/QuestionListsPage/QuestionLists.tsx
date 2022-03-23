@@ -1,180 +1,164 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Modal, Space, Spin, Table, Tag } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Link } from 'react-router-dom';
+import { Divider, Input, List, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import QuestionListCardLarge from '../../domain/QuestionList/QuestionListCard/QuestionListCardLarge';
+import QuestionListCardSmall from '../../domain/QuestionList/QuestionListCard/QuestionListCardSmall';
+import CreateQuestionListModal from '../../domain/QuestionLists/CreateQuestionListModal';
+import MoreIconContent from '../../domain/QuestionLists/MoreIconContent';
+import styles from '../../domain/QuestionLists/QuestionLists.module.scss';
+import QuestionListsHeader from '../../domain/QuestionLists/QuestionListsHeader';
+import { useLocalStorage } from '../../hooks';
+import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
   CreateQuestionListRequest,
   InterviewQuestionModel,
   QuestionListModel,
 } from '../../services/Client';
-import styles from './QuestionLists.module.scss';
-
-const { TextArea } = Input;
+import { filterLists } from '../../services/filterService';
+import {
+  colorByCategory,
+  getDistinctCategories,
+} from '../../services/tagCategoryColorService';
 
 export default function QuestionLists(): JSX.Element {
-  const client = useMemo(() => new Client(), []);
+  const client = new Client();
+  const navigate = useNavigate();
   const [isPopupVisible, setPopupVisible] = useState(false);
-  const [titleInput, setTitleInput] = useState('');
-  const [descriptionInput, setDescriptionInput] = useState('');
+  const [searchText, setSearchText] = useState<string>('');
   const [lists, setLists] = useState<QuestionListModel[] | null>();
-  const colors: string[] = useMemo(
-    () => ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'black'],
+  const maxStoredRecentLists = 5;
+  const [recentListIds, setRecentListIds] = useLocalStorage<number[]>(
+    'recentListIds',
     []
   );
-  const colorIndex = useRef(0);
-  const hashmap = useMemo(() => new Map<string, string>(), []);
-
-  const nextColor = useCallback((): string => {
-    const color = colors[colorIndex.current];
-    colorIndex.current = (colorIndex.current + 1) % colors.length;
-    return color;
-  }, [colors]);
-
-  const colorByCategory = useCallback(
-    (category: string): string => {
-      if (!hashmap.has(category)) {
-        hashmap.set(category, nextColor());
-      }
-      return hashmap.get(category) ?? 'black';
-    },
-    [hashmap, nextColor]
-  );
-
-  function getDistinctCategories(
-    questions: InterviewQuestionModel[]
-  ): string[] {
-    const set = new Set<string>();
-    questions?.forEach((question) => {
-      if (question?.category) {
-        set.add(question.category);
-      }
-    });
-    return Array.from(set);
-  }
 
   useEffect(() => {
-    async function loadLists(): Promise<void> {
-      const data = await client.questionLists(undefined, undefined, undefined);
+    client.questionLists(undefined, undefined, undefined).then((value) => {
+      setLists(value);
+    });
+  }, []);
 
-      setLists(data);
+  const addListIdToRecentlyUsed = (listId: number): void => {
+    let currentIds = recentListIds;
+    if (currentIds.includes(listId)) {
+      currentIds = currentIds.filter((id) => id !== listId);
+    } else if (currentIds.length >= maxStoredRecentLists) {
+      currentIds.pop();
     }
-    loadLists();
-  }, [client]);
+    currentIds.unshift(listId);
+    setRecentListIds(currentIds);
+  };
 
-  function setModalVisibility(value: boolean | null = null): void {
+  const setModalVisibility = (value: boolean | null = null): void => {
     setPopupVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
-  }
+  };
 
-  const createList = useCallback(() => {
+  const createList = (title: string, description: string): void => {
     const request = new CreateQuestionListRequest({
-      title: titleInput,
-      description: descriptionInput,
+      title,
+      description,
     });
     client.create2(request).then((model) => {
       setLists([...(lists ?? []), model]);
     });
     setModalVisibility(false);
-  }, [client, lists, titleInput, descriptionInput]);
+  };
 
-  const tableColumns = useMemo(
-    (): ColumnsType<QuestionListModel> => [
-      {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-      },
-      {
-        title: 'Categories',
-        dataIndex: 'interviewQuestions',
-        key: 'categories',
-        render: (interviewQuestions: InterviewQuestionModel[]) => (
-          <>
-            {getDistinctCategories(interviewQuestions).map((category) => {
-              return (
-                <Tag key={category} color={colorByCategory(category)}>
-                  {category}
-                </Tag>
-              );
-            })}
-          </>
-        ),
-      },
-      {
-        title: 'Options',
-        key: 'options',
-        render: (_, record) => (
-          <div>
-            <Link to={`QuestionList/${record.id}`}>View</Link>
-            <Button type="link">Start Interview</Button>
-            <Button type="link" danger>
-              Delete
-            </Button>
+  const tags = (
+    interviewQuestions: InterviewQuestionModel[]
+  ): JSX.Element[] => {
+    return getDistinctCategories(interviewQuestions).map((category) => (
+      <Tag key={category} color={colorByCategory(category)}>
+        {category}
+      </Tag>
+    ));
+  };
+
+  const recentlyUsedLists = (
+    <List
+      grid={{ xs: 2, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5, gutter: 16 }}
+      dataSource={
+        lists
+          ? recentListIds.map((id) => lists.filter((list) => list.id === id)[0])
+          : undefined
+      }
+      renderItem={(list: QuestionListModel) => (
+        <List.Item>
+          <div className="centered">
+            <QuestionListCardSmall
+              list={list}
+              categories={tags(list.interviewQuestions ?? [])}
+              onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
+            />
           </div>
-        ),
-      },
-    ],
-    [colorByCategory]
+        </List.Item>
+      )}
+    />
   );
 
-  const showModal = (): void => setModalVisibility(true);
-  const hideModal = (): void => setModalVisibility(false);
-  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setTitleInput(e.target.value);
-  const onDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ): void => setDescriptionInput(e.target.value);
-
-  const listsElement = useMemo(() => {
-    if (lists) {
-      if (lists.length) {
-        return <Table dataSource={lists} columns={tableColumns} />;
-      }
-
-      return <Empty description="No question lists" />;
-    }
-
-    return <Spin indicator={<LoadingOutlined />} />;
-  }, [lists, tableColumns]);
+  const allLists = (
+    <List
+      grid={{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3, gutter: 16 }}
+      dataSource={filterLists(lists ?? [], searchText)}
+      pagination={{
+        defaultPageSize: 12,
+      }}
+      renderItem={(list: QuestionListModel) => (
+        <List.Item>
+          <div className="centered">
+            <QuestionListCardLarge
+              list={list}
+              categories={tags(list.interviewQuestions ?? [])}
+              onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
+              moreIconContent={
+                <MoreIconContent
+                  list={list}
+                  startInterviewCallback={() =>
+                    addListIdToRecentlyUsed(list.id ?? 0)
+                  }
+                />
+              }
+            />
+          </div>
+        </List.Item>
+      )}
+    />
+  );
 
   return (
-    <div className={styles.questionLists}>
-      <div className={styles.questionListsHeader}>
-        <h3>Question Lists</h3>
-        <Button type="primary" onClick={showModal}>
-          Create a New List
-        </Button>
+    <ScalableBody>
+      <div>
+        <QuestionListsHeader
+          buttonClickCallback={() => setModalVisibility(true)}
+        />
+        <CreateQuestionListModal
+          visible={isPopupVisible}
+          okCallback={createList}
+          cancelCallback={() => setModalVisibility(false)}
+        />
+        <div>
+          <Divider orientation="left" plain>
+            <h3>Recently Viewed</h3>
+          </Divider>
+          {recentlyUsedLists}
+          <Divider orientation="left" plain>
+            <h3>All Lists</h3>
+          </Divider>
+          <div className={styles.searchListsInput}>
+            <div className="half-width">
+              <Input
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder="Search question lists"
+                allowClear
+              />
+            </div>
+          </div>
+          {allLists}
+        </div>
       </div>
-      <Modal
-        title="New Question List"
-        visible={isPopupVisible}
-        okButtonProps={{ disabled: titleInput === '' }}
-        onOk={createList}
-        onCancel={hideModal}
-      >
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Input
-            placeholder="Title"
-            value={titleInput}
-            onChange={onTitleChange}
-          />
-          <TextArea
-            placeholder="Description"
-            value={descriptionInput}
-            onChange={onDescriptionChange}
-            rows={4}
-          />
-        </Space>
-      </Modal>
-      <div className={styles.questionListsData}>{listsElement}</div>
-    </div>
+    </ScalableBody>
   );
 }

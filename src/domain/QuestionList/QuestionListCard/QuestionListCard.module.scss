@@ -1,0 +1,57 @@
+.card {
+    background-color: #FFF;
+    width: 100%;
+    height: auto;
+    &:hover { cursor: pointer; }
+    border-radius: 2px;
+    padding: 15px;
+    max-width: 300px;
+}
+
+.cardLarge {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1), 0 -5px 0 #FFF, 0 -10px 5px rgba(0, 0, 0, 0.03), 0 -10px 0 #FFF;
+    padding: 20px;
+    max-width: 450px;
+}
+
+.categories {
+    display: flex;
+    flex-flow: row;
+    overflow: clip;
+}
+
+.averageDifficultyCircle {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    >h4 {
+        margin-bottom: 4px;
+    }
+    >span {
+        font-size: 8px;
+    }
+}
+
+.cardContent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    >:first-child {
+        >h3 {
+            margin-bottom: 0;
+        }
+        >span {
+            font-size: 12px;
+        }
+    }
+}
+
+.threeDots {
+    font-size: 20;
+    width: 40;
+    height: 40;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
