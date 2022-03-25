@@ -8,54 +8,48 @@ import QuestionListHeader from '../../domain/QuestionList/QuestionListHeader';
 import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
-  InterviewQuestionModel,
-  QuestionListModel,
-  UpdateQuestionListRequest,
+  QuestionModel,
+  QuestionSetDetail,
+  UpdateQuestionSetRequest,
 } from '../../services/Client';
 
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
   const client = new Client();
   const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
-  const [list, setList] = useState<QuestionListModel>();
-  const [allQuestions, setAllQuestions] = useState<InterviewQuestionModel[]>(
-    []
-  );
+  const [list, setList] = useState<QuestionSetDetail>();
+  const [allQuestions, setAllQuestions] = useState<QuestionModel[]>([]);
   useEffect(() => {
-    client.questionLists(Number(id), undefined, undefined).then((lists) => {
-      setList(lists[0]);
+    client.getQuestionSetById(Number(id)).then((questionSet) => {
+      setList(questionSet);
     });
-    client
-      .interviewQuestions(undefined, undefined, undefined)
-      .then((questions) => {
-        setAllQuestions(questions);
-      });
+    client.getQuestions(undefined, undefined, undefined).then((questions) => {
+      setAllQuestions(questions);
+    });
   }, []);
 
   const [isDrawerVisible, setDrawerVisible] = useState(false);
-  const [questionsToAdd, setQuestionsToAdd] = useState<
-    InterviewQuestionModel[]
-  >([]);
-  const [questionsToRemove, setQuestionsToRemove] = useState<
-    InterviewQuestionModel[]
-  >([]);
+  const [questionsToAdd, setQuestionsToAdd] = useState<QuestionModel[]>([]);
+  const [questionsToRemove, setQuestionsToRemove] = useState<QuestionModel[]>(
+    []
+  );
   const setDrawerVisibility = (value: boolean | null = null): void => {
     setDrawerVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
   };
 
-  const addToAddDrawer = (record: InterviewQuestionModel): void => {
+  const addToAddDrawer = (record: QuestionModel): void => {
     setQuestionsToAdd((old) => [...old, record]);
   };
 
-  const addToRemoveDrawer = (record: InterviewQuestionModel): void => {
+  const addToRemoveDrawer = (record: QuestionModel): void => {
     setQuestionsToRemove((old) => [...old, record]);
   };
 
-  const removeFromAddDrawer = (question: InterviewQuestionModel): void => {
+  const removeFromAddDrawer = (question: QuestionModel): void => {
     setQuestionsToAdd((old) => old.filter((q) => q.id !== question.id));
   };
 
-  const removeFromRemoveDrawer = (question: InterviewQuestionModel): void => {
+  const removeFromRemoveDrawer = (question: QuestionModel): void => {
     setQuestionsToRemove((old) => old.filter((q) => q.id !== question.id));
   };
 
@@ -71,11 +65,11 @@ export default function QuestionList(): JSX.Element {
 
   const saveChanges = (): void => {
     client
-      .update2(
-        new UpdateQuestionListRequest({
-          id: list?.id,
-          title: list?.title,
-          description: list?.description,
+      .updateQuestionSet(
+        list?.questionSet?.id ?? 0,
+        new UpdateQuestionSetRequest({
+          title: list?.questionSet?.title,
+          description: list?.questionSet?.description,
           questionsToAdd: questionsToAdd.map((q) => (q.id ? q.id : 0)),
           questionsToRemove: questionsToRemove.map((q) => (q.id ? q.id : 0)),
         })
@@ -83,10 +77,10 @@ export default function QuestionList(): JSX.Element {
       .then(() => {
         setList(
           (old) =>
-            new QuestionListModel({
+            new QuestionSetDetail({
               ...old,
-              interviewQuestions: [
-                ...(old?.interviewQuestions?.filter(
+              questions: [
+                ...(old?.questions?.filter(
                   (q) => !questionsToRemove.map((rq) => rq.id).includes(q.id)
                 ) ?? []),
                 ...questionsToAdd,
@@ -100,12 +94,12 @@ export default function QuestionList(): JSX.Element {
 
   const addableQuestions = allQuestions.filter(
     (question) =>
-      !list?.interviewQuestions?.map((q) => q.id).includes(question.id) &&
+      !list?.questions?.map((q) => q.id).includes(question.id) &&
       !questionsToAdd.map((q) => q.id).includes(question.id)
   );
 
   const displayableQuestions =
-    list?.interviewQuestions?.filter(
+    list?.questions?.filter(
       (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
     ) ?? [];
 
@@ -123,7 +117,7 @@ export default function QuestionList(): JSX.Element {
         <QuestionListHeader
           isBeingEdited={isBeingEdited}
           setBeingEditedCallback={setBeingEdited}
-          listTitle={list?.title}
+          listTitle={list?.questionSet?.title}
           discardCallback={discard}
           saveChangesCallback={saveChanges}
           setDrawerVisibilityCallback={setDrawerVisibility}

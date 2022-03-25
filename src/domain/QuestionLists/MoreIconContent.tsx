@@ -2,13 +2,13 @@ import { Button, Menu } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { QuestionListModel } from '../../services/Client';
+import { QuestionSetModel } from '../../services/Client';
 
 export default function MoreIconContent({
   list,
   startInterviewCallback,
 }: {
-  list: QuestionListModel;
+  list: QuestionSetModel;
   startInterviewCallback: () => void;
 }): JSX.Element {
   return (

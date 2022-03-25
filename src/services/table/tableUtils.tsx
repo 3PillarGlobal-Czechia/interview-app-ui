@@ -2,7 +2,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { ReactNode } from 'react';
 
-import { InterviewQuestionModel } from '../Client';
+import { QuestionModel } from '../Client';
 import { getDistinctValues, toPascalCase } from '../stringUtils';
 import FilterDropdown from './FilterDropdown';
 import {
@@ -67,7 +67,7 @@ export function createColumnSearchProps(
     },
     onFilter: (
       value: string | number | boolean,
-      record: InterviewQuestionModel
+      record: QuestionModel
     ): boolean =>
       record[dataIndex]
         ?.toString()
@@ -88,7 +88,7 @@ export function createColumnFilterProps(
     }),
     onFilter: (
       value: string | number | boolean,
-      record: InterviewQuestionModel
+      record: QuestionModel
     ): boolean => {
       return (
         record[dataIndex]

@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Divider, Drawer, Space } from 'antd';
+import { Divider, Drawer, List, Space } from 'antd';
 import React from 'react';
 
 import QuestionCartProps from './QuestionCartProps';
@@ -22,7 +22,7 @@ export default function QuestionCart(props: QuestionCartProps): JSX.Element {
       visible={isVisible}
     >
       {addList.map((question) => (
-        <>
+        <List key={question.id}>
           <Space>
             <strong>Add: </strong>
             {question.title}
@@ -31,11 +31,11 @@ export default function QuestionCart(props: QuestionCartProps): JSX.Element {
             />
           </Space>
           <Divider />
-        </>
+        </List>
       ))}
       {removeList.map((question) => (
-        <>
-          <Space>
+        <List key={question.id}>
+          <Space key={question.id}>
             <strong>Remove: </strong>
             {question.title}
             <DeleteOutlined
@@ -43,7 +43,7 @@ export default function QuestionCart(props: QuestionCartProps): JSX.Element {
             />
           </Space>
           <Divider />
-        </>
+        </List>
       ))}
     </Drawer>
   );

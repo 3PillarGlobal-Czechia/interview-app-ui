@@ -6,7 +6,7 @@ export class Client extends ApiClient {
   }
 }
 
-export const InterviewQuestionModelProps = {
+export const QuestionModelProps = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   id: 'id',

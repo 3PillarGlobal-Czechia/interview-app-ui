@@ -1,4 +1,4 @@
-import { InterviewQuestionModel } from './Client';
+import { QuestionModel } from './Client';
 
 const colors: string[] = [
   'red',
@@ -25,9 +25,7 @@ export function colorByCategory(category: string): string {
   return hashmap.get(category) ?? 'black';
 }
 
-export function getDistinctCategories(
-  questions: InterviewQuestionModel[]
-): string[] {
+export function getDistinctCategories(questions: QuestionModel[]): string[] {
   const set = new Set<string>();
   questions?.forEach((question) => {
     if (question?.category) {

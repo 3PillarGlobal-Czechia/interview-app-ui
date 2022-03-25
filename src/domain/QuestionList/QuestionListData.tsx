@@ -5,10 +5,7 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { useRef } from 'react';
 
 import TableWrapper from '../../components/TableWrapper';
-import {
-  InterviewQuestionModel,
-  InterviewQuestionModelProps,
-} from '../../services/Client';
+import { QuestionModel, QuestionModelProps } from '../../services/Client';
 import {
   createColumnFilterProps,
   createColumnSearchProps,
@@ -46,14 +43,12 @@ export default function QuestionListData(
     confirm({ closeDropdown: true });
   };
 
-  const tableColumns = (
-    data: InterviewQuestionModel[]
-  ): ColumnsType<InterviewQuestionModel> => {
+  const tableColumns = (data: QuestionModel[]): ColumnsType<QuestionModel> => {
     return [
       {
         ...createColumnSearchProps({
           dataIndex:
-            InterviewQuestionModelProps.title as InterviewQuestionDisplayColumns,
+            QuestionModelProps.title as InterviewQuestionDisplayColumns,
           searchInput,
           handleSearchCallback: handleSearch,
           handleResetCallback: handleReset,
@@ -62,7 +57,7 @@ export default function QuestionListData(
       {
         ...createColumnFilterProps({
           dataIndex:
-            InterviewQuestionModelProps.category as InterviewQuestionDisplayColumns,
+            QuestionModelProps.category as InterviewQuestionDisplayColumns,
           filterData: data
             .filter((value) => value !== undefined)
             .map((value) => value.category?.toString() ?? ''),
@@ -71,7 +66,7 @@ export default function QuestionListData(
       {
         ...createColumnSearchProps({
           dataIndex:
-            InterviewQuestionModelProps.content as InterviewQuestionDisplayColumns,
+            QuestionModelProps.content as InterviewQuestionDisplayColumns,
           searchInput,
           handleSearchCallback: handleSearch,
           handleResetCallback: handleReset,
@@ -80,19 +75,19 @@ export default function QuestionListData(
       {
         ...createColumnFilterProps({
           dataIndex:
-            InterviewQuestionModelProps.difficulty as InterviewQuestionDisplayColumns,
+            QuestionModelProps.difficulty as InterviewQuestionDisplayColumns,
           filterData: data
             .filter((value) => value !== undefined)
             .map((value) => value.difficulty?.toString() ?? ''),
         }),
-        sorter: (a: InterviewQuestionModel, b: InterviewQuestionModel) =>
+        sorter: (a: QuestionModel, b: QuestionModel) =>
           a.difficulty && b.difficulty ? a.difficulty - b.difficulty : 1,
         render: (value: number) => <Rate disabled value={value} />,
       },
     ];
   };
 
-  if (!list?.interviewQuestions) {
+  if (!list?.questions) {
     return (
       <div className={styles.questionListData}>
         <Spin indicator={<LoadingOutlined />} />
@@ -104,8 +99,9 @@ export default function QuestionListData(
     <div className={styles.questionListData}>
       <Space direction="vertical">
         <TableWrapper
+          key={1}
           dataSource={displayableQuestions}
-          columns={tableColumns(list?.interviewQuestions)}
+          columns={tableColumns(list?.questions)}
           customAction={{
             buttonText: 'Remove',
             actionCallback: addToRemoveDrawerCallback,
@@ -113,6 +109,7 @@ export default function QuestionListData(
           customTitle="Questions added to list"
         />
         <TableWrapper
+          key={2}
           dataSource={addableQuestions}
           columns={tableColumns(allQuestions)}
           customAction={{
@@ -127,7 +124,7 @@ export default function QuestionListData(
     <div className={styles.questionListData}>
       <TableWrapper
         dataSource={displayableQuestions}
-        columns={tableColumns(list.interviewQuestions)}
+        columns={tableColumns(list.questions)}
       />
     </div>
   );
