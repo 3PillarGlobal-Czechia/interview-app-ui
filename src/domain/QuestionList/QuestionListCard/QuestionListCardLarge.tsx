@@ -2,10 +2,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Progress, Row, Space } from 'antd';
 import React from 'react';
 
-import {
-  average,
-  difficultyPercentageToColor,
-} from '../../../services/mathUtils';
+import { difficultyPercentageToColor } from '../../../services/mathUtils';
 import AverageDifficultyContent from './AverageDifficultyContent';
 import styles from './QuestionListCard.module.scss';
 import { QuestionListCardLargeProps } from './QuestionListCardLargeProps';
@@ -15,12 +12,7 @@ export default function QuestionListCardLarge(
 ): JSX.Element {
   const { list, categories, onCardClickedCallback, moreIconContent } = props;
 
-  const percentage =
-    average(
-      list.interviewQuestions
-        ?.filter((value) => value.difficulty !== undefined)
-        ?.map((value) => value.difficulty ?? 0) ?? []
-    ) * 20;
+  const percentage = 20;
 
   const averageDifficultyContentElement = (
     percent: number | undefined

@@ -35,7 +35,9 @@ export default function TableWrapper<RecordType extends object>(
     ];
   }
 
-  return <Table<RecordType> dataSource={dataSource} columns={columns} />;
+  return (
+    <Table<RecordType> rowKey="id" dataSource={dataSource} columns={columns} />
+  );
 }
 
 TableWrapper.defaultProps = {

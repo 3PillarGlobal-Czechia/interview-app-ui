@@ -1,9 +1,9 @@
 import { MouseEventHandler } from 'react';
 
-import { QuestionListModel } from '../../../services/Client';
+import { QuestionSetModel } from '../../../services/Client';
 
 export interface QuestionListCardLargeProps {
-  list: QuestionListModel;
+  list: QuestionSetModel;
   categories: JSX.Element[];
   onCardClickedCallback: MouseEventHandler;
   moreIconContent: JSX.Element;

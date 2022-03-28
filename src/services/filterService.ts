@@ -1,9 +1,9 @@
-import { InterviewQuestionModel, QuestionListModel } from './Client';
+import { QuestionModel, QuestionSetModel } from './Client';
 
 export function filterQuestions(
-  questions: InterviewQuestionModel[],
+  questions: QuestionModel[],
   value: string
-): InterviewQuestionModel[] {
+): QuestionModel[] {
   const lowerCaseValue = value.toLowerCase();
   return questions.filter(
     (question) =>
@@ -14,31 +14,15 @@ export function filterQuestions(
 }
 
 export function filterLists(
-  lists: QuestionListModel[],
-  value: string,
-  filterAlsoQuestions = true
-): QuestionListModel[] {
+  lists: QuestionSetModel[],
+  value: string
+): QuestionSetModel[] {
   const lowerCaseValue = value.toLowerCase();
-  let ret = lists.filter(
+  const ret = lists.filter(
     (list) =>
       list.title?.toLowerCase().includes(lowerCaseValue) ||
       list.description?.toLowerCase().includes(lowerCaseValue)
   );
-
-  if (filterAlsoQuestions) {
-    ret = Array.from(
-      new Set<QuestionListModel>([
-        ...ret,
-        ...lists.filter((list) =>
-          list.interviewQuestions?.some(Boolean)
-            ? filterQuestions(list.interviewQuestions, lowerCaseValue).some(
-                Boolean
-              )
-            : true
-        ),
-      ])
-    );
-  }
 
   return ret;
 }

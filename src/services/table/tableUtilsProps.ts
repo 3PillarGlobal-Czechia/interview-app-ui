@@ -8,7 +8,7 @@ import {
 import { DataIndex } from 'rc-table/lib/interface';
 import { Key, MutableRefObject, ReactNode } from 'react';
 
-import { InterviewQuestionModel } from '../Client';
+import { QuestionModel } from '../Client';
 
 export type InterviewQuestionDisplayColumns =
   | 'title'
@@ -29,7 +29,7 @@ export interface CreateColumnSearchPropsInput {
 }
 
 export interface CreateColumnSearchPropsOutput {
-  title: ColumnTitle<InterviewQuestionModel>;
+  title: ColumnTitle<QuestionModel>;
   dataIndex: DataIndex;
   key: Key;
   filterIcon: ReactNode | ((filtered: boolean) => ReactNode);
@@ -37,7 +37,7 @@ export interface CreateColumnSearchPropsOutput {
   onFilterDropdownVisibleChange: (visible: boolean) => void;
   onFilter: (
     value: string | number | boolean,
-    record: InterviewQuestionModel
+    record: QuestionModel
   ) => boolean;
 }
 
@@ -47,12 +47,12 @@ export interface CreateColumnFilterPropsInput {
 }
 
 export interface CreateColumnFilterPropsOutput {
-  title: ColumnTitle<InterviewQuestionModel>;
+  title: ColumnTitle<QuestionModel>;
   dataIndex: DataIndex;
   key: Key;
   filters: ColumnFilterItem[];
   onFilter: (
     value: string | number | boolean,
-    record: InterviewQuestionModel
+    record: QuestionModel
   ) => boolean;
 }

@@ -12,9 +12,9 @@ import { useLocalStorage } from '../../hooks';
 import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
-  CreateQuestionListRequest,
-  InterviewQuestionModel,
-  QuestionListModel,
+  CreateQuestionSetRequest,
+  QuestionModel,
+  QuestionSetModel,
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
 import {
@@ -27,7 +27,7 @@ export default function QuestionLists(): JSX.Element {
   const navigate = useNavigate();
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
-  const [lists, setLists] = useState<QuestionListModel[] | null>();
+  const [lists, setLists] = useState<QuestionSetModel[] | null>();
   const maxStoredRecentLists = 5;
   const [recentListIds, setRecentListIds] = useLocalStorage<number[]>(
     'recentListIds',
@@ -35,7 +35,7 @@ export default function QuestionLists(): JSX.Element {
   );
 
   useEffect(() => {
-    client.questionLists(undefined, undefined, undefined).then((value) => {
+    client.getQuestionSets().then((value) => {
       setLists(value);
     });
   }, []);
@@ -56,19 +56,17 @@ export default function QuestionLists(): JSX.Element {
   };
 
   const createList = (title: string, description: string): void => {
-    const request = new CreateQuestionListRequest({
+    const request = new CreateQuestionSetRequest({
       title,
       description,
     });
-    client.create2(request).then((model) => {
+    client.createQuestionSet(request).then((model) => {
       setLists([...(lists ?? []), model]);
     });
     setModalVisibility(false);
   };
 
-  const tags = (
-    interviewQuestions: InterviewQuestionModel[]
-  ): JSX.Element[] => {
+  const tags = (interviewQuestions: QuestionModel[]): JSX.Element[] => {
     return getDistinctCategories(interviewQuestions).map((category) => (
       <Tag key={category} color={colorByCategory(category)}>
         {category}
@@ -84,12 +82,12 @@ export default function QuestionLists(): JSX.Element {
           ? recentListIds.map((id) => lists.filter((list) => list.id === id)[0])
           : undefined
       }
-      renderItem={(list: QuestionListModel) => (
+      renderItem={(list: QuestionSetModel) => (
         <List.Item>
           <div className="centered">
             <QuestionListCardSmall
               list={list}
-              categories={tags(list.interviewQuestions ?? [])}
+              categories={tags([])}
               onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
             />
           </div>
@@ -105,12 +103,12 @@ export default function QuestionLists(): JSX.Element {
       pagination={{
         defaultPageSize: 12,
       }}
-      renderItem={(list: QuestionListModel) => (
+      renderItem={(list: QuestionSetModel) => (
         <List.Item>
           <div className="centered">
             <QuestionListCardLarge
               list={list}
-              categories={tags(list.interviewQuestions ?? [])}
+              categories={tags([])}
               onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
               moreIconContent={
                 <MoreIconContent
