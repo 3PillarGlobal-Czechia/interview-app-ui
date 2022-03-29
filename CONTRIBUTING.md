@@ -29,4 +29,5 @@ Contact authors directly via email.
 
 Thanks! :heart: :heart: :heart:
 
-Jakub
+Jakub (@PlesnikJakub), and the rest of the team
+
