@@ -2,7 +2,8 @@
 
 ## General
 
-The application design is based on UI Toolkit [Ant Design](https://ant.design/) with some custom elements designed specificaly for purposes of this application. The main focus of our design is to make application lightweight, features easily accesible and fast for use.
+The application design is based the [Ant Design](https://ant.design/) UI Toolkit with some custom elements designed specifically for the purposes of this application. The main focus of our design is to make the application lightweight, features easily accessible and fast to use.
+
 
 ## Device support
 
