@@ -17,7 +17,7 @@ Welcome to UI repository of Interview app. Goal of this project is to create a t
 
 `npm start` - Runs the app in the development mode \
 `npm test` - Launches the test runner in the interactive watch mode \
-`npm lint` - Runs eslint with quiet and autofix flag \
+`npm lint` - Runs [ESLint](https://eslint.org/) with the quiet and autofix flags \
 `npm run build` - Builds the app for production to the `build` folder
 
 ## Documentation
