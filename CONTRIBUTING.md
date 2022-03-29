@@ -18,7 +18,8 @@
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Open a new GitHub issue with the description of the new feature and add label **suggestion**.
+* Open a new GitHub issue with the description of the new feature and apply the **suggestion** [label](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#applying-a-label).
+
 
 #### **Do you have questions about the source code?**
 
