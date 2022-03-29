@@ -9,7 +9,7 @@ Welcome to UI repository of Interview app. Goal of this project is to create a t
 ## Local setup
 
 - run `npm install`
-- Make sure API is running on url specified in .env file
+- Make sure [the API](https://github.com/3PillarGlobal-Czechia/interview-app-api) is running on the URL specified in the `.env` file
 - run `npm start`
 - application will start on `http://localhost:3000/`
 
