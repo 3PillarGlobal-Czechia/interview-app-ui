@@ -1,6 +1,6 @@
 # interview-app-ui
 
-Welcome to UI repository of Interview app. Goal of this project is to create a tool that can help technical interviewes to lead an interview with a increased confidence and ability to stay consistent accross of multiple interviews.
+Welcome to the UI repository of Interview app. The goal of this project is to create a tool that helps technical interviewers lead an interview with increased confidence and the ability to stay consistent across multiple interviews.
 
 ## Technical stack
 - [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
