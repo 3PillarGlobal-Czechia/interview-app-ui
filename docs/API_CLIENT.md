@@ -9,7 +9,8 @@ Auto-generation is done through the [NSwag package](https://openbase.com/js/nswa
 
 ## Regeneration
 
-After any changes in the contract on API (new endpoints, URL changes, requests, or return types) ApiClinet needs to be regenerated to reflect all changes. 
+After any changes to the API contract (new endpoints, URL changes, requests, or return types) ApiClient needs to be regenerated to reflect these changes. 
+
 
 1. Start the API on your local machine *
 1. Ensure url `/swagger` is working properly 
