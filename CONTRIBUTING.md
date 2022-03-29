@@ -21,7 +21,8 @@
 * Open a new GitHub issue with the description of the new feature and apply the **suggestion** [label](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#applying-a-label).
 
 
-#### **Do you have questions about the source code?**
+#### **Do you have any questions about the source code?**
+
 
 Contact authors directly via email. 
 
