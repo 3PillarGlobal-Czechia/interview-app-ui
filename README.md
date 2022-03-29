@@ -3,8 +3,8 @@
 Welcome to UI repository of Interview app. Goal of this project is to create a tool that can help technical interviewes to lead an interview with a increased confidence and ability to stay consistent accross of multiple interviews.
 
 ## Technical stack
-- React + TypeScript
-- AntD 
+- [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
+- [AntD](https://ant.design/)
 
 ## Local setup
 
