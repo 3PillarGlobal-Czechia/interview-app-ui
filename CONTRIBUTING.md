@@ -13,7 +13,8 @@
 
 #### **Did you fix whitespace, format code, or make a purely cosmetic patch?**
 
-* Open a new GitHub pull request with the fix.
+* Open a [new GitHub pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) with the fix.
+
 
 #### **Do you intend to add a new feature or change an existing one?**
 
