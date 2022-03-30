@@ -20,7 +20,7 @@ export default function MoreIconContent({
       </Menu.Item>
       <Menu.Item>
         <Button type="link">
-          <Link onClick={startInterviewCallback} to="/">
+          <Link to={`Interview/${list.id}`} onClick={startInterviewCallback}>
             Start Interview
           </Link>
         </Button>
