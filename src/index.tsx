@@ -18,7 +18,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// #region Applicati//#region Application insight
+// #region Application insight
 const browserHistory = createBrowserHistory({});
 const reactPlugin = new ReactPlugin();
 export default withAITracking(reactPlugin, App);
