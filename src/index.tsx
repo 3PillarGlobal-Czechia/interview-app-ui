@@ -18,7 +18,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-//#region Application insight
+// #region Applicati//#region Application insight
 const browserHistory = createBrowserHistory({});
 const reactPlugin = new ReactPlugin();
 export default withAITracking(reactPlugin, App);
@@ -37,9 +37,9 @@ appInsights.loadAppInsights();
 
 window.addEventListener("unhandledrejection", (event) => {
   console.log(event)
-  appInsights.trackException({ error:  event.reason} as IExceptionTelemetry);
+  appInsights.trackException({ error: event.reason } as IExceptionTelemetry);
 });
-//#endregion
+// #endregion
 
 try {
   ReactDOM.render(
@@ -58,5 +58,3 @@ try {
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-

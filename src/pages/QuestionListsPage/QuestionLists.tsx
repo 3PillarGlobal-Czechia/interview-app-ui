@@ -1,5 +1,4 @@
-
-import { useAppInsightsContext } from "@microsoft/applicationinsights-react-js";
+import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
 import { Divider, Input, List, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -129,8 +128,8 @@ export default function QuestionLists(): JSX.Element {
 
   // Example how to use it
   const appInsights = useAppInsightsContext();
-  appInsights.trackEvent({ "name": 'QuestionLists' });
-  appInsights.trackPageView({"name": 'QuestionLists'})
+  appInsights.trackEvent({ name: 'QuestionLists' });
+  appInsights.trackPageView({name: 'QuestionLists'})
 
   return (
     <ScalableBody>
