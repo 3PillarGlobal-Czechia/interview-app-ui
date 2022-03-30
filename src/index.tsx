@@ -36,6 +36,7 @@ export const appInsights = new ApplicationInsights({
 appInsights.loadAppInsights();
 
 window.addEventListener('unhandledrejection', (event) => {
+  // eslint-disable-next-line no-console
   console.log(event);
   appInsights.trackException({ error: event.reason } as IExceptionTelemetry);
 });
