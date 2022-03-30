@@ -9,3 +9,13 @@
         }
     }
 }
+
+.timelineContainer {
+    display: flex;
+    justify-content: center;
+    >:first-child {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
