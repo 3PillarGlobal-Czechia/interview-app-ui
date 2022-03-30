@@ -35,8 +35,8 @@ export const appInsights = new ApplicationInsights({
 
 appInsights.loadAppInsights();
 
-window.addEventListener("unhandledrejection", (event) => {
-  console.log(event)
+window.addEventListener('unhandledrejection', (event) => {
+  console.log(event);
   appInsights.trackException({ error: event.reason } as IExceptionTelemetry);
 });
 // #endregion
