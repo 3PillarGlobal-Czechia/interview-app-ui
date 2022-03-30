@@ -129,7 +129,7 @@ export default function QuestionLists(): JSX.Element {
   // Example how to use it
   const appInsights = useAppInsightsContext();
   appInsights.trackEvent({ name: 'QuestionLists' });
-  appInsights.trackPageView({ name: 'QuestionLists' })
+  appInsights.trackPageView({ name: 'QuestionLists' });
 
   return (
     <ScalableBody>
