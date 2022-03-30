@@ -1,3 +1,4 @@
+import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -102,6 +103,11 @@ export default function QuestionList(): JSX.Element {
     list?.questions?.filter(
       (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
     ) ?? [];
+
+  // Example how to use it
+  const appInsights = useAppInsightsContext();
+  appInsights.trackEvent({ name: 'QuestionList' });
+  appInsights.trackPageView({ name: 'QuestionList' });
 
   return (
     <ScalableBody>
