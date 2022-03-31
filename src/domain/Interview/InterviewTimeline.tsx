@@ -13,7 +13,7 @@ export default function InterviewTimeline({
   return (
     <Timeline>
       {questions.map((question) => (
-        <Timeline.Item>
+        <Timeline.Item key={question.id}>
           <span
             role="presentation"
             onClick={() => itemClickedCallback(question)}
