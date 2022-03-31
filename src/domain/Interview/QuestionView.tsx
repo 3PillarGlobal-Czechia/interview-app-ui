@@ -6,8 +6,10 @@ import styles from './QuestionView.module.scss';
 
 export default function InterviewQuestionView({
   question,
+  onRatingChanged,
 }: {
   question: QuestionModel;
+  onRatingChanged: (questionId: number, rating: number) => void;
 }): JSX.Element {
   const [value, setValue] = useState<number>();
 
@@ -23,7 +25,15 @@ export default function InterviewQuestionView({
           <span>{question.content}</span>
           <div>
             <span>Rate answer (1 - 10)</span>
-            <InputNumber min={1} max={10} value={value} onChange={setValue} />
+            <InputNumber
+              min={1}
+              max={10}
+              value={value}
+              onChange={(currentRating) => {
+                setValue(currentRating);
+                onRatingChanged(question.id ?? 0, currentRating);
+              }}
+            />
           </div>
         </div>
       </div>

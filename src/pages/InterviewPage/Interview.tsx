@@ -23,11 +23,17 @@ export default function Interview(): JSX.Element {
     useState<QuestionSetDetail>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
+  const [rating, setRating] = useState(new Map<number, number>());
+
   useEffect(() => {
     client
       .getQuestionSetById(Number(id))
       .then((questionSet) => setQuestionSetDetail(questionSet));
   }, []);
+
+  const setQuestionRating = (questionId: number, value: number): void => {
+    setRating(new Map(rating.set(questionId, value)));
+  };
 
   return (
     <ScalableBody>
@@ -58,7 +64,10 @@ export default function Interview(): JSX.Element {
                 }
               >
                 <List.Item>
-                  <QuestionView question={question} />
+                  <QuestionView
+                    question={question}
+                    onRatingChanged={setQuestionRating}
+                  />
                 </List.Item>
               </div>
             )}
@@ -67,6 +76,7 @@ export default function Interview(): JSX.Element {
         <Col span={6} className={styles.timelineContainer}>
           <InterviewTimeline
             questions={questionSetDetail?.questions ?? []}
+            questionRating={rating}
             itemClickedCallback={(question: QuestionModel) => {
               if (question.id) {
                 getRef(question.id.toString())?.scrollIntoView({
