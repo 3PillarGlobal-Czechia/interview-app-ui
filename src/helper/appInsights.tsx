@@ -11,7 +11,6 @@ import { createBrowserHistory } from 'history';
 
 import App from '../App';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 const browserHistory = createBrowserHistory({});
 export const reactPlugin = new ReactPlugin();
 
