@@ -17,7 +17,7 @@
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        >li:hover {
+        span:hover {
             cursor: pointer;
         }
     }
