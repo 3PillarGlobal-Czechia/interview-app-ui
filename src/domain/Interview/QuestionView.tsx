@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { QuestionModel } from '../../services/Client';
 import styles from './QuestionView.module.scss';
 
-export default function InterviewQuestionView({
+export default function QuestionView({
   question,
   onRatingChanged,
 }: {
