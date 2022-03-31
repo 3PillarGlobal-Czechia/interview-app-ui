@@ -1,16 +1,16 @@
 import './index.module.scss';
 import 'antd/dist/antd.css';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { AppInsightsContext, ReactPlugin } from '@microsoft/applicationinsights-react-js';
+import { AppInsightsContext } from '@microsoft/applicationinsights-react-js';
 import { IExceptionTelemetry } from '@microsoft/applicationinsights-web';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { getAppInsights } from './appInsights';
 
-const reactPlugin = new ReactPlugin();
-let appInsights = getAppInsights( reactPlugin );
+import App from './App';
+import { getAppInsights, reactPlugin } from './helper/appInsights';
+import reportWebVitals from './reportWebVitals';
+
+const appInsights = getAppInsights();
 
 try {
   ReactDOM.render(

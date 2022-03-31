@@ -1,15 +1,21 @@
-import App from './App';
-
-import { ApplicationInsights, IExceptionTelemetry } from "@microsoft/applicationinsights-web";
+import {
+  ReactPlugin,
+  withAITracking,
+} from '@microsoft/applicationinsights-react-js';
+import {
+  ApplicationInsights,
+  IExceptionTelemetry,
+} from '@microsoft/applicationinsights-web';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { createBrowserHistory } from 'history';
-import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
+
+import App from '../App';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const browserHistory = createBrowserHistory({});
+export const reactPlugin = new ReactPlugin();
 
-export function getAppInsights(
-  reactPlugin: ReactPlugin
-): ApplicationInsights {
+export function getAppInsights(): ApplicationInsights {
   withAITracking(reactPlugin, App);
   const appInsights = new ApplicationInsights({
     config: {
@@ -21,11 +27,9 @@ export function getAppInsights(
       },
     },
   });
-  debugger;
   appInsights.loadAppInsights();
 
   window.addEventListener('unhandledrejection', (event) => {
-    debugger;
     // eslint-disable-next-line no-console
     console.log(event);
     appInsights.trackException({ error: event.reason } as IExceptionTelemetry);
