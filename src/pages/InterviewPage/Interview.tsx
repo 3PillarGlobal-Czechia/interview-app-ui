@@ -6,6 +6,7 @@ import InterviewHeader from '../../domain/Interview/InterviewHeader';
 import InterviewTimeline from '../../domain/Interview/InterviewTimeline';
 import QuestionView from '../../domain/Interview/QuestionView';
 import styles from '../../domain/Interview/QuestionView.module.scss';
+import { useRefMap } from '../../hooks';
 import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
@@ -17,6 +18,7 @@ export default function Interview(): JSX.Element {
   const { id } = useParams<'id'>();
   const client = new Client();
   const navigate = useNavigate();
+  const [setRef, getRef] = useRefMap<HTMLDivElement>();
   const [questionSetDetail, setQuestionSetDetail] =
     useState<QuestionSetDetail>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -48,14 +50,31 @@ export default function Interview(): JSX.Element {
             itemLayout="horizontal"
             dataSource={questionSetDetail?.questions}
             renderItem={(question: QuestionModel) => (
-              <List.Item>
-                <QuestionView question={question} />
-              </List.Item>
+              <div
+                ref={(element) =>
+                  question.id && element
+                    ? setRef(question.id.toString(), element)
+                    : null
+                }
+              >
+                <List.Item>
+                  <QuestionView question={question} />
+                </List.Item>
+              </div>
             )}
           />
         </Col>
         <Col span={6} className={styles.timelineContainer}>
-          <InterviewTimeline questions={questionSetDetail?.questions ?? []} />
+          <InterviewTimeline
+            questions={questionSetDetail?.questions ?? []}
+            itemClickedCallback={(question: QuestionModel) => {
+              if (question.id) {
+                getRef(question.id.toString())?.scrollIntoView({
+                  behavior: 'smooth',
+                });
+              }
+            }}
+          />
         </Col>
       </Row>
     </ScalableBody>

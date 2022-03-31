@@ -5,13 +5,25 @@ import { QuestionModel } from '../../services/Client';
 
 export default function InterviewTimeline({
   questions,
+  itemClickedCallback,
 }: {
   questions: QuestionModel[];
+  itemClickedCallback: (question: QuestionModel) => void;
 }): JSX.Element {
   return (
     <Timeline>
       {questions.map((question) => (
-        <Timeline.Item>{question.title}</Timeline.Item>
+        <Timeline.Item>
+          <span
+            role="presentation"
+            onClick={() => itemClickedCallback(question)}
+            onKeyDown={() => {
+              // do nothing
+            }}
+          >
+            {question.title}
+          </span>
+        </Timeline.Item>
       ))}
     </Timeline>
   );
