@@ -7,6 +7,14 @@
             display: flex;
             justify-content: space-around;
         }
+        >:nth-child(2) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            span {
+                padding: 5px;
+            }
+        }
     }
 }
 
