@@ -1,0 +1,32 @@
+.questionView {
+    width: 100%;
+    padding: 10px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    >:first-child {
+        >:first-child {
+            display: flex;
+            justify-content: space-around;
+        }
+        >:nth-child(2) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            span {
+                padding: 5px;
+            }
+        }
+    }
+}
+
+.timelineContainer {
+    display: flex;
+    justify-content: center;
+    >:first-child {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        span:hover {
+            cursor: pointer;
+        }
+    }
+}
