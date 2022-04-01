@@ -12,8 +12,6 @@ export default function QuestionListCardLarge(
 ): JSX.Element {
   const { list, categories, onCardClickedCallback, moreIconContent } = props;
 
-  const percentage = 20;
-
   const averageDifficultyContentElement = (
     percent: number | undefined
   ): JSX.Element => <AverageDifficultyContent percent={percent} />;
@@ -29,14 +27,14 @@ export default function QuestionListCardLarge(
           format={(percent: number | undefined) =>
             averageDifficultyContentElement(percent)
           }
-          percent={Number(percentage.toFixed(2))}
-          strokeColor={difficultyPercentageToColor(percentage)}
+          percent={Number(list.difficulty?.value?.toFixed(2))}
+          strokeColor={difficultyPercentageToColor(list.difficulty?.value ?? 0)}
         />
       </Col>
       <Col span={13}>
         <div className={styles.cardContent}>
           <Space direction="vertical" size={0}>
-            <h3>{list.title}</h3>
+            <h3>{list.questionSet?.title}</h3>
             <span>By Anonymous</span>
           </Space>
           <div className={styles.categories}>{categories}</div>

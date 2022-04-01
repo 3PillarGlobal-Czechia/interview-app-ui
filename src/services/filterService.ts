@@ -1,4 +1,5 @@
-import { QuestionModel, QuestionSetModel } from './Client';
+import { QuestionSetListItem } from './ApiClient';
+import { QuestionModel } from './Client';
 
 export function filterQuestions(
   questions: QuestionModel[],
@@ -14,15 +15,14 @@ export function filterQuestions(
 }
 
 export function filterLists(
-  lists: QuestionSetModel[],
+  lists: QuestionSetListItem[],
   value: string
-): QuestionSetModel[] {
+): QuestionSetListItem[] {
   const lowerCaseValue = value.toLowerCase();
   const ret = lists.filter(
     (list) =>
-      list.title?.toLowerCase().includes(lowerCaseValue) ||
-      list.description?.toLowerCase().includes(lowerCaseValue)
+      list.questionSet?.title?.toLowerCase().includes(lowerCaseValue) ||
+      list.questionSet?.description?.toLowerCase().includes(lowerCaseValue)
   );
-
   return ret;
 }
