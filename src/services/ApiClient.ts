@@ -73,6 +73,56 @@ export class ApiClient {
     }
 
     /**
+     * @return Success
+     */
+    deleteQuestion(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/api/v1/Question/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteQuestion(_response);
+        });
+    }
+
+    protected processDeleteQuestion(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param category (optional) 
      * @param text (optional) 
      * @param difficulties (optional) 
@@ -199,7 +249,7 @@ export class ApiClient {
     /**
      * @return Success
      */
-    getQuestionSets(): Promise<QuestionSetModel[]> {
+    getQuestionSets(): Promise<QuestionSetListItem[]> {
         let url_ = this.baseUrl + "/api/v1/QuestionSet";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -215,7 +265,7 @@ export class ApiClient {
         });
     }
 
-    protected processGetQuestionSets(response: Response): Promise<QuestionSetModel[]> {
+    protected processGetQuestionSets(response: Response): Promise<QuestionSetListItem[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -225,7 +275,7 @@ export class ApiClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(QuestionSetModel.fromJS(item));
+                    result200!.push(QuestionSetListItem.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -251,7 +301,7 @@ export class ApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<QuestionSetModel[]>(null as any);
+        return Promise.resolve<QuestionSetListItem[]>(null as any);
     }
 
     /**
@@ -519,6 +569,42 @@ export interface ICreateQuestionSetRequest {
     interviewQuestionIds?: number[] | undefined;
 }
 
+export class Difficulty implements IDifficulty {
+    value?: number;
+
+    constructor(data?: IDifficulty) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): Difficulty {
+        data = typeof data === 'object' ? data : {};
+        let result = new Difficulty();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IDifficulty {
+    value?: number;
+}
+
 export class ProblemDetails implements IProblemDetails {
     type?: string | undefined;
     title?: string | undefined;
@@ -677,6 +763,46 @@ export class QuestionSetDetail implements IQuestionSetDetail {
 export interface IQuestionSetDetail {
     questionSet?: QuestionSetModel;
     questions?: QuestionModel[] | undefined;
+}
+
+export class QuestionSetListItem implements IQuestionSetListItem {
+    questionSet?: QuestionSetModel;
+    difficulty?: Difficulty;
+
+    constructor(data?: IQuestionSetListItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.questionSet = _data["questionSet"] ? QuestionSetModel.fromJS(_data["questionSet"]) : <any>undefined;
+            this.difficulty = _data["difficulty"] ? Difficulty.fromJS(_data["difficulty"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): QuestionSetListItem {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuestionSetListItem();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["questionSet"] = this.questionSet ? this.questionSet.toJSON() : <any>undefined;
+        data["difficulty"] = this.difficulty ? this.difficulty.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IQuestionSetListItem {
+    questionSet?: QuestionSetModel;
+    difficulty?: Difficulty;
 }
 
 export class QuestionSetModel implements IQuestionSetModel {

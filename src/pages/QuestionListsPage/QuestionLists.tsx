@@ -15,7 +15,7 @@ import {
   Client,
   CreateQuestionSetRequest,
   QuestionModel,
-  QuestionSetModel,
+  QuestionSetListItem,
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
 import {
@@ -28,7 +28,7 @@ export default function QuestionLists(): JSX.Element {
   const navigate = useNavigate();
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
-  const [lists, setLists] = useState<QuestionSetModel[] | null>();
+  const [lists, setLists] = useState<QuestionSetListItem[] | null>();
   const maxStoredRecentLists = 5;
   const [recentListIds, setRecentListIds] = useLocalStorage<number[]>(
     'recentListIds',
@@ -80,16 +80,20 @@ export default function QuestionLists(): JSX.Element {
       grid={{ xs: 2, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5, gutter: 16 }}
       dataSource={
         lists
-          ? recentListIds.map((id) => lists.filter((list) => list.id === id)[0])
+          ? recentListIds.map(
+              (id) => lists.filter((list) => list.questionSet?.id === id)[0]
+            )
           : undefined
       }
-      renderItem={(list: QuestionSetModel) => (
+      renderItem={(list: QuestionSetListItem) => (
         <List.Item>
           <div className="centered">
             <QuestionListCardSmall
               list={list}
               categories={tags([])}
-              onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
+              onCardClickedCallback={() =>
+                navigate(`QuestionList/${list.questionSet?.id}`)
+              }
             />
           </div>
         </List.Item>
@@ -104,18 +108,20 @@ export default function QuestionLists(): JSX.Element {
       pagination={{
         defaultPageSize: 12,
       }}
-      renderItem={(list: QuestionSetModel) => (
+      renderItem={(list: QuestionSetListItem) => (
         <List.Item>
           <div className="centered">
             <QuestionListCardLarge
               list={list}
               categories={tags([])}
-              onCardClickedCallback={() => navigate(`QuestionList/${list.id}`)}
+              onCardClickedCallback={() =>
+                navigate(`QuestionList/${list.questionSet?.id}`)
+              }
               moreIconContent={
                 <MoreIconContent
                   list={list}
                   startInterviewCallback={() =>
-                    addListIdToRecentlyUsed(list.id ?? 0)
+                    addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
                   }
                 />
               }
