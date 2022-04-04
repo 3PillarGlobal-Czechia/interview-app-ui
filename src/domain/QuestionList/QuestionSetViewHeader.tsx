@@ -7,8 +7,10 @@ import styles from './QuestionSetView.module.scss';
 
 export default function QuestionSetViewHeader({
   title,
+  createdBy,
 }: {
   title: string;
+  createdBy: string;
 }): JSX.Element {
   return (
     <Header
@@ -21,7 +23,7 @@ export default function QuestionSetViewHeader({
           <EditOutlined />
         </div>
       }
-      right={<span>By anonymous</span>}
+      right={<span>By {createdBy}</span>}
     />
   );
 }

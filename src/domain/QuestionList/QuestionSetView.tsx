@@ -23,7 +23,7 @@ export default function QuestionSetView({
     <Row>
       <Col span={1} />
       <Col span={22}>
-        <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} />
+        <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} createdBy='anonymous' />
         <div className={styles.questionSetView}>
           <AverageDifficultyCircle />
           <p>
