@@ -25,3 +25,10 @@
         justify-content: center;
     }
 }
+
+.questionSetViewHeader {
+    align-items: center;
+    >* {
+        margin: 0 2px;
+    }
+}
