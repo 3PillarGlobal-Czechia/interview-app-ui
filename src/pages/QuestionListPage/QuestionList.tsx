@@ -31,7 +31,7 @@ export default function QuestionList(): JSX.Element {
   appInsights.trackPageView({ name: 'QuestionList' });
 
   return (
-    <Row>
+    <Row className='full-height'>
       <Col span={9}>
         <QuestionSetView list={list} />
       </Col>

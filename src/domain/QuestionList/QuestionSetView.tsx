@@ -20,7 +20,7 @@ export default function QuestionSetView({
   }
 
   return (
-    <Row>
+    <Row className={`${styles.questionSetBackground} full-height`}>
       <Col span={1} />
       <Col span={22}>
         <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} createdBy='anonymous' />
