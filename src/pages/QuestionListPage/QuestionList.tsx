@@ -1,9 +1,10 @@
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import AvailableQuestionsView from '../../domain/QuestionList/AvailableQuestionsView';
 
-import styles from '../../domain/QuestionList/QuestionList.module.scss';
-import ScalableBody from '../../layout/scalableBody/ScalableBody';
+import QuestionSetView from '../../domain/QuestionList/QuestionSetView';
 import {
   Client,
   QuestionModel,
@@ -30,8 +31,13 @@ export default function QuestionList(): JSX.Element {
   appInsights.trackPageView({ name: 'QuestionList' });
 
   return (
-    <div className={styles.questionList}>
-
-    </div>
+    <Row>
+      <Col span={9}>
+        <QuestionSetView />
+      </Col>
+      <Col span={15}>
+        <AvailableQuestionsView />
+      </Col>
+    </Row>
   );
 }
