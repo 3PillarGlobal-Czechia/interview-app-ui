@@ -2,8 +2,8 @@ import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AvailableQuestionsView from '../../domain/QuestionList/AvailableQuestionsView';
 
+import AvailableQuestionsView from '../../domain/QuestionList/AvailableQuestionsView';
 import QuestionSetView from '../../domain/QuestionList/QuestionSetView';
 import {
   Client,
@@ -33,7 +33,7 @@ export default function QuestionList(): JSX.Element {
   return (
     <Row>
       <Col span={9}>
-        <QuestionSetView />
+        <QuestionSetView list={list} />
       </Col>
       <Col span={15}>
         <AvailableQuestionsView />
