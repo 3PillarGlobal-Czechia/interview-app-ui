@@ -9,6 +9,7 @@ import {
   Client,
   QuestionModel,
   QuestionSetDetail,
+  UpdateQuestionSetRequest,
 } from '../../services/Client';
 
 export default function QuestionList(): JSX.Element {
@@ -25,6 +26,14 @@ export default function QuestionList(): JSX.Element {
     });
   }, []);
 
+  const removeQuestionFromList = (id: number): void => {
+    if (list?.questionSet?.id) {
+      client.updateQuestionSet(list.questionSet.id, new UpdateQuestionSetRequest({ ...list.questionSet, questionsToRemove: [id] })).then(() => {
+        setList(new QuestionSetDetail({ ...list, questions: list?.questions?.filter(question => question.id !== id) }));
+      });
+    }
+  }
+
   // Example how to use it
   const appInsights = useAppInsightsContext();
   appInsights.trackEvent({ name: 'QuestionList' });
@@ -33,7 +42,7 @@ export default function QuestionList(): JSX.Element {
   return (
     <Row className='full-height'>
       <Col span={9}>
-        <QuestionSetView list={list} />
+        <QuestionSetView list={list} removeQuestionFromListCallback={removeQuestionFromList} />
       </Col>
       <Col span={15}>
         <AvailableQuestionsView />

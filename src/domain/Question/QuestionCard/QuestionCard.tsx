@@ -7,17 +7,19 @@ import styles from './QuestionCard.module.scss';
 
 export default function QuestionCard({
   question,
-  tagColor
+  tagColor,
+  deleteClickedCallback,
 }: {
   question: QuestionModel;
   tagColor: string;
+  deleteClickedCallback: (id: number) => void;
 }): JSX.Element {
   return (
     <div className={styles.questionCard}>
       <span>{question.title}</span>
       <div>
         <Tag color={tagColor}>{question.category}</Tag>
-        <DeleteOutlined style={{ color: 'red' }} />
+        <DeleteOutlined onClick={() => question.id ? deleteClickedCallback(question.id) : null} style={{ color: 'red' }} />
       </div>
     </div>
   );

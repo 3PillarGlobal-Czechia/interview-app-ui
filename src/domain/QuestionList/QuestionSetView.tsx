@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
-import { Client, QuestionModel, QuestionSetDetail } from '../../services/Client';
+import { Client, QuestionModel, QuestionSetDetail, UpdateQuestionSetRequest } from '../../services/Client';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
@@ -12,8 +12,10 @@ import styles from './QuestionSetView.module.scss';
 
 export default function QuestionSetView({
   list,
+  removeQuestionFromListCallback
 }: {
   list: QuestionSetDetail | undefined;
+  removeQuestionFromListCallback: (id: number) => void;
 }): JSX.Element {
   if (!list) {
     return <Spin indicator={<LoadingOutlined />} />;
@@ -44,7 +46,7 @@ export default function QuestionSetView({
         <List
           dataSource={list.questions}
           renderItem={(question: QuestionModel) => (
-            <QuestionCard key={question.id} question={question} tagColor={'cyan'} />
+            <QuestionCard key={question.id} question={question} tagColor={'cyan'} deleteClickedCallback={removeQuestionFromListCallback} />
           )}
         />
       </Col>
