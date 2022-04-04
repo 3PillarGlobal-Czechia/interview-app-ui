@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { List, Spin } from 'antd';
+import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
 import { QuestionModel, QuestionSetDetail } from '../../services/Client';
@@ -7,6 +7,8 @@ import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
 import QuestionSetViewHeader from './QuestionSetViewHeader';
+
+import styles from './QuestionSetView.module.scss';
 
 export default function QuestionSetView({
   list,
@@ -18,23 +20,27 @@ export default function QuestionSetView({
   }
 
   return (
-    <>
-      <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} />
-      <>
-        <AverageDifficultyCircle />
-        <p>
-          This set contains {list.questions?.length} questions with the
-          following tags:
-        </p>
-        <DistinctCategoryTags />
-      </>
-      <p>Questions in this set ({list.questions?.length}):</p>
-      <List
-        dataSource={list.questions}
-        renderItem={(question: QuestionModel) => (
-          <QuestionCard key={question.id} question={question} tagColor={'cyan'} />
-        )}
-      />
-    </>
+    <Row>
+      <Col span={1} />
+      <Col span={22}>
+        <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} />
+        <div className={styles.questionSetView}>
+          <AverageDifficultyCircle />
+          <p>
+            This set contains {list.questions?.length} questions with the
+            following tags:
+          </p>
+          <DistinctCategoryTags />
+        </div>
+        <p>Questions in this set ({list.questions?.length}):</p>
+        <List
+          dataSource={list.questions}
+          renderItem={(question: QuestionModel) => (
+            <QuestionCard key={question.id} question={question} tagColor={'cyan'} />
+          )}
+        />
+      </Col>
+      <Col span={1} />
+    </Row>
   );
 }
