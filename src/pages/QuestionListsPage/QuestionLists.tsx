@@ -118,12 +118,16 @@ export default function QuestionLists(): JSX.Element {
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
               moreIconContent={
-                <MoreIconContent
-                  list={list}
-                  startInterviewCallback={() =>
-                    addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
-                  }
-                />
+                list.questionSet ? (
+                  <MoreIconContent
+                    list={list.questionSet}
+                    startInterviewCallback={() =>
+                      addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
+                    }
+                  />
+                ) : (
+                  <></>
+                )
               }
             />
           </div>
