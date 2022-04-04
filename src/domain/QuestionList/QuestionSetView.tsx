@@ -35,7 +35,7 @@ export default function QuestionSetView({
       <Col span={22}>
         <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} createdBy='anonymous' updateTitleCallback={updateTitleCallback} />
         <div className={styles.questionSetView}>
-          <AverageDifficultyCircle />
+          <AverageDifficultyCircle percent={80} />
           <p>
             This set contains {list.questions?.length} questions with the
             following tags:

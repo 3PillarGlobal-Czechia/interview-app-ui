@@ -7,7 +7,7 @@ import AverageDifficultyContent from './AverageDifficultyContent';
 export default function AverageDifficultyCircle({
   percent,
 }: {
-  percent?: number;
+  percent: number;
 }): JSX.Element {
   const averageDifficultyContentElement = (
     percentage?: number
@@ -22,7 +22,3 @@ export default function AverageDifficultyCircle({
     />
   );
 }
-
-AverageDifficultyCircle.defaultProps = {
-  percent: undefined,
-};
