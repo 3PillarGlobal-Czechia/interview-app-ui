@@ -27,6 +27,7 @@ jobs:
       uses: SpicyPizza/create-envfile@v1.3
       with:
         envkey_REACT_APP_BACKEND_URL:  ${{ secrets.APP_BACKEND_URL }}
+        envkey_REACT_APP_APPINSIGHTS_KEY:  ""
         directory: .
         file_name: .env
         fail_on_empty: false
