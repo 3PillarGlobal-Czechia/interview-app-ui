@@ -70,6 +70,13 @@ export default function QuestionList(): JSX.Element {
     }
   };
 
+  const updateTitle = (title: string): void => {
+    if (list?.questionSet?.id) {
+      list.questionSet.title = title;
+      client.updateQuestionSet(list.questionSet.id, list.questionSet);
+    }
+  };
+
   // Example how to use it
   const appInsights = useAppInsightsContext();
   appInsights.trackEvent({ name: 'QuestionList' });
@@ -81,6 +88,7 @@ export default function QuestionList(): JSX.Element {
         <QuestionSetView
           list={list}
           removeQuestionFromListCallback={removeQuestionFromList}
+          updateTitleCallback={updateTitle}
         />
       </Col>
       <Col span={15}>

@@ -2,12 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
-import {
-  Client,
-  QuestionModel,
-  QuestionSetDetail,
-  UpdateQuestionSetRequest,
-} from '../../services/Client';
+import { QuestionModel, QuestionSetDetail } from '../../services/Client';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
@@ -17,21 +12,15 @@ import QuestionSetViewHeader from './QuestionSetViewHeader';
 export default function QuestionSetView({
   list,
   removeQuestionFromListCallback,
+  updateTitleCallback,
 }: {
   list: QuestionSetDetail | undefined;
   removeQuestionFromListCallback: (id: number) => void;
+  updateTitleCallback: (title: string) => void;
 }): JSX.Element {
   if (!list) {
     return <Spin indicator={<LoadingOutlined />} />;
   }
-
-  const client = new Client();
-  const updateTitleCallback = (title: string) => {
-    if (list.questionSet?.id) {
-      list.questionSet.title = title;
-      client.updateQuestionSet(list.questionSet.id, list.questionSet);
-    }
-  };
 
   return (
     <Row className={`${styles.questionSetBackground} full-height`}>
