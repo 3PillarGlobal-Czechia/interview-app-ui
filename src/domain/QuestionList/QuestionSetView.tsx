@@ -4,6 +4,7 @@ import React from 'react';
 
 import { arrayDistinct } from '../../services/arrayUtils';
 import { QuestionModel, QuestionSetDetail } from '../../services/Client';
+import { average } from '../../services/mathUtils';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
@@ -33,7 +34,17 @@ export default function QuestionSetView({
           updateTitleCallback={updateTitleCallback}
         />
         <div className={styles.questionSetView}>
-          <AverageDifficultyCircle percent={80} />
+          <AverageDifficultyCircle
+            percent={Number(
+              (
+                average(
+                  list.questions
+                    ?.filter((question) => question.difficulty)
+                    .map((question) => question.difficulty ?? 0) ?? []
+                ) * 20
+              ).toFixed(2)
+            )}
+          />
           <div>
             <p>
               This set contains {list.questions?.length} questions with the
