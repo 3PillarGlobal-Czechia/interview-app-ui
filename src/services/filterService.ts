@@ -15,7 +15,7 @@ export function filterQuestions(
       question.content?.toLowerCase().includes(lowerCaseValue)
   );
 
-  if (validCategories) {
+  if (validCategories && validCategories.length) {
     ret = ret.filter(
       (question) =>
         question.category &&
