@@ -53,7 +53,7 @@ export default function QuestionList(): JSX.Element {
         <QuestionSetView list={list} removeQuestionFromListCallback={removeQuestionFromList} />
       </Col>
       <Col span={15}>
-        <AvailableQuestionsView availableQuestions={allQuestions} addToSetCallback={addQuestionToSet} />
+        <AvailableQuestionsView availableQuestions={allQuestions} questionsAddedToSet={list?.questions} addToSetCallback={addQuestionToSet} />
       </Col>
     </Row>
   );
