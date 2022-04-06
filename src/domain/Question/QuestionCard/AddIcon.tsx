@@ -12,19 +12,15 @@ export default function AddIcon({
   addClickCallback: () => void;
 }): JSX.Element {
   const tooltip = 'This question is already in this set';
+  if (isAddIcon) {
+    return (
+      <PlusCircleOutlined className={styles.icon} onClick={addClickCallback} />
+    );
+  }
 
   return (
-    <>
-      {isAddIcon ? (
-        <PlusCircleOutlined
-          className={styles.icon}
-          onClick={addClickCallback}
-        />
-      ) : (
-        <Tooltip title={tooltip} placement="right">
-          <CheckCircleOutlined className={styles.icon} />
-        </Tooltip>
-      )}
-    </>
+    <Tooltip title={tooltip} placement="right">
+      <CheckCircleOutlined className={styles.icon} />
+    </Tooltip>
   );
 }

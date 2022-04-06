@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../layout/header/Header';
-import { Client } from '../../services/Client';
 import styles from './QuestionSetView.module.scss';
 
 export default function QuestionSetViewHeader({
@@ -20,7 +19,7 @@ export default function QuestionSetViewHeader({
   const [inputValue, setInputValue] = useState(title);
   const inputRef = useRef<Input>(null);
 
-  const changeIsBeingEdited = (value?: boolean) => {
+  const changeIsBeingEdited = (value?: boolean): void => {
     const targetValue = value || !isBeingEdited;
     if (targetValue) {
       setTimeout(() => inputRef.current?.select(), 100);
@@ -40,16 +39,18 @@ export default function QuestionSetViewHeader({
           {isBeingEdited ? (
             <Input
               onKeyDown={(e) =>
-                e.key == 'Enter' ? changeIsBeingEdited(false) : null
+                e.key === 'Enter' ? changeIsBeingEdited(false) : null
               }
               ref={inputRef}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
           ) : (
-            <h3 onClick={(_) => changeIsBeingEdited(true)}>{inputValue}</h3>
+            <h3 role="presentation" onClick={() => changeIsBeingEdited(true)}>
+              {inputValue}
+            </h3>
           )}
-          <EditOutlined onClick={(_) => changeIsBeingEdited()} />
+          <EditOutlined onClick={() => changeIsBeingEdited()} />
         </div>
       }
       right={<span>By {createdBy}</span>}

@@ -1,5 +1,6 @@
+import { LoadingOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
-import { Divider, Input, List, Tag } from 'antd';
+import { Divider, Input, List, Spin, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -126,7 +127,7 @@ export default function QuestionLists(): JSX.Element {
                     }
                   />
                 ) : (
-                  <></>
+                  <Spin indicator={<LoadingOutlined />} />
                 )
               }
             />

@@ -26,14 +26,14 @@ export default function QuestionList(): JSX.Element {
     });
   }, []);
 
-  const removeQuestionFromList = (id: number): void => {
+  const removeQuestionFromList = (questionId: number): void => {
     if (list?.questionSet?.id) {
       client
         .updateQuestionSet(
           list.questionSet.id,
           new UpdateQuestionSetRequest({
             ...list.questionSet,
-            questionsToRemove: [id],
+            questionsToRemove: [questionId],
           })
         )
         .then(() => {
@@ -41,7 +41,7 @@ export default function QuestionList(): JSX.Element {
             new QuestionSetDetail({
               ...list,
               questions: list?.questions?.filter(
-                (question) => question.id !== id
+                (question) => question.id !== questionId
               ),
             })
           );
