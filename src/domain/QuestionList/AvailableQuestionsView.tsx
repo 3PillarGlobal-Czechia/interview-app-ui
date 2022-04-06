@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 
 import styles from './QuestionSetView.module.scss';
 
-export default function AvailableQuestionsView(): JSX.Element {
-    const [inputValue, setInputValue] = useState('');
+const { Search } = Input;
 
+export default function AvailableQuestionsView(): JSX.Element {
     return (
         <div className={styles.availableQuestions}>
             <h3>Available Questions</h3>
             <div>
-                <Input value={inputValue} onChange={e => setInputValue(e.target.value)} placeholder='Search available questions' />
+                <Search placeholder='Search available questions' allowClear />
                 <Select placeholder='Category' />
                 <Select placeholder='Difficulty' />
             </div>
