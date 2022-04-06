@@ -2,6 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
+import { arrayDistinct } from '../../services/arrayUtils';
 import { QuestionModel, QuestionSetDetail } from '../../services/Client';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
@@ -33,11 +34,19 @@ export default function QuestionSetView({
         />
         <div className={styles.questionSetView}>
           <AverageDifficultyCircle percent={80} />
-          <p>
-            This set contains {list.questions?.length} questions with the
-            following tags:
-          </p>
-          <DistinctCategoryTags />
+          <div>
+            <p>
+              This set contains {list.questions?.length} questions with the
+              following tags:
+            </p>
+            <DistinctCategoryTags
+              categories={arrayDistinct(
+                list.questions
+                  ?.filter((question) => question.category)
+                  .map((question) => question.category ?? '') ?? []
+              )}
+            />
+          </div>
         </div>
         <p>Questions in this set ({list.questions?.length}):</p>
         <List

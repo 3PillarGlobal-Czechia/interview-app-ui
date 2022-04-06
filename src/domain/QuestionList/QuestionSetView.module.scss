@@ -22,6 +22,9 @@
         margin: 0 0 14px;
     }
     >:nth-child(2) {
+        p {
+            margin-bottom: 0;
+        }
         text-align: center;
         width: 100%;
         display: flex;
