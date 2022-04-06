@@ -1,14 +1,15 @@
-import { CheckCircleOutlined, MoreOutlined } from '@ant-design/icons';
+import { MoreOutlined } from '@ant-design/icons';
 import { Dropdown } from 'antd';
 import React from 'react';
 import { QuestionModel } from '../../../services/Client';
+import AddIcon from './AddIcon';
 
 import styles from './QuestionCard.module.scss';
 
 export default function QuestionCardLarge({ question }: { question: QuestionModel }): JSX.Element {
     return (
         <div className={styles.questionCardLarge}>
-            <CheckCircleOutlined style={{ fontSize: '32px' }} />
+            <AddIcon isAddIcon={true} />
             <span>{question.title}</span>
             <div>
                 <Dropdown overlay={<p>What to place here?</p>} placement="topLeft">
