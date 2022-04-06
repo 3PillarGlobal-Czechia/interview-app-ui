@@ -6,10 +6,10 @@ import AddIcon from './AddIcon';
 
 import styles from './QuestionCard.module.scss';
 
-export default function QuestionCardLarge({ question }: { question: QuestionModel }): JSX.Element {
+export default function QuestionCardLarge({ question, addToSetCallback }: { question: QuestionModel; addToSetCallback: (question: QuestionModel) => void; }): JSX.Element {
     return (
         <div className={styles.questionCardLarge}>
-            <AddIcon isAddIcon={true} />
+            <AddIcon isAddIcon={true} addClickCallback={() => addToSetCallback(question)} />
             <span>{question.title}</span>
             <div>
                 <Dropdown overlay={<p>What to place here?</p>} placement="topLeft">

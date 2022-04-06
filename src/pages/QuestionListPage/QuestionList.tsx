@@ -34,6 +34,14 @@ export default function QuestionList(): JSX.Element {
     }
   }
 
+  const addQuestionToSet = (question: QuestionModel): void => {
+    if (list?.questionSet?.id && question.id) {
+      client.updateQuestionSet(list?.questionSet.id, new UpdateQuestionSetRequest({ ...list.questionSet, questionsToAdd: [question.id] })).then(() => {
+        setList(new QuestionSetDetail({ ...list, questions: [...list?.questions ?? [], question] }));
+      })
+    }
+  }
+
   // Example how to use it
   const appInsights = useAppInsightsContext();
   appInsights.trackEvent({ name: 'QuestionList' });
@@ -45,7 +53,7 @@ export default function QuestionList(): JSX.Element {
         <QuestionSetView list={list} removeQuestionFromListCallback={removeQuestionFromList} />
       </Col>
       <Col span={15}>
-        <AvailableQuestionsView availableQuestions={allQuestions} />
+        <AvailableQuestionsView availableQuestions={allQuestions} addToSetCallback={addQuestionToSet} />
       </Col>
     </Row>
   );

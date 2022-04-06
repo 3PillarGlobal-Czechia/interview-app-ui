@@ -8,9 +8,9 @@ import styles from './QuestionSetView.module.scss';
 
 const { Search } = Input;
 
-export default function AvailableQuestionsView({ availableQuestions }: { availableQuestions: QuestionModel[] | undefined }): JSX.Element {
+export default function AvailableQuestionsView({ availableQuestions, addToSetCallback }: { availableQuestions: QuestionModel[] | undefined; addToSetCallback: (question: QuestionModel) => void; }): JSX.Element {
     const questionListElement = availableQuestions
-        ? <List dataSource={availableQuestions} renderItem={item => <QuestionCardLarge question={item} />} />
+        ? <List dataSource={availableQuestions} renderItem={item => <QuestionCardLarge question={item} addToSetCallback={addToSetCallback} />} />
         : <Spin indicator={<LoadingOutlined />} />
 
     return (
