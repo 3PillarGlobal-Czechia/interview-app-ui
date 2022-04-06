@@ -55,7 +55,6 @@ export default function QuestionSetView({
             <QuestionCard
               key={question.id}
               question={question}
-              tagColor="cyan"
               deleteClickedCallback={removeQuestionFromListCallback}
             />
           )}

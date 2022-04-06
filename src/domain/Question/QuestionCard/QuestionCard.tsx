@@ -4,15 +4,14 @@ import React from 'react';
 
 import { QuestionModel } from '../../../services/Client';
 import { difficultyPercentageToColor } from '../../../services/mathUtils';
+import { colorByCategory } from '../../../services/tagCategoryColorService';
 import styles from './QuestionCard.module.scss';
 
 export default function QuestionCard({
   question,
-  tagColor,
   deleteClickedCallback,
 }: {
   question: QuestionModel;
-  tagColor: string;
   deleteClickedCallback: (id: number) => void;
 }): JSX.Element {
   const color = question.difficulty
@@ -23,7 +22,9 @@ export default function QuestionCard({
     <div className={styles.questionCard} style={{ borderLeftColor: color }}>
       <span>{question.title}</span>
       <div>
-        <Tag color={tagColor}>{question.category}</Tag>
+        <Tag color={colorByCategory(question.category ?? '')}>
+          {question.category}
+        </Tag>
         <DeleteOutlined
           onClick={() =>
             question.id ? deleteClickedCallback(question.id) : null

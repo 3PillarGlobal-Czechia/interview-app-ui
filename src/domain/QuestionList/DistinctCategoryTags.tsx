@@ -1,6 +1,8 @@
 import { Tag } from 'antd';
 import React from 'react';
 
+import { colorByCategory } from '../../services/tagCategoryColorService';
+
 export default function DistinctCategoryTags({
   categories,
 }: {
@@ -9,7 +11,7 @@ export default function DistinctCategoryTags({
   return (
     <div>
       {categories.map((category) => (
-        <Tag color="cyan">{category}</Tag>
+        <Tag color={colorByCategory(category)}>{category}</Tag>
       ))}
     </div>
   );
