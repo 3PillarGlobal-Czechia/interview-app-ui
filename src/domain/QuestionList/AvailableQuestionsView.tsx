@@ -1,11 +1,12 @@
 import { Input, Select } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
+import { QuestionModel } from '../../services/Client';
 
 import styles from './QuestionSetView.module.scss';
 
 const { Search } = Input;
 
-export default function AvailableQuestionsView(): JSX.Element {
+export default function AvailableQuestionsView({ availableQuestions }: { availableQuestions: QuestionModel[] | undefined }): JSX.Element {
     return (
         <div className={styles.availableQuestions}>
             <h3>Available Questions</h3>
