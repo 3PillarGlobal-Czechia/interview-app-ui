@@ -21,11 +21,10 @@ export default function QuestionSetViewHeader({
   const inputRef = useRef<Input>(null);
 
   const changeIsBeingEdited = (value?: boolean) => {
-    const targetValue = value ? value : !isBeingEdited;
+    const targetValue = value || !isBeingEdited;
     if (targetValue) {
       setTimeout(() => inputRef.current?.select(), 100);
-    }
-    else {
+    } else {
       updateTitleCallback(inputValue);
     }
     setIsBeingEdited(targetValue);
@@ -38,8 +37,19 @@ export default function QuestionSetViewHeader({
           <Link to="/" className="text-black">
             <ArrowLeftOutlined />
           </Link>
-          {isBeingEdited ? <Input onKeyDown={(e) => e.key == 'Enter' ? changeIsBeingEdited(false) : null} ref={inputRef} value={inputValue} onChange={(e) => setInputValue(e.target.value)} /> : <h3 onClick={_ => changeIsBeingEdited(true)}>{inputValue}</h3>}
-          <EditOutlined onClick={_ => changeIsBeingEdited()} />
+          {isBeingEdited ? (
+            <Input
+              onKeyDown={(e) =>
+                e.key == 'Enter' ? changeIsBeingEdited(false) : null
+              }
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          ) : (
+            <h3 onClick={(_) => changeIsBeingEdited(true)}>{inputValue}</h3>
+          )}
+          <EditOutlined onClick={(_) => changeIsBeingEdited()} />
         </div>
       }
       right={<span>By {createdBy}</span>}

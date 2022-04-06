@@ -2,17 +2,21 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
-import { Client, QuestionModel, QuestionSetDetail, UpdateQuestionSetRequest } from '../../services/Client';
+import {
+  Client,
+  QuestionModel,
+  QuestionSetDetail,
+  UpdateQuestionSetRequest,
+} from '../../services/Client';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
-import QuestionSetViewHeader from './QuestionSetViewHeader';
-
 import styles from './QuestionSetView.module.scss';
+import QuestionSetViewHeader from './QuestionSetViewHeader';
 
 export default function QuestionSetView({
   list,
-  removeQuestionFromListCallback
+  removeQuestionFromListCallback,
 }: {
   list: QuestionSetDetail | undefined;
   removeQuestionFromListCallback: (id: number) => void;
@@ -27,13 +31,17 @@ export default function QuestionSetView({
       list.questionSet.title = title;
       client.updateQuestionSet(list.questionSet.id, list.questionSet);
     }
-  }
+  };
 
   return (
     <Row className={`${styles.questionSetBackground} full-height`}>
       <Col span={1} />
       <Col span={22}>
-        <QuestionSetViewHeader title={list?.questionSet?.title ?? ''} createdBy='anonymous' updateTitleCallback={updateTitleCallback} />
+        <QuestionSetViewHeader
+          title={list?.questionSet?.title ?? ''}
+          createdBy="anonymous"
+          updateTitleCallback={updateTitleCallback}
+        />
         <div className={styles.questionSetView}>
           <AverageDifficultyCircle percent={80} />
           <p>
@@ -46,7 +54,12 @@ export default function QuestionSetView({
         <List
           dataSource={list.questions}
           renderItem={(question: QuestionModel) => (
-            <QuestionCard key={question.id} question={question} tagColor={'cyan'} deleteClickedCallback={removeQuestionFromListCallback} />
+            <QuestionCard
+              key={question.id}
+              question={question}
+              tagColor="cyan"
+              deleteClickedCallback={removeQuestionFromListCallback}
+            />
           )}
         />
       </Col>

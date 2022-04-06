@@ -6,10 +6,10 @@ export function filterQuestions(
   text: string,
   validCategories: string[] | undefined,
   minDifficulty: number | undefined,
-  maxDifficulty: number | undefined,
+  maxDifficulty: number | undefined
 ): QuestionModel[] {
   const lowerCaseValue = text.toLowerCase();
-  var ret = questions.filter(
+  let ret = questions.filter(
     (question) =>
       question.title?.toLowerCase().includes(lowerCaseValue) ||
       question.content?.toLowerCase().includes(lowerCaseValue)
@@ -18,21 +18,22 @@ export function filterQuestions(
   if (validCategories) {
     ret = ret.filter(
       (question) =>
-        question.category && validCategories.map(category => category.toLowerCase()).includes(question.category.toLowerCase())
+        question.category &&
+        validCategories
+          .map((category) => category.toLowerCase())
+          .includes(question.category.toLowerCase())
     );
   }
 
   if (minDifficulty) {
     ret = ret.filter(
-      (question) =>
-        question.difficulty && question.difficulty >= minDifficulty
+      (question) => question.difficulty && question.difficulty >= minDifficulty
     );
   }
 
   if (maxDifficulty) {
     ret = ret.filter(
-      (question) =>
-        question.difficulty && question.difficulty <= maxDifficulty
+      (question) => question.difficulty && question.difficulty <= maxDifficulty
     );
   }
 

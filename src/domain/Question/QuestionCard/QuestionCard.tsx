@@ -3,9 +3,8 @@ import { Tag } from 'antd';
 import React from 'react';
 
 import { QuestionModel } from '../../../services/Client';
-import styles from './QuestionCard.module.scss';
-
 import { difficultyPercentageToColor } from '../../../services/mathUtils';
+import styles from './QuestionCard.module.scss';
 
 export default function QuestionCard({
   question,
@@ -16,15 +15,22 @@ export default function QuestionCard({
   tagColor: string;
   deleteClickedCallback: (id: number) => void;
 }): JSX.Element {
-  const color = question.difficulty ? difficultyPercentageToColor(question.difficulty) : '#FFF';
+  const color = question.difficulty
+    ? difficultyPercentageToColor(question.difficulty)
+    : '#FFF';
 
   return (
     <div className={styles.questionCard} style={{ borderLeftColor: color }}>
       <span>{question.title}</span>
       <div>
         <Tag color={tagColor}>{question.category}</Tag>
-        <DeleteOutlined onClick={() => question.id ? deleteClickedCallback(question.id) : null} style={{ color: 'red' }} />
+        <DeleteOutlined
+          onClick={() =>
+            question.id ? deleteClickedCallback(question.id) : null
+          }
+          style={{ color: 'red' }}
+        />
       </div>
-    </div >
+    </div>
   );
 }

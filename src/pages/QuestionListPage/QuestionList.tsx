@@ -28,19 +28,47 @@ export default function QuestionList(): JSX.Element {
 
   const removeQuestionFromList = (id: number): void => {
     if (list?.questionSet?.id) {
-      client.updateQuestionSet(list.questionSet.id, new UpdateQuestionSetRequest({ ...list.questionSet, questionsToRemove: [id] })).then(() => {
-        setList(new QuestionSetDetail({ ...list, questions: list?.questions?.filter(question => question.id !== id) }));
-      });
+      client
+        .updateQuestionSet(
+          list.questionSet.id,
+          new UpdateQuestionSetRequest({
+            ...list.questionSet,
+            questionsToRemove: [id],
+          })
+        )
+        .then(() => {
+          setList(
+            new QuestionSetDetail({
+              ...list,
+              questions: list?.questions?.filter(
+                (question) => question.id !== id
+              ),
+            })
+          );
+        });
     }
-  }
+  };
 
   const addQuestionToSet = (question: QuestionModel): void => {
     if (list?.questionSet?.id && question.id) {
-      client.updateQuestionSet(list?.questionSet.id, new UpdateQuestionSetRequest({ ...list.questionSet, questionsToAdd: [question.id] })).then(() => {
-        setList(new QuestionSetDetail({ ...list, questions: [...list?.questions ?? [], question] }));
-      })
+      client
+        .updateQuestionSet(
+          list?.questionSet.id,
+          new UpdateQuestionSetRequest({
+            ...list.questionSet,
+            questionsToAdd: [question.id],
+          })
+        )
+        .then(() => {
+          setList(
+            new QuestionSetDetail({
+              ...list,
+              questions: [...(list?.questions ?? []), question],
+            })
+          );
+        });
     }
-  }
+  };
 
   // Example how to use it
   const appInsights = useAppInsightsContext();
@@ -48,12 +76,19 @@ export default function QuestionList(): JSX.Element {
   appInsights.trackPageView({ name: 'QuestionList' });
 
   return (
-    <Row className='full-height'>
+    <Row className="full-height">
       <Col span={9}>
-        <QuestionSetView list={list} removeQuestionFromListCallback={removeQuestionFromList} />
+        <QuestionSetView
+          list={list}
+          removeQuestionFromListCallback={removeQuestionFromList}
+        />
       </Col>
       <Col span={15}>
-        <AvailableQuestionsView availableQuestions={allQuestions} questionsAddedToSet={list?.questions} addToSetCallback={addQuestionToSet} />
+        <AvailableQuestionsView
+          availableQuestions={allQuestions}
+          questionsAddedToSet={list?.questions}
+          addToSetCallback={addQuestionToSet}
+        />
       </Col>
     </Row>
   );
