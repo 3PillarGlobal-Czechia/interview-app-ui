@@ -7,9 +7,11 @@ import { QuestionSetModel } from '../../services/Client';
 export default function MoreIconContent({
   list,
   startInterviewCallback,
+  deleteCallback,
 }: {
   list: QuestionSetModel;
   startInterviewCallback: () => void;
+  deleteCallback: () => void;
 }): JSX.Element {
   return (
     <Menu>
@@ -27,7 +29,9 @@ export default function MoreIconContent({
       </Menu.Item>
       <Menu.Item>
         <Button type="link" danger>
-          Delete
+          <Link onClick={deleteCallback} to="/">
+            Delete
+          </Link>
         </Button>
       </Menu.Item>
     </Menu>

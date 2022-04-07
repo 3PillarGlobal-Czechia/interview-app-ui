@@ -66,6 +66,12 @@ export default function QuestionLists(): JSX.Element {
     setModalVisibility(false);
   };
 
+  const deleteList = (id: number): void => {
+    client.deleteQuestionSet(id).then(() => {
+      setLists(lists?.filter((item) => item.questionSet?.id !== id));
+    });
+  };
+
   const tags = (categories: string[]): JSX.Element[] => {
     return categories.map((category) => (
       <Tag key={category} color={colorByCategory(category)}>
@@ -123,6 +129,7 @@ export default function QuestionLists(): JSX.Element {
                   startInterviewCallback={() =>
                     addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
                   }
+                  deleteCallback={() => deleteList(list.questionSet!.id!)}
                 />
               }
             />
