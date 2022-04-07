@@ -1,9 +1,9 @@
 import { MouseEventHandler } from 'react';
 
-import { QuestionSetModel } from '../../../services/Client';
+import { QuestionSetDetail } from '../../../services/Client';
 
 export interface QuestionListCardSmallProps {
-  list: QuestionSetModel;
+  list: QuestionSetDetail;
   categories: JSX.Element[];
   onCardClickedCallback: MouseEventHandler;
 }

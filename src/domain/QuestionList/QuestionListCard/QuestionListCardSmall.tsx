@@ -17,7 +17,7 @@ export default function QuestionListCardSmall(
       }}
       className={styles.card}
     >
-      <h4>{list.title}</h4>
+      <h4>{list.questionSet?.title}</h4>
       <div className={styles.categories}>{categories}</div>
     </div>
   );
