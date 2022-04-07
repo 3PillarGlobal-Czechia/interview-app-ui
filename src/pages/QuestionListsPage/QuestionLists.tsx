@@ -108,6 +108,7 @@ export default function QuestionLists(): JSX.Element {
       dataSource={filterLists(lists ?? [], searchText)}
       pagination={{
         defaultPageSize: 12,
+        style: { textAlign: 'center' },
       }}
       renderItem={(list: QuestionSetListItem) => (
         <List.Item>
