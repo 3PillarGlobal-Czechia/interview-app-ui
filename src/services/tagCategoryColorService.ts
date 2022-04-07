@@ -1,5 +1,3 @@
-import { QuestionModel } from './Client';
-
 const colors: string[] = [
   'red',
   'blue',
@@ -23,14 +21,4 @@ export function colorByCategory(category: string): string {
     hashmap.set(category, nextColor());
   }
   return hashmap.get(category) ?? 'black';
-}
-
-export function getDistinctCategories(questions: QuestionModel[]): string[] {
-  const set = new Set<string>();
-  questions?.forEach((question) => {
-    if (question?.category) {
-      set.add(question.category);
-    }
-  });
-  return Array.from(set);
 }

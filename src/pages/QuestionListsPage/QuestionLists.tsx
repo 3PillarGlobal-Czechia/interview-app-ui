@@ -15,14 +15,12 @@ import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
   CreateQuestionSetRequest,
-  QuestionModel,
   QuestionSetListItem,
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
-import {
-  colorByCategory,
-  getDistinctCategories,
-} from '../../services/tagCategoryColorService';
+import { colorByCategory } from '../../services/tagCategoryColorService';
+
+const exampleCategories = ['C#', 'SQL', 'Java'];
 
 export default function QuestionLists(): JSX.Element {
   const client = new Client();
@@ -68,8 +66,8 @@ export default function QuestionLists(): JSX.Element {
     setModalVisibility(false);
   };
 
-  const tags = (interviewQuestions: QuestionModel[]): JSX.Element[] => {
-    return getDistinctCategories(interviewQuestions).map((category) => (
+  const tags = (categories: string[]): JSX.Element[] => {
+    return categories.map((category) => (
       <Tag key={category} color={colorByCategory(category)}>
         {category}
       </Tag>
@@ -91,7 +89,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardSmall
               list={list}
-              categories={tags([])}
+              categories={tags(exampleCategories)}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
@@ -115,7 +113,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardLarge
               list={list}
-              categories={tags([])}
+              categories={tags(exampleCategories)}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
