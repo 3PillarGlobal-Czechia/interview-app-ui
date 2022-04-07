@@ -1,3 +1,4 @@
+import { FilterOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
 import { Divider, Input, List, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -162,6 +163,7 @@ export default function QuestionLists(): JSX.Element {
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="Search question lists"
+                addonAfter={<FilterOutlined />}
                 allowClear
               />
             </div>
