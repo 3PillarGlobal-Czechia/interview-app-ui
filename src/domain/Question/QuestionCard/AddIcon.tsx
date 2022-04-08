@@ -1,5 +1,5 @@
-import { CheckCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
 import React from 'react';
 
 import styles from './QuestionCard.module.scss';
@@ -14,13 +14,17 @@ export default function AddIcon({
   const tooltip = 'This question is already in this set';
   if (isAddIcon) {
     return (
-      <PlusCircleOutlined className={styles.icon} onClick={addClickCallback} />
+      <Button shape="circle" onClick={addClickCallback}>
+        <PlusOutlined />
+      </Button>
     );
   }
 
   return (
     <Tooltip title={tooltip} placement="right">
-      <CheckCircleOutlined className={styles.icon} />
+      <Button type="dashed" shape="circle" className={styles.icon}>
+        <CheckOutlined />
+      </Button>
     </Tooltip>
   );
 }
