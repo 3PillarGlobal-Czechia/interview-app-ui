@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Input, List, Select, Spin } from 'antd';
 import React, { useState } from 'react';
 
-import { arrayDistinct } from '../../services/arrayUtils';
+import { arrayDistinct } from '../../helper/arrayUtils';
 import { QuestionModel } from '../../services/Client';
 import { filterQuestions } from '../../services/filterService';
 import QuestionCardLarge from '../Question/QuestionCard/QuestionCardLarge';

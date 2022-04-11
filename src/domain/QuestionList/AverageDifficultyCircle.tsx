@@ -1,7 +1,7 @@
 import { Progress } from 'antd';
 import React from 'react';
 
-import { difficultyPercentageToColor } from '../../services/mathUtils';
+import { difficultyPercentageToColor } from '../../helper/mathUtils';
 import AverageDifficultyContent from './AverageDifficultyContent';
 
 export default function AverageDifficultyCircle({

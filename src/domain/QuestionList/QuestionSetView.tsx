@@ -2,9 +2,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Col, List, Row, Spin } from 'antd';
 import React from 'react';
 
-import { arrayDistinct } from '../../services/arrayUtils';
+import { arrayDistinct } from '../../helper/arrayUtils';
 import { QuestionModel, QuestionSetDetail } from '../../services/Client';
-import { average } from '../../services/mathUtils';
+import { average } from '../../helper/mathUtils';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';

@@ -3,7 +3,7 @@ import { Tag } from 'antd';
 import React from 'react';
 
 import { QuestionModel } from '../../../services/Client';
-import { difficultyPercentageToColor } from '../../../services/mathUtils';
+import { difficultyPercentageToColor } from '../../../helper/mathUtils';
 import { colorByCategory } from '../../../services/tagCategoryColorService';
 import styles from './QuestionCard.module.scss';
 

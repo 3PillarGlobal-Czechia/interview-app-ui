@@ -1,5 +1,5 @@
 import { QuestionModel } from './Client';
-import { hashCode } from './stringUtils';
+import { hashCode } from '../helper/stringUtils';
 
 const colors: string[] = [
   'red',
