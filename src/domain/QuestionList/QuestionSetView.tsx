@@ -4,12 +4,12 @@ import React from 'react';
 
 import { arrayDistinct } from '../../helper/arrayUtils';
 import { QuestionModel, QuestionSetDetail } from '../../services/Client';
-import { average } from '../../helper/mathUtils';
 import QuestionCard from '../Question/QuestionCard/QuestionCard';
 import AverageDifficultyCircle from './AverageDifficultyCircle';
 import DistinctCategoryTags from './DistinctCategoryTags';
 import styles from './QuestionSetView.module.scss';
 import QuestionSetViewHeader from './QuestionSetViewHeader';
+import { averageDifficulty } from '../../services/questionSetService';
 
 export default function QuestionSetView({
   list,
@@ -37,11 +37,7 @@ export default function QuestionSetView({
           <AverageDifficultyCircle
             percent={Number(
               (
-                average(
-                  list.questions
-                    ?.filter((question) => question.difficulty)
-                    .map((question) => question.difficulty ?? 0) ?? []
-                ) * 20
+                averageDifficulty(list.questions ?? [])
               ).toFixed(2)
             )}
           />
