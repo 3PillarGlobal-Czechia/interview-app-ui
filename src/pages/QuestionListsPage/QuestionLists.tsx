@@ -129,7 +129,9 @@ export default function QuestionLists(): JSX.Element {
                   startInterviewCallback={() =>
                     addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
                   }
-                  deleteCallback={() => deleteList(list.questionSet!.id!)}
+                  deleteCallback={() =>
+                    list.questionSet?.id && deleteList(list.questionSet?.id)
+                  }
                 />
               }
             />
