@@ -2,8 +2,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import React from 'react';
 
-import { QuestionModel } from '../../../services/Client';
 import { difficultyPercentageToColor } from '../../../helper/mathUtils';
+import { QuestionModel } from '../../../services/Client';
 import { colorByCategory } from '../../../services/tagCategoryColorService';
 import styles from './QuestionCard.module.scss';
 
