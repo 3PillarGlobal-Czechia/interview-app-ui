@@ -28,10 +28,8 @@ export default function MoreIconContent({
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button type="link" danger>
-          <Link onClick={deleteCallback} to="/">
-            Delete
-          </Link>
+        <Button type="link" onClick={deleteCallback} danger>
+          Delete
         </Button>
       </Menu.Item>
     </Menu>
