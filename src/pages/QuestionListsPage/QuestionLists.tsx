@@ -1,6 +1,6 @@
 import { FilterOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
-import { Divider, Input, List, Tag } from 'antd';
+import { Divider, Input, List, Modal, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -66,9 +66,30 @@ export default function QuestionLists(): JSX.Element {
     setModalVisibility(false);
   };
 
+  const showSuccessModal = (): void => {
+    const successModal = Modal.success({
+      title: `Question Set was deleted.`,
+    });
+    setTimeout(() => successModal.destroy(), 3000);
+  };
+
   const deleteList = (id: number): void => {
     client.deleteQuestionSet(id).then(() => {
       setLists(lists?.filter((item) => item.questionSet?.id !== id));
+      setTimeout(() => showSuccessModal(), 500);
+    });
+  };
+
+  const showConfirmationModal = (title: string, onOk: () => any): void => {
+    Modal.warning({
+      title: `Delete ‘${title}’ Question Set?`,
+      content: 'This change cannot be undone.',
+      okText: 'Yes',
+      okButtonProps: { danger: true },
+      onOk: () => onOk(),
+      cancelText: 'No',
+      okCancel: true,
+      maskClosable: true,
     });
   };
 
@@ -130,7 +151,9 @@ export default function QuestionLists(): JSX.Element {
                     addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
                   }
                   deleteCallback={() =>
-                    list.questionSet?.id && deleteList(list.questionSet?.id)
+                    showConfirmationModal(list.questionSet?.title ?? '', () =>
+                      deleteList(list.questionSet?.id ?? 0)
+                    )
                   }
                 />
               }
