@@ -80,7 +80,7 @@ export default function QuestionLists(): JSX.Element {
     });
   };
 
-  const showConfirmationModal = (title: string, onOk: () => any): void => {
+  const showConfirmationModal = (title: string, onOk: () => void): void => {
     Modal.warning({
       title: `Delete ‘${title}’ Question Set?`,
       content: 'This change cannot be undone.',
