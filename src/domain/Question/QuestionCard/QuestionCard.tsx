@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Tag } from 'antd';
+import { Button, Tag } from 'antd';
 import React from 'react';
 
 import { difficultyPercentageToColor } from '../../../helper/mathUtils';
@@ -25,12 +25,14 @@ export default function QuestionCard({
         <Tag color={colorByCategory(question.category ?? '')}>
           {question.category}
         </Tag>
-        <DeleteOutlined
-          onClick={() =>
-            question.id ? deleteClickedCallback(question.id) : null
-          }
-          style={{ color: 'red' }}
-        />
+        <Button shape="circle">
+          <DeleteOutlined
+            onClick={() =>
+              question.id ? deleteClickedCallback(question.id) : null
+            }
+            style={{ color: 'red' }}
+          />
+        </Button>
       </div>
     </div>
   );
