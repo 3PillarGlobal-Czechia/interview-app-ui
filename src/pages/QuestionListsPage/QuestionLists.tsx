@@ -85,7 +85,7 @@ export default function QuestionLists(): JSX.Element {
       content: 'This change cannot be undone.',
       okText: 'Yes',
       okButtonProps: { danger: true },
-      onOk: () => onOk(),
+      onOk,
       cancelText: 'No',
       okCancel: true,
       maskClosable: true,
