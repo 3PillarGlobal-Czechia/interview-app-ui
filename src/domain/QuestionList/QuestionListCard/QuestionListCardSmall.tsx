@@ -1,5 +1,6 @@
 import React from 'react';
 
+import TagList from '../../../components/TagList';
 import styles from './QuestionListCard.module.scss';
 import { QuestionListCardSmallProps } from './QuestionListCardSmallProps';
 
@@ -18,7 +19,8 @@ export default function QuestionListCardSmall(
       className={styles.card}
     >
       <h4>{list.questionSet?.title}</h4>
-      <div className={styles.categories}>{categories}</div>
+
+      <TagList categories={categories} />
     </div>
   );
 }

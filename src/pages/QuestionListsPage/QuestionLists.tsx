@@ -1,6 +1,6 @@
 import { FilterOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
-import { Divider, Input, List, Modal, Tag } from 'antd';
+import { Divider, Input, List, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ import {
   QuestionSetListItem,
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
-import { colorByCategory } from '../../services/tagCategoryColorService';
 
 const exampleCategories = ['C#', 'SQL', 'Java'];
 
@@ -93,14 +92,6 @@ export default function QuestionLists(): JSX.Element {
     });
   };
 
-  const tags = (categories: string[]): JSX.Element[] => {
-    return categories.map((category) => (
-      <Tag key={category} color={colorByCategory(category)}>
-        {category}
-      </Tag>
-    ));
-  };
-
   const recentlyUsedLists = (
     <List
       grid={{ xs: 2, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5, gutter: 16 }}
@@ -116,7 +107,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardSmall
               list={list}
-              categories={tags(exampleCategories)}
+              categories={exampleCategories}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
@@ -140,7 +131,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardLarge
               list={list}
-              categories={tags(exampleCategories)}
+              categories={exampleCategories}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }

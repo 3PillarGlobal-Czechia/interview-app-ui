@@ -4,6 +4,6 @@ import { QuestionSetDetail } from '../../../services/Client';
 
 export interface QuestionListCardSmallProps {
   list: QuestionSetDetail;
-  categories: JSX.Element[];
+  categories: string[];
   onCardClickedCallback: MouseEventHandler;
 }
