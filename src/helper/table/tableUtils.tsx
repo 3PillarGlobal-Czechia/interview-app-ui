@@ -2,7 +2,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import React, { ReactNode } from 'react';
 
-import { QuestionModel } from '../Client';
+import { QuestionModel } from '../../services/Client';
 import { getDistinctValues, toPascalCase } from '../stringUtils';
 import FilterDropdown from './FilterDropdown';
 import {

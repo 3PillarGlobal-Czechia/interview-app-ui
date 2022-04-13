@@ -2,8 +2,8 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Progress, Row, Space } from 'antd';
 import React from 'react';
 
-import { difficultyPercentageToColor } from '../../../services/mathUtils';
-import AverageDifficultyContent from './AverageDifficultyContent';
+import { difficultyPercentageToColor } from '../../../helper/mathUtils';
+import AverageDifficultyContent from '../AverageDifficultyContent';
 import styles from './QuestionListCard.module.scss';
 import { QuestionListCardLargeProps } from './QuestionListCardLargeProps';
 

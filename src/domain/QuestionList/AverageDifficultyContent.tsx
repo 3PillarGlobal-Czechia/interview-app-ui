@@ -1,11 +1,11 @@
 import React from 'react';
 
-import styles from './QuestionListCard.module.scss';
+import styles from './QuestionSetView.module.scss';
 
-export default function AverageDifficulty({
+export default function AverageDifficultyContent({
   percent,
 }: {
-  percent: number | undefined;
+  percent?: number;
 }): JSX.Element {
   return (
     <div className={`${styles.averageDifficultyCircle} text-black`}>
@@ -14,3 +14,7 @@ export default function AverageDifficulty({
     </div>
   );
 }
+
+AverageDifficultyContent.defaultProps = {
+  percent: undefined,
+};

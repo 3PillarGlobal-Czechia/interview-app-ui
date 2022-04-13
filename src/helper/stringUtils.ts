@@ -14,3 +14,11 @@ export function getDistinctValues(arr: string[]): string[] {
   });
   return Array.from(distinctValues);
 }
+
+export function hashCode(srt: string): number {
+  let h = 0;
+  const l = srt.length;
+  let i = 0;
+  if (l > 0) while (i < l) h = ((h << 5) - h + srt.charCodeAt(i++)) | 0; // eslint-disable-line no-bitwise, no-plusplus
+  return h;
+}

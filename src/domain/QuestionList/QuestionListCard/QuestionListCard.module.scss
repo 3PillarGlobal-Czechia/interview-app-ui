@@ -20,18 +20,6 @@
     overflow: clip;
 }
 
-.averageDifficultyCircle {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    >h4 {
-        margin-bottom: 4px;
-    }
-    >span {
-        font-size: 8px;
-    }
-}
-
 .cardContent {
     height: 100%;
     display: flex;
