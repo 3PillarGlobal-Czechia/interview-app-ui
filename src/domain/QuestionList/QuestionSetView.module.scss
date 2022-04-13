@@ -1,0 +1,65 @@
+.questionSetBackground {
+    background-color: white;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+.averageDifficultyCircle {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    >h4 {
+        margin-bottom: 4px;
+    }
+    >span {
+        font-size: 8px;
+    }
+}
+
+.questionSetView {
+    display: flex;
+    flex-direction: row;
+    >:first-child {
+        margin: 0 0 14px;
+    }
+    >:nth-child(2) {
+        p {
+            margin-bottom: 0;
+        }
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.questionSetViewHeader {
+    align-items: center;
+    >* {
+        margin: 0 2px;
+    }
+    >h3:hover {
+        cursor: pointer;
+    }
+}
+
+.availableQuestions {
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+    >:nth-child(2) {
+        display: flex;
+        >:first-child() {
+            flex: 1;
+        }
+        >:nth-child(2) {
+            flex: 0 0 100px;
+            margin-left: 10px;
+        }
+        >:nth-child(3) {
+            flex: 0 0 100px;
+            margin-left: 10px;
+        }
+    }
+}

@@ -1,6 +1,6 @@
-import { FilterOutlined } from '@ant-design/icons';
+import { FilterOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
-import { Divider, Input, List, Modal } from 'antd';
+import { Divider, Input, List, Modal, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -136,17 +136,21 @@ export default function QuestionLists(): JSX.Element {
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
               moreIconContent={
-                <MoreIconContent
-                  list={list}
-                  startInterviewCallback={() =>
-                    addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
-                  }
-                  deleteCallback={() =>
-                    showConfirmationModal(list.questionSet?.title ?? '', () =>
-                      deleteList(list.questionSet?.id ?? 0)
-                    )
-                  }
-                />
+                list.questionSet ? (
+                  <MoreIconContent
+                    list={list.questionSet}
+                    startInterviewCallback={() =>
+                      addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
+                    }
+                    deleteCallback={() =>
+                      showConfirmationModal(list.questionSet?.title ?? '', () =>
+                        deleteList(list.questionSet?.id ?? 0)
+                      )
+                    }
+                  />
+                ) : (
+                  <Spin indicator={<LoadingOutlined />} />
+                )
               }
             />
           </div>

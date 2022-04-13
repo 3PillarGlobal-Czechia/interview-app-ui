@@ -8,7 +8,7 @@ import {
 import { DataIndex } from 'rc-table/lib/interface';
 import { Key, MutableRefObject, ReactNode } from 'react';
 
-import { QuestionModel } from '../Client';
+import { QuestionModel } from '../../services/Client';
 
 export type InterviewQuestionDisplayColumns =
   | 'title'

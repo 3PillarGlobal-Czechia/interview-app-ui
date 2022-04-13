@@ -1,12 +1,10 @@
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import QuestionCart from '../../domain/QuestionList/QuestionCart';
-import styles from '../../domain/QuestionList/QuestionList.module.scss';
-import QuestionListData from '../../domain/QuestionList/QuestionListData';
-import QuestionListHeader from '../../domain/QuestionList/QuestionListHeader';
-import ScalableBody from '../../layout/scalableBody/ScalableBody';
+import AvailableQuestionsView from '../../domain/QuestionList/AvailableQuestionsView';
+import QuestionSetView from '../../domain/QuestionList/QuestionSetView';
 import {
   Client,
   QuestionModel,
@@ -17,7 +15,6 @@ import {
 export default function QuestionList(): JSX.Element {
   const { id } = useParams<'id'>();
   const client = new Client();
-  const [isBeingEdited, setBeingEdited] = useState<boolean>(false);
   const [list, setList] = useState<QuestionSetDetail>();
   const [allQuestions, setAllQuestions] = useState<QuestionModel[]>([]);
   useEffect(() => {
@@ -29,80 +26,56 @@ export default function QuestionList(): JSX.Element {
     });
   }, []);
 
-  const [isDrawerVisible, setDrawerVisible] = useState(false);
-  const [questionsToAdd, setQuestionsToAdd] = useState<QuestionModel[]>([]);
-  const [questionsToRemove, setQuestionsToRemove] = useState<QuestionModel[]>(
-    []
-  );
-  const setDrawerVisibility = (value: boolean | null = null): void => {
-    setDrawerVisible((isCurrentlyVisible) => value ?? !isCurrentlyVisible);
-  };
-
-  const addToAddDrawer = (record: QuestionModel): void => {
-    setQuestionsToAdd((old) => [...old, record]);
-  };
-
-  const addToRemoveDrawer = (record: QuestionModel): void => {
-    setQuestionsToRemove((old) => [...old, record]);
-  };
-
-  const removeFromAddDrawer = (question: QuestionModel): void => {
-    setQuestionsToAdd((old) => old.filter((q) => q.id !== question.id));
-  };
-
-  const removeFromRemoveDrawer = (question: QuestionModel): void => {
-    setQuestionsToRemove((old) => old.filter((q) => q.id !== question.id));
-  };
-
-  const clearDrawerQuestions = (): void => {
-    questionsToAdd.forEach((question) => removeFromAddDrawer(question));
-    questionsToRemove.forEach((question) => removeFromRemoveDrawer(question));
-  };
-
-  const discard = (): void => {
-    clearDrawerQuestions();
-    setBeingEdited(false);
-  };
-
-  const saveChanges = (): void => {
-    client
-      .updateQuestionSet(
-        list?.questionSet?.id ?? 0,
-        new UpdateQuestionSetRequest({
-          title: list?.questionSet?.title,
-          description: list?.questionSet?.description,
-          questionsToAdd: questionsToAdd.map((q) => (q.id ? q.id : 0)),
-          questionsToRemove: questionsToRemove.map((q) => (q.id ? q.id : 0)),
-        })
-      )
-      .then(() => {
-        setList(
-          (old) =>
+  const removeQuestionFromList = (questionId: number): void => {
+    if (list?.questionSet?.id) {
+      client
+        .updateQuestionSet(
+          list.questionSet.id,
+          new UpdateQuestionSetRequest({
+            ...list.questionSet,
+            questionsToRemove: [questionId],
+          })
+        )
+        .then(() => {
+          setList(
             new QuestionSetDetail({
-              ...old,
-              questions: [
-                ...(old?.questions?.filter(
-                  (q) => !questionsToRemove.map((rq) => rq.id).includes(q.id)
-                ) ?? []),
-                ...questionsToAdd,
-              ],
+              ...list,
+              questions: list?.questions?.filter(
+                (question) => question.id !== questionId
+              ),
             })
-        );
-        clearDrawerQuestions();
-        setBeingEdited(false);
-      });
+          );
+        });
+    }
   };
 
-  const addableQuestions = allQuestions.filter(
-    (question) =>
-      !list?.questions?.map((q) => q.id).includes(question.id) &&
-      !questionsToAdd.map((q) => q.id).includes(question.id)
-  );
+  const addQuestionToSet = (question: QuestionModel): void => {
+    if (list?.questionSet?.id && question.id) {
+      client
+        .updateQuestionSet(
+          list?.questionSet.id,
+          new UpdateQuestionSetRequest({
+            ...list.questionSet,
+            questionsToAdd: [question.id],
+          })
+        )
+        .then(() => {
+          setList(
+            new QuestionSetDetail({
+              ...list,
+              questions: [...(list?.questions ?? []), question],
+            })
+          );
+        });
+    }
+  };
 
-  const displayableQuestions =
-    list?.questions?.filter(
-      (question) => !questionsToRemove.map((q) => q.id).includes(question.id)
-    ) ?? [];
+  const updateTitle = (title: string): void => {
+    if (list?.questionSet?.id) {
+      list.questionSet.title = title;
+      client.updateQuestionSet(list.questionSet.id, list.questionSet);
+    }
+  };
 
   // Example how to use it
   const appInsights = useAppInsightsContext();
@@ -110,34 +83,21 @@ export default function QuestionList(): JSX.Element {
   appInsights.trackPageView({ name: 'QuestionList' });
 
   return (
-    <ScalableBody>
-      <div className={styles.questionList}>
-        <QuestionCart
-          isVisible={isDrawerVisible}
-          visibilityChangedCallback={setDrawerVisibility}
-          addList={questionsToAdd}
-          removeList={questionsToRemove}
-          removeFromAddListCallback={removeFromAddDrawer}
-          removeFromRemoveListCallback={removeFromRemoveDrawer}
-        />
-        <QuestionListHeader
-          isBeingEdited={isBeingEdited}
-          setBeingEditedCallback={setBeingEdited}
-          listTitle={list?.questionSet?.title}
-          discardCallback={discard}
-          saveChangesCallback={saveChanges}
-          setDrawerVisibilityCallback={setDrawerVisibility}
-        />
-        <QuestionListData
-          isBeingEdited={isBeingEdited}
+    <Row className="full-height">
+      <Col span={9}>
+        <QuestionSetView
           list={list}
-          allQuestions={allQuestions}
-          addToAddDrawerCallback={addToAddDrawer}
-          addToRemoveDrawerCallback={addToRemoveDrawer}
-          displayableQuestions={displayableQuestions}
-          addableQuestions={addableQuestions}
+          removeQuestionFromListCallback={removeQuestionFromList}
+          updateTitleCallback={updateTitle}
         />
-      </div>
-    </ScalableBody>
+      </Col>
+      <Col span={15}>
+        <AvailableQuestionsView
+          availableQuestions={allQuestions}
+          questionsAddedToSet={list?.questions}
+          addToSetCallback={addQuestionToSet}
+        />
+      </Col>
+    </Row>
   );
 }

@@ -3,8 +3,8 @@ import { Col, Dropdown, Progress, Row, Space } from 'antd';
 import React from 'react';
 
 import TagList from '../../../components/TagList';
-import { difficultyPercentageToColor } from '../../../services/mathUtils';
-import AverageDifficultyContent from './AverageDifficultyContent';
+import { difficultyPercentageToColor } from '../../../helper/mathUtils';
+import AverageDifficultyContent from '../AverageDifficultyContent';
 import styles from './QuestionListCard.module.scss';
 import { QuestionListCardLargeProps } from './QuestionListCardLargeProps';
 
