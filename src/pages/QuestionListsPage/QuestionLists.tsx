@@ -1,6 +1,6 @@
-import { LoadingOutlined } from '@ant-design/icons';
+import { FilterOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
-import { Divider, Input, List, Spin, Tag } from 'antd';
+import { Divider, Input, List, Modal, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,14 +15,11 @@ import ScalableBody from '../../layout/scalableBody/ScalableBody';
 import {
   Client,
   CreateQuestionSetRequest,
-  QuestionModel,
   QuestionSetListItem,
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
-import {
-  colorByCategory,
-  getDistinctCategories,
-} from '../../services/tagCategoryColorService';
+
+const exampleCategories = ['C#', 'SQL', 'Java'];
 
 export default function QuestionLists(): JSX.Element {
   const client = new Client();
@@ -68,12 +65,31 @@ export default function QuestionLists(): JSX.Element {
     setModalVisibility(false);
   };
 
-  const tags = (interviewQuestions: QuestionModel[]): JSX.Element[] => {
-    return getDistinctCategories(interviewQuestions).map((category) => (
-      <Tag key={category} color={colorByCategory(category)}>
-        {category}
-      </Tag>
-    ));
+  const showSuccessModal = (): void => {
+    const successModal = Modal.success({
+      title: `Question Set was deleted.`,
+    });
+    setTimeout(() => successModal.destroy(), 3000);
+  };
+
+  const deleteList = (id: number): void => {
+    client.deleteQuestionSet(id).then(() => {
+      setLists(lists?.filter((item) => item.questionSet?.id !== id));
+      setTimeout(() => showSuccessModal(), 500);
+    });
+  };
+
+  const showConfirmationModal = (title: string, onOk: () => void): void => {
+    Modal.warning({
+      title: `Delete ‘${title}’ Question Set?`,
+      content: 'This change cannot be undone.',
+      okText: 'Yes',
+      okButtonProps: { danger: true },
+      onOk,
+      cancelText: 'No',
+      okCancel: true,
+      maskClosable: true,
+    });
   };
 
   const recentlyUsedLists = (
@@ -91,7 +107,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardSmall
               list={list}
-              categories={tags([])}
+              categories={exampleCategories}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
@@ -108,13 +124,14 @@ export default function QuestionLists(): JSX.Element {
       dataSource={filterLists(lists ?? [], searchText)}
       pagination={{
         defaultPageSize: 12,
+        style: { textAlign: 'center' },
       }}
       renderItem={(list: QuestionSetListItem) => (
         <List.Item>
           <div className="centered">
             <QuestionListCardLarge
               list={list}
-              categories={tags([])}
+              categories={exampleCategories}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
@@ -124,6 +141,11 @@ export default function QuestionLists(): JSX.Element {
                     list={list.questionSet}
                     startInterviewCallback={() =>
                       addListIdToRecentlyUsed(list.questionSet?.id ?? 0)
+                    }
+                    deleteCallback={() =>
+                      showConfirmationModal(list.questionSet?.title ?? '', () =>
+                        deleteList(list.questionSet?.id ?? 0)
+                      )
                     }
                   />
                 ) : (
@@ -167,6 +189,7 @@ export default function QuestionLists(): JSX.Element {
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="Search question lists"
+                addonAfter={<FilterOutlined />}
                 allowClear
               />
             </div>

@@ -2,6 +2,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Progress, Row, Space } from 'antd';
 import React from 'react';
 
+import TagList from '../../../components/TagList';
 import { difficultyPercentageToColor } from '../../../helper/mathUtils';
 import AverageDifficultyContent from '../AverageDifficultyContent';
 import styles from './QuestionListCard.module.scss';
@@ -37,7 +38,7 @@ export default function QuestionListCardLarge(
             <h3>{list.questionSet?.title}</h3>
             <span>By Anonymous</span>
           </Space>
-          <div className={styles.categories}>{categories}</div>
+          <TagList categories={categories} />
         </div>
       </Col>
       <Col span={2}>
