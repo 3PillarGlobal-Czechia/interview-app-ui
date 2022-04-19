@@ -11,7 +11,7 @@ import { QuestionListCardLargeProps } from './QuestionListCardLargeProps';
 export default function QuestionListCardLarge(
   props: QuestionListCardLargeProps
 ): JSX.Element {
-  const { list, categories, onCardClickedCallback, moreIconContent } = props;
+  const { list, tags, onCardClickedCallback, moreIconContent } = props;
 
   const averageDifficultyContentElement = (
     percent: number | undefined
@@ -38,7 +38,7 @@ export default function QuestionListCardLarge(
             <h3>{list.questionSet?.title}</h3>
             <span>By Anonymous</span>
           </Space>
-          <TagList categories={categories} />
+          <TagList tags={tags} />
         </div>
       </Col>
       <Col span={2}>

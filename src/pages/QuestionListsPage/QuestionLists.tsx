@@ -19,8 +19,6 @@ import {
 } from '../../services/Client';
 import { filterLists } from '../../services/filterService';
 
-const exampleCategories = ['C#', 'SQL', 'Java'];
-
 export default function QuestionLists(): JSX.Element {
   const client = new Client();
   const navigate = useNavigate();
@@ -107,7 +105,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardSmall
               list={list}
-              categories={exampleCategories}
+              tags={list.tags ?? []}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
@@ -131,7 +129,7 @@ export default function QuestionLists(): JSX.Element {
           <div className="centered">
             <QuestionListCardLarge
               list={list}
-              categories={exampleCategories}
+              tags={list.tags ?? []}
               onCardClickedCallback={() =>
                 navigate(`QuestionList/${list.questionSet?.id}`)
               }
