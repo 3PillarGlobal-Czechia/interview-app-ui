@@ -7,7 +7,7 @@ import { QuestionListCardSmallProps } from './QuestionListCardSmallProps';
 export default function QuestionListCardSmall(
   props: QuestionListCardSmallProps
 ): JSX.Element {
-  const { list, categories, onCardClickedCallback } = props;
+  const { list, tags, onCardClickedCallback } = props;
 
   return (
     <div
@@ -20,7 +20,7 @@ export default function QuestionListCardSmall(
     >
       <h4>{list.questionSet?.title}</h4>
 
-      <TagList categories={categories} />
+      <TagList tags={tags} />
     </div>
   );
 }
