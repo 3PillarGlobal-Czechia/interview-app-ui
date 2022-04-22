@@ -521,8 +521,8 @@ export class ApiClient {
     /**
      * @return Success
      */
-    updateQuestionOrder(id: number, body: UpdateQuestionOrderRequest): Promise<void> {
-        let url_ = this.baseUrl + "/api/v1/QuestionSet/{id}/UpdateQuestionOrder";
+    orderQuestions(id: number, body: UpdateQuestionOrderRequest): Promise<void> {
+        let url_ = this.baseUrl + "/api/v1/QuestionSet/{id}/OrderQuestions";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -539,11 +539,11 @@ export class ApiClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateQuestionOrder(_response);
+            return this.processOrderQuestions(_response);
         });
     }
 
-    protected processUpdateQuestionOrder(response: Response): Promise<void> {
+    protected processOrderQuestions(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -573,9 +573,45 @@ export class ApiClient {
     }
 }
 
+export class Category implements ICategory {
+    title?: string | undefined;
+
+    constructor(data?: ICategory) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): Category {
+        data = typeof data === 'object' ? data : {};
+        let result = new Category();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        return data;
+    }
+}
+
+export interface ICategory {
+    title?: string | undefined;
+}
+
 export class CreateQuestionRequest implements ICreateQuestionRequest {
     title!: string;
-    difficulty?: number | undefined;
+    difficulty!: number;
     category!: string;
     content!: string;
 
@@ -616,7 +652,7 @@ export class CreateQuestionRequest implements ICreateQuestionRequest {
 
 export interface ICreateQuestionRequest {
     title: string;
-    difficulty?: number | undefined;
+    difficulty: number;
     category: string;
     content: string;
 }
@@ -872,6 +908,7 @@ export interface IQuestionSetDetail {
 export class QuestionSetListItem implements IQuestionSetListItem {
     questionSet?: QuestionSetModel;
     difficulty?: Difficulty;
+    tags?: Category[] | undefined;
 
     constructor(data?: IQuestionSetListItem) {
         if (data) {
@@ -886,6 +923,11 @@ export class QuestionSetListItem implements IQuestionSetListItem {
         if (_data) {
             this.questionSet = _data["questionSet"] ? QuestionSetModel.fromJS(_data["questionSet"]) : <any>undefined;
             this.difficulty = _data["difficulty"] ? Difficulty.fromJS(_data["difficulty"]) : <any>undefined;
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(Category.fromJS(item));
+            }
         }
     }
 
@@ -900,6 +942,11 @@ export class QuestionSetListItem implements IQuestionSetListItem {
         data = typeof data === 'object' ? data : {};
         data["questionSet"] = this.questionSet ? this.questionSet.toJSON() : <any>undefined;
         data["difficulty"] = this.difficulty ? this.difficulty.toJSON() : <any>undefined;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -907,6 +954,7 @@ export class QuestionSetListItem implements IQuestionSetListItem {
 export interface IQuestionSetListItem {
     questionSet?: QuestionSetModel;
     difficulty?: Difficulty;
+    tags?: Category[] | undefined;
 }
 
 export class QuestionSetModel implements IQuestionSetModel {
